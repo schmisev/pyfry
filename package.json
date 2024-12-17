@@ -22,6 +22,7 @@
 	},
 	"dependencies": {
 		"@codemirror/lang-python": "^6.1.6",
+		"@sveltejs/adapter-vercel": "^5.5.2",
 		"pyodide": "^0.26.4",
 		"shrink-string": "^3.1.9",
 		"svelte-codemirror-editor": "^1.4.1"
