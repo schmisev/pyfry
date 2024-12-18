@@ -4,8 +4,12 @@
   import CodeMirror from "svelte-codemirror-editor";
   import { python } from "@codemirror/lang-python";
   import { page } from "$app/state";
+  import { downloadPreset } from "$lib/preset-loading";
   //import { compress, decompress } from "shrink-string";
   //import { loadPyodide, type PyodideInterface } from "pyodide";
+  import LZString from "lz-string";
+  let btoa2 = (v: string) => btoa(v);
+  let atob2 = (v: string) => atob(v);
 
   let flags = $state({
     isRunning: false,
@@ -15,28 +19,29 @@
   loadURLParams(); // fetch from URL
 
   function loadURLParams() {
-    let _name = page.url.searchParams.get("name");
+    //let _name = page.url.searchParams.get("name");
     let _code = page.url.searchParams.get("code");
     let _preamble = page.url.searchParams.get("preamble");
     let _pseudo = page.url.searchParams.get("pseudo");
 
-    if (_name) preset.name = atob(_name)
-    if (_code) preset.code = atob(_code);
-    if (_preamble) preset.preamble = atob(_preamble);
-    if (_pseudo) preset.pseudoPreamble = atob(_pseudo);
+    //if (_name) preset.name = atob2(_name)
+    if (_code) preset.code = atob2(_code);
+    if (_preamble) preset.preamble = atob2(_preamble);
+    if (_pseudo) preset.pseudo = atob2(_pseudo);
   }
-
   function updateURL() {
     let query = new URLSearchParams("");
-    query.set('name', btoa(preset.name));
-    query.set('code', btoa(preset.code));
-    query.set('preamble', btoa(preset.preamble));
-    query.set('pseudo', btoa(preset.pseudoPreamble));
+    //query.set('name', btoa2(preset.name));
+    query.set('code', btoa2(preset.code));
+    query.set('preamble', btoa2(preset.preamble));
+    query.set('pseudo', btoa2(preset.pseudo));
     // goto(`?${query.toString()}`);
     window.history.replaceState(history.state, '', `?${query.toString()}`);
   }
 
-  $effect(updateURL);
+  $effect(
+    updateURL
+  );
 
   let consoleOut: HTMLElement;
   let imageOut: HTMLElement;
@@ -69,7 +74,7 @@
     flags.isRunning = true;
     let png;
     try {
-      png = await pyodide.runPythonAsync(preset.preamble + preset.code);
+      png = await pyodide.runPythonAsync(preset.preamble + "\n" + preset.code);
     } catch (e) {
       console.log(e);
     }
@@ -98,13 +103,13 @@
       </select>
     </div>
     <div class="holder">
-      <button disabled>download</button>
+      <button onclick={() => downloadPreset(preset)}>download</button>
       <button disabled>upload</button>
       <button onclick={runCode}>{flags.isRunning ? "⌛" : "Go!"}</button>
     </div>
 
     <div id="editor-wrapper">
-      <CodeMirror readonly={true} bind:value={preset.pseudoPreamble} lang={python()}></CodeMirror>
+      <CodeMirror readonly={true} bind:value={preset.pseudo} lang={python()}></CodeMirror>
       <div class="layout panel divider"></div>
       <CodeMirror bind:value={preset.code} lang={python()}></CodeMirror>
     </div>
