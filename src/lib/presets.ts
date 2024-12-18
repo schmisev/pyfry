@@ -26,7 +26,7 @@ import numpy as np`;
 
 export const ALL_PRESETS: CodePreset[] = [
   {
-    name: "...",
+    name: "Startpunkt",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
     code: `# Hier könnte dein Code stehen`,

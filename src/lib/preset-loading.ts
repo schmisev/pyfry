@@ -3,7 +3,7 @@ import { type CodePreset } from "./presets";
 type SectionLabel = "name" | "code" | "preamble" | "pseudo";
 
 function download(filename: string, text: string) {
-  var element = document.createElement('a');
+  let element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
   element.setAttribute('download', filename);
 
@@ -31,18 +31,17 @@ function generateStringFromPreset(preset: CodePreset): string {
 }
 
 export function downloadPreset(preset: CodePreset) {
-  let name = prompt("Gib einen Namen für deine Datei an:", preset.name);
   let content = generateStringFromPreset(preset);
 
-  console.log(JSON.stringify(generatePresetFromString(content), null, 2));
+  //console.log(JSON.stringify(generatePresetFromString(content), null, 2));
 
   return download(
-    (name ? name : "pyfryham").replaceAll(" ", "_").replaceAll(".", "_") + ".py",
+    (preset.name ? preset.name : "pyfryham").replaceAll(" ", "_").replaceAll(".", "_") + ".py",
     content
   )
 }
 
-function generatePresetFromString(src: string): CodePreset {
+export function generatePresetFromString(src: string): CodePreset {
   let preset = {
     name: "",
     preamble: "",
@@ -74,7 +73,7 @@ function generatePresetFromString(src: string): CodePreset {
           preset.preamble = lines.slice(1).join("\n");
           break;
         case "pseudo":
-          preset.pseudo = lines.slice(1).join("\n").slice(3, -3);
+          preset.pseudo = lines.slice(1).join("\n").slice(3, -4); // remove comments
           break;
       }
     }
