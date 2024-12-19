@@ -1,6 +1,6 @@
 button {
-  border: 2px #E76F51 solid;
-  background-color: #E76F51;
+  border: 2px rgba(0, 0, 0, 0.2) solid;
+  background-color: whitesmoke;
   box-sizing: border-box;
   display: inline-flex;
   flex-direction: row;
@@ -9,15 +9,15 @@ button {
   border-radius: 0.2em;
   text-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
   box-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
-  color: white;
+  color: black;
   font-weight: bold;
   height: 2em;
   transition: border-color 0.2s, background-color 0.2s;
   white-space: nowrap;
+  padding: 0 0.2em;
 }
 
 button:hover {
-  border: 2px white solid;
   background-color: #F4A261;
 }
 
@@ -25,13 +25,26 @@ select {
   height: 2em;
 }
 
+select, input{
+  border-radius: 0.2em;
+  border: 2px rgba(0, 0, 0, 0.2) solid;
+  background-color: whitesmoke;
+}
+
+select:hover, input:hover {
+  background-color: #E9C46A;
+}
+
+select:focus, input:focus {
+  background-color: #F4A261;
+}
+
 .holder {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  gap: 0.5em;
-  height: max-content;
+  gap: 0.2em;
 }
 
 .holder.left {
@@ -158,6 +171,5 @@ select {
 #name-input {
   width: 100%;
   text-align: right;
-  font-size: large;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }

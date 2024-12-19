@@ -9,6 +9,7 @@
   import { type PyodideInterface } from "pyodide";
   import { replaceState } from "$app/navigation";
 
+  // Helper functions
   let btoa2 = (v: string) => btoa(v);
   let atob2 = (v: string) => atob(v);
 
@@ -20,7 +21,7 @@
     isRunning: false,
   });
 
-  let current_presets = $state(ALL_PRESETS)
+  let current_presets = $state(ALL_PRESETS.map(copyObj));
   let preset: CodePreset = $state(current_presets[0]); // get first preset
   
   // preset uploads
@@ -47,8 +48,6 @@
     element.click();
     document.body.removeChild(element);
   }
-
-  loadURLParams(); // fetch from URL
 
   function loadURLParams() {
     let _name = page.url.searchParams.get("name");
@@ -83,9 +82,25 @@
     preset = new_preset;
   }
 
+  function removePreset() {
+    let index = current_presets.indexOf(preset);
+    current_presets.splice(index, 1);
+    if (current_presets.length <= 0) {
+      current_presets = ALL_PRESETS.map(copyObj);
+    }
+    preset = current_presets[0];
+  }
+
+  function reloadPresets() {
+    current_presets = ALL_PRESETS.map(copyObj);
+    preset = current_presets[0];
+  }
+
   $effect(
     updateURL
   );
+
+  loadURLParams(); // fetch from URL
 
   let consoleOut: HTMLElement;
   let imageOut: HTMLElement;
@@ -140,16 +155,18 @@
   <div class="layout panel code">
     <div class="holder left">
       <div id="title" class="layout panel"><span><b>🍳 PyFryHam</b> by sms</span></div>
-    </div>
-    <div class="holder left">
       <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}>⬇️</button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}>📂</button>
+    </div>
+    <div class="holder left">
       <select id="preset-select" bind:value={preset}>
         {#each current_presets.entries() as [i, p]}
           <option value={p}>{p.name}</option>
         {/each}
       </select>
       <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}>➕</button>
+      <button title="Entferne '{preset.name}'" onclick={removePreset}>❌</button>
+      <button title="Vorlagen zurücksetzen" onclick={reloadPresets}>🔄️</button>
       <button title="Starte die Ausführung!" onclick={runCode}>{flags.isRunning ? "Warte ⌛" : "Start ▶️"}</button>
     </div>
     <div class="holder left">
