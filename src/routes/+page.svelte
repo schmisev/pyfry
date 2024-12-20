@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "$lib/pyfryham.scss";
+  import "$lib/page-style.scss";
   import { ALL_PRESETS, type CodePreset } from "$lib/presets";
   import { onMount } from "svelte";
   import CodeMirror from "svelte-codemirror-editor";
@@ -104,7 +104,7 @@
 
   let consoleOut: HTMLElement;
   let imageOut: HTMLElement;
-  let pyodide: any;
+  let pyodide: PyodideInterface;
   let editor: CodeMirror;
 
   onMount(async () => {
@@ -131,22 +131,31 @@
     if (flags.isRunning) return;
     consoleOut.innerHTML = ""
     flags.isRunning = true;
-    let png;
+    let ret;
+    let pngList: string[] = [];
     try {
-      png = await pyodide.runPythonAsync(generateStringFromPreset(preset));
+      ret = await pyodide.runPythonAsync(generateStringFromPreset(preset));
+      pngList = pyodide.globals.get("plot_result");
     } catch (e) {
       console.log(e);
     }
     flags.isRunning = false;
 
-    if (!png) return;
+    if (pngList) {
+      console.log("Plots generiert: " + pngList.length);
+      // console.log("" + pngList);
+    }
+    if (pngList.length === 0) return;
+    // if (!pngList[-1]) return;
 
-    const img = document.createElement('img');
-    img.style.width = "100%";
-    img.src = 'data:image/png;base64,' + png;
-    imageOut.prepend(img);
-    while (imageOut.children.length > 10) {
-      imageOut.lastChild?.remove();
+    for (const png of pngList) {
+      const img = document.createElement('img');
+      img.style.width = "100%";
+      img.src = 'data:image/png;base64,' + png;
+      imageOut.prepend(img);
+      while (imageOut.children.length > 10) {
+        imageOut.lastChild?.remove();
+      }
     }
   }
 </script>
@@ -154,7 +163,7 @@
 <div class="layout main">
   <div class="layout panel code">
     <div class="holder left">
-      <div id="title" class="layout panel"><span><b>🍳 PyFryHam</b> by sms</span></div>
+      <div id="title" class="layout panel"><span><b>🍳 PyFryHam</b> by sms & cdr</span></div>
       <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}>⬇️</button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}>📂</button>
     </div>
@@ -167,7 +176,7 @@
       <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}>➕</button>
       <button title="Entferne '{preset.name}'" onclick={removePreset}>❌</button>
       <button title="Vorlagen zurücksetzen" onclick={reloadPresets}>🔄️</button>
-      <button title="Starte die Ausführung!" onclick={runCode}>{flags.isRunning ? "Warte ⌛" : "Start ▶️"}</button>
+      <button title="Starte die Ausführung!" onclick={runCode}>&nbsp;{flags.isRunning ? "Warte ⌛" : "Start ▶️"}</button>
     </div>
     <div class="holder left">
       Name: 
@@ -187,7 +196,11 @@
   </div>
 
   <div class="layout panel output">
-    <div class="layout panel label"><span>🥓 Meine Plots</span></div>
+    <div class="holder">
+      <div class="layout panel label"><span>🥓 Meine Plots</span></div>
+      <a href="https://matplotlib.org/cheatsheets/_images/cheatsheets-1.png" target="_blank">⁉️</a>
+      <a href="https://matplotlib.org/cheatsheets/_images/handout-beginner.png" target="_blank">🤔</a>
+    </div>
     <div id="image-out">
     </div>
   </div>

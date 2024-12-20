@@ -11,14 +11,21 @@ import numpy as np
 from io import BytesIO
 import base64
 
-def new_show():
+plot_result = []
+
+def new_show(append=True):
+  global plot_result
   buf = BytesIO()
   plt.savefig(buf, format='png')
   plt.clf()
-  return base64.b64encode(buf.getvalue()).decode('utf-8')
+  result = base64.b64encode(buf.getvalue()).decode('utf-8')
+  if append:
+    plot_result.append(result)
+  else:
+    return result
 
 plt.show = new_show
-new_show()`;
+new_show(False)`;
 
 export const STD_PSEUDO_PREAMBLE = `# Import
 import matplotlib.pyplot as plt
@@ -67,7 +74,7 @@ x = np.array([1, 1,   1,   1,   2,   2,   2,    2,   3,   3, 3,   4,    5]);
 y = np.array([1, 0.9, 1.5, 2.3, 4.2, 5.0, 3.99, 4.0, 8.1, 9, 9.1, 16.5, 25.02]);
 
 # Polynomielle Regression
-A, B, C = np.polynomial.polynomial.polyfit(x, y, 2);
+C, B, A = np.polynomial.polynomial.polyfit(x, y, 2);
 x_fit = np.arange(np.min(x), np.max(x), 0.01)
 y_fit = A * x_fit**2 + B * x_fit + C
 
@@ -85,6 +92,27 @@ plt.xlabel("Versuche")
 plt.ylabel("Erfolgschance [%]")
 
 plt.title("Trickshots", color="green", weight="bold")
+plt.show()
+    `
+  },
+  {
+    name: "Mehrere verschiedene Plots",
+    preamble: STD_PREAMBLE,
+    pseudo: STD_PSEUDO_PREAMBLE,
+    code: `# Mehrere verschiedene Plots
+
+# Werte & Beschriftungen
+labels = ["A", "B", "C", "D", "E"];
+values = [1, 2, 5, 4, 7];
+
+# Kuchendiagramm
+plt.title("Ein Kuchendiagramm")
+plt.pie(values, labels=labels)
+plt.show()
+
+# Kuchendiagramm
+plt.title("Ein Säulendiagramm")
+plt.bar(labels, values)
 plt.show()
     `
   }
