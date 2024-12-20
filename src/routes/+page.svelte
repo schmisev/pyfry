@@ -5,7 +5,7 @@
   import CodeMirror from "svelte-codemirror-editor";
   import { python } from "@codemirror/lang-python";
   import { page } from "$app/state";
-  import { downloadPreset, generatePresetFromString } from "$lib/preset-loading";
+  import { downloadPreset, generatePresetFromString, generateStringFromPreset } from "$lib/preset-loading";
   import { type PyodideInterface } from "pyodide";
   import { replaceState } from "$app/navigation";
 
@@ -133,7 +133,7 @@
     flags.isRunning = true;
     let png;
     try {
-      png = await pyodide.runPythonAsync(preset.preamble + "\n" + preset.code);
+      png = await pyodide.runPythonAsync(generateStringFromPreset(preset));
     } catch (e) {
       console.log(e);
     }

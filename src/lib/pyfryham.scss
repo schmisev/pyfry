@@ -152,6 +152,21 @@ select:focus, input:focus {
   scrollbar-width: thin;
 }
 
+img {
+  box-sizing: border-box;
+}
+
+img:first-child {
+  border: 2px solid black;
+  border-radius: 0.2em;
+  width: 100%;
+}
+
+img:not(:first-child) {
+  border-radius: 0.2em;
+  flex-grow: 0;
+}
+
 #title {
   background-color: #2A9D8F;
   color: white;

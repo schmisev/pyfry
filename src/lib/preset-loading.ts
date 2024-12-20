@@ -19,7 +19,7 @@ function sectionComment(label: SectionLabel) {
   return `###[${label}]`;
 }
 
-function generateStringFromPreset(preset: CodePreset): string {
+export function generateStringFromPreset(preset: CodePreset): string {
   let retStr = "";
 
   retStr += sectionComment("name") + ` ${preset.name}\n`;
