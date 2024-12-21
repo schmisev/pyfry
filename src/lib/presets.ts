@@ -67,14 +67,14 @@ plt.show()`,
     pseudo: STD_PSEUDO_PREAMBLE,
     code: `# Zusätzliche Imports
 from matplotlib.ticker import MaxNLocator
-from numpy.polynomial.polynomial import Polynomial as pn
+import numpy.polynomial.polynomial as pn
 
 # Messdaten
 x = np.array([1, 1,   1,   1,   2,   2,   2,    2,   3,   3, 3,   4,    5]);
 y = np.array([1, 0.9, 1.5, 2.3, 4.2, 5.0, 3.99, 4.0, 8.1, 9, 9.1, 16.5, 25.02]);
 
 # Polynomielle Regression
-C, B, A = np.polynomial.polynomial.polyfit(x, y, 2);
+C, B, A = pn.polyfit(x, y, 2);
 x_fit = np.arange(np.min(x), np.max(x), 0.01)
 y_fit = A * x_fit**2 + B * x_fit + C
 
@@ -92,8 +92,7 @@ plt.xlabel("Versuche")
 plt.ylabel("Erfolgschance [%]")
 
 plt.title("Trickshots", color="green", weight="bold")
-plt.show()
-    `
+plt.show()`
   },
   {
     name: "Mehrere verschiedene Plots",
