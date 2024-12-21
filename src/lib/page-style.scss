@@ -13,14 +13,25 @@ button, a {
   font-weight: bold;
   font-size: 1em;
   height: 2em;
-  transition: border-color 0.2s, background-color 0.2s;
   white-space: nowrap;
   padding: 0 0.2em;
   text-decoration: none;
+  cursor: pointer;
+
+  transition: 
+    border-color 0.2s, 
+    background-color 0.2s,
+    scale 0.2s;
 }
 
 button:hover, a:hover {
   background-color: #F4A261;
+  scale: 1.05;
+  rotate: 2deg;
+}
+
+button:active, a:active {
+  scale: 0.9;
 }
 
 select {
@@ -64,6 +75,7 @@ select:focus, input:focus {
   min-width: max-content;
   width: 100%;
   height: 2em;
+  text-shadow: rgba(255, 255, 255, 0.5) 0em 0em 0.5em;
 }
 
 .layout {
@@ -156,14 +168,6 @@ select:focus, input:focus {
   border-radius: 0.2em;
 }
 
-#image-out > img {
-  box-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
-}
-
-img {
-  box-sizing: border-box;
-}
-
 #title {
   background-color: #2A9D8F;
   color: white;
@@ -186,9 +190,12 @@ img {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-img {
+#image-out > img {
+  cursor: grab;
+  box-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
   animation: show 600ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
   border-radius: 0.5em;
+  box-sizing: border-box;
 
   // Prestate
   opacity: 0;

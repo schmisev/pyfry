@@ -8,6 +8,8 @@
   import { downloadPreset, generatePresetFromString, generateStringFromPreset } from "$lib/preset-loading";
   import { type PyodideInterface } from "pyodide";
   import { replaceState } from "$app/navigation";
+  import { browser } from "$app/environment";
+  import Sortable from 'sortablejs';
 
   // Helper functions
   let btoa2 = (v: string) => btoa(v);
@@ -125,6 +127,9 @@
 
     await pyodide.loadPackage("numpy");
     await pyodide.loadPackage("matplotlib");
+
+    new Sortable(imageOut, {
+    });
   });
 
   async function runCode() {
