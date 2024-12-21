@@ -165,6 +165,7 @@ select:focus, input:focus {
   min-height: 0;
   overflow-y: scroll;
   touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   border-radius: 0.2em;
 }
