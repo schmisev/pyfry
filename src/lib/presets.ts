@@ -115,4 +115,63 @@ plt.bar(labels, values)
 plt.show()
     `
   }
+  {
+    name: "Bruchkurve",
+    preamble: STD_PREAMBLE,
+    pseudo: STD_PSEUDO_PREAMBLE,
+    code = `# Spannungs-Dehnungs-Diagramm
+import random
+
+def stress_strain(xs, D, ReL, ReH, Rm, AL, Ag, A):
+  ys = []
+  mode = 0
+
+  for x in xs:
+    if mode == 0:
+      # elastic
+      y = D * x
+      if y >= ReH:
+        mode = 1
+    elif mode == 1:
+      # nicht-linear el.
+      y = ReL + 0.8 * (ReH - ReL) * random.random()
+      if x > AL:
+        mode = 2
+    elif mode == 2:
+      # inelastisch
+      b = (Rm-ReL) / (AL - Ag)**2
+      y = Rm - b * (x - Ag)**2
+      if x > A:
+        mode = 3
+    else:
+      y = None
+        
+    ys.append(y)
+  return ys
+      
+
+D = 10
+ReL = 1.2
+ReH = 1.3
+Rm = 1.7
+AL = 0.2
+Ag = 0.5
+A = 0.7
+
+x = np.linspace(0, 1, 1000)
+y = stress_strain(x, D, ReL, ReH, Rm, AL, Ag, A)
+
+plt.plot(x, y)
+plt.axhline(y=ReL, color="black", ls="--")
+plt.axhline(y=ReH, color="black", ls="--")
+plt.axhline(y=Rm, color="black", ls="--")
+plt.axvline(x=AL, color="green", ls=":")
+plt.axvline(x=Ag, color="green", ls=":")
+plt.axvline(x=A, color="green", ls=":")
+
+ax = plt.gca()
+ax.set_xlim([0, 1])
+
+plt.show()`
+  }
 ]
