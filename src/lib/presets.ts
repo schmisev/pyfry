@@ -119,7 +119,7 @@ plt.show()
     name: "Bruchkurve",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
-    code = `# Spannungs-Dehnungs-Diagramm
+    code: `# Spannungs-Dehnungs-Diagramm
 import random
 
 def stress_strain(xs, D, ReL, ReH, Rm, AL, Ag, A):
