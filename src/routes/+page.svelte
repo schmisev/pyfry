@@ -21,6 +21,8 @@
 
   let flags = $state({
     isRunning: false,
+    cheatsheetBeginner: false,
+    cheatsheetAdvanced: true
   });
 
   let current_presets = $state(ALL_PRESETS.map(copyObj));
@@ -57,7 +59,7 @@
     let _preamble = page.url.searchParams.get("preamble");
     let _pseudo = page.url.searchParams.get("pseudo");
 
-    if (_name) preset.name = atob2(_name)
+    if (_name) preset.name = atob2(_name) + " [aus URL]";
     if (_code) preset.code = atob2(_code);
     if (_preamble) preset.preamble = atob2(_preamble);
     if (_pseudo) preset.pseudo = atob2(_pseudo);
@@ -129,6 +131,8 @@
     await pyodide.loadPackage("matplotlib");
 
     new Sortable(imageOut, {
+      handle: ".img-handle",
+      easing: "cubic-bezier(1, 0, 0, 1)",
     });
   });
 
@@ -154,10 +158,20 @@
     // if (!pngList[-1]) return;
 
     for (const png of pngList) {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("img-wrapper");
+
+      const handle = document.createElement("div");
+      handle.classList.add("img-handle");
+
       const img = document.createElement('img');
       img.style.width = "100%";
       img.src = 'data:image/png;base64,' + png;
-      imageOut.prepend(img);
+      
+      wrapper.append(handle);
+      wrapper.append(img);
+      
+      imageOut.prepend(wrapper);
       while (imageOut.children.length > 10) {
         imageOut.lastChild?.remove();
       }
@@ -168,7 +182,7 @@
 <div class="layout main">
   <div class="layout panel code">
     <div class="holder left">
-      <div id="title" class="layout panel"><span><b>🍳 PyFryHam</b> by sms & cdr</span></div>
+      <div id="title" class="layout panel"><div id="title-text"><b>🍳 PyFryHam</b> by sms & cdr</div></div>
       <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}>⬇️</button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}>📂</button>
     </div>

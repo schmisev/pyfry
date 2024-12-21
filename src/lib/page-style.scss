@@ -171,13 +171,19 @@ select:focus, input:focus {
 #title {
   background-color: #2A9D8F;
   color: white;
-  display: inline-flex;
-  flex-wrap: nowrap;
   flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
-  min-width: max-content;
   width: 100%;
   height: 2em;
+  min-width: 0;
+}
+
+#title-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  //max-width: 200px;
 }
 
 #preset-select {
@@ -190,8 +196,7 @@ select:focus, input:focus {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-#image-out > img {
-  cursor: grab;
+#image-out > .img-wrapper {
   box-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
   animation: show 600ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
   border-radius: 0.5em;
@@ -202,6 +207,19 @@ select:focus, input:focus {
   // remove transform for just a fade-in
   transform: rotateX(-90deg);
   transform-origin: top center;
+
+  display: flex;
+  flex-direction: column;
+  min-height: max-content;
+  overflow: hidden;
+}
+
+.img-handle {
+  background-color: #2A9D8F;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  margin: 0.5em;
+  cursor: grab;
 }
 
 @keyframes show {
@@ -209,4 +227,18 @@ select:focus, input:focus {
     opacity: 1;
     transform: none;
   }
+}
+
+.modal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100vh;
+  width: 100%;
+}
+
+.modal-content {
+  margin: 0.5em;
+  width: 100%;
 }
