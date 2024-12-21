@@ -163,7 +163,8 @@ select:focus, input:focus {
   gap: 0.7em;
   height: 100%;
   min-height: 0;
-  overflow-y: auto;
+  overflow-y: scroll;
+  touch-action: pan-y;
   scrollbar-width: thin;
   border-radius: 0.2em;
 }
