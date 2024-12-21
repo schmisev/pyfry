@@ -130,12 +130,12 @@
     await pyodide.loadPackage("numpy");
     await pyodide.loadPackage("matplotlib");
 
-    /*
+    
     new Sortable(imageOut, {
       handle: ".img-handle",
       easing: "cubic-bezier(1, 0, 0, 1)",
     });
-    */
+    
   });
 
   async function runCode() {
