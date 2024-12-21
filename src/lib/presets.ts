@@ -114,7 +114,7 @@ plt.title("Ein Säulendiagramm")
 plt.bar(labels, values)
 plt.show()
     `
-  }
+  },
   {
     name: "Bruchkurve",
     preamble: STD_PREAMBLE,
