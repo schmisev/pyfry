@@ -59,7 +59,7 @@
     let _preamble = page.url.searchParams.get("preamble");
     let _pseudo = page.url.searchParams.get("pseudo");
 
-    if (_name) preset.name = atob2(_name) + " [aus URL]";
+    if (_name) preset.name = atob2(_name);
     if (_code) preset.code = atob2(_code);
     if (_preamble) preset.preamble = atob2(_preamble);
     if (_pseudo) preset.pseudo = atob2(_pseudo);
@@ -184,9 +184,9 @@
 <div class="layout main">
   <div class="layout panel code">
     <div class="holder left">
-      <div id="title" class="layout panel"><div id="title-text"><b>🍳 PyFryHam</b> by sms & cdr</div></div>
-      <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}>⬇️</button>
-      <button title="Lade Code in .py-Format hoch" onclick={uploadFile}>📂</button>
+      <div id="title" class="layout panel"><span class="material-symbols-outlined">egg_alt</span>&nbsp;<div id="title-text"><b>PyFryHam</b> by sms & cdr</div></div>
+      <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}><span class="material-symbols-outlined">download</span></button>
+      <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><span class="material-symbols-outlined">folder_open</span></button>
     </div>
     <div class="holder left">
       <select id="preset-select" bind:value={preset}>
@@ -194,10 +194,10 @@
           <option value={p}>{p.name}</option>
         {/each}
       </select>
-      <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}>➕</button>
-      <button title="Entferne '{preset.name}'" onclick={removePreset}>❌</button>
-      <button title="Vorlagen zurücksetzen" onclick={reloadPresets}>🔄️</button>
-      <button title="Starte die Ausführung!" onclick={runCode}>&nbsp;{flags.isRunning ? "Warte ⌛" : "Start ▶️"}</button>
+      <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}><span class="material-symbols-outlined">content_copy</span></button>
+      <button title="Entferne '{preset.name}'" onclick={removePreset}><span class="material-symbols-outlined">delete</span></button>
+      <button title="Vorlagen zurücksetzen" onclick={reloadPresets}><span class="material-symbols-outlined">history</span></button>
+      <button title="Starte die Ausführung!" onclick={runCode}>&nbsp;Start <span class="material-symbols-outlined">flag</span></button>
     </div>
     <div class="holder left">
       Name: 
@@ -218,9 +218,9 @@
 
   <div class="layout panel output">
     <div class="holder">
-      <div class="layout panel label"><span>🥓 Meine Plots</span></div>
-      <a href="https://matplotlib.org/cheatsheets/_images/cheatsheets-1.png" target="_blank">⁉️</a>
-      <a href="https://matplotlib.org/cheatsheets/_images/handout-beginner.png" target="_blank">🤔</a>
+      <div class="layout panel label"><span class="material-symbols-outlined">cards_star</span>&nbsp;<span>Meine Plots</span></div>
+      <a href="https://matplotlib.org/cheatsheets/_images/cheatsheets-1.png" target="_blank"><span class="material-symbols-outlined">help</span></a>
+      <a href="https://matplotlib.org/cheatsheets/_images/handout-beginner.png" target="_blank"><span class="material-symbols-outlined">info</span></a>
     </div>
     <div id="image-out">
     </div>
