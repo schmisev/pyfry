@@ -85,7 +85,7 @@ select:focus, input:focus {
 }
 
 .layout.main {
-  height: 100vh;
+  height: 100dvh;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: minmax(0, 5fr) minmax(0, 1fr);
