@@ -21,8 +21,7 @@
 
   let flags = $state({
     isRunning: false,
-    cheatsheetBeginner: false,
-    cheatsheetAdvanced: true
+    updateURL: true,
   });
 
   let current_presets = $state(ALL_PRESETS.map(copyObj));
@@ -66,6 +65,11 @@
   }
 
   function updateURL() {
+    if (!flags.updateURL) {
+      replaceState("?", page.state);
+      return;
+    }
+
     let query = new URLSearchParams("");
     query.set('name', btoa2(preset.name));
     query.set('code', btoa2(preset.code));
@@ -77,6 +81,11 @@
     } catch {
       // do nothing
     }
+  }
+
+  function toggleURLUpdates() {
+    flags.updateURL = !flags.updateURL; 
+    updateURL();
   }
 
   function duplicatePreset() {
@@ -185,6 +194,7 @@
   <div class="layout panel code">
     <div class="holder left">
       <div id="title" class="layout panel"><span class="material-symbols-outlined">egg_alt</span>&nbsp;<div id="title-text"><b>PyFryHam</b> by sms & cdr</div></div>
+      <button class="{flags.updateURL ? 'active' : ''}" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"}</button>
       <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}><span class="material-symbols-outlined">download</span></button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><span class="material-symbols-outlined">folder_open</span></button>
     </div>

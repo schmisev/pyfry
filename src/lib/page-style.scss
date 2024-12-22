@@ -42,6 +42,10 @@ button:active, a:active {
   scale: 0.9;
 }
 
+button.active {
+  background-color: #E9C46A;
+}
+
 select {
   height: 2em;
 }
