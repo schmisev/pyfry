@@ -153,40 +153,40 @@
     flags.isRunning = true;
     let ret;
     let pngList: string[] = [];
-    try {
-      ret = await pyodide.runPythonAsync(generateStringFromPreset(preset));
+    ret = pyodide.runPythonAsync(generateStringFromPreset(preset));
+    ret.then((val) => {
       pngList = pyodide.globals.get("plot_result");
-    } catch (e) {
-      console.log(e);
-    }
-    flags.isRunning = false;
-
-    if (pngList) {
-      console.log("Plots generiert: " + pngList.length);
-      // console.log("" + pngList);
-    }
-    if (pngList.length === 0) return;
-    // if (!pngList[-1]) return;
-
-    for (const png of pngList) {
-      const wrapper = document.createElement("div");
-      wrapper.classList.add("img-wrapper");
-
-      const handle = document.createElement("div");
-      handle.classList.add("img-handle");
-
-      const img = document.createElement('img');
-      img.style.width = "100%";
-      img.src = 'data:image/png;base64,' + png;
-      
-      wrapper.append(handle);
-      wrapper.append(img);
-      
-      imageOut.prepend(wrapper);
-      while (imageOut.children.length > 10) {
-        imageOut.lastChild?.remove();
+      flags.isRunning = false;
+      if (pngList) {
+        console.log("Plots generiert: " + pngList.length);
+        // console.log("" + pngList);
       }
-    }
+      if (pngList.length === 0) return;
+      // if (!pngList[-1]) return;
+
+      for (const png of pngList) {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("img-wrapper");
+
+        const handle = document.createElement("div");
+        handle.classList.add("img-handle");
+
+        const img = document.createElement('img');
+        img.style.width = "100%";
+        img.src = 'data:image/png;base64,' + png;
+        
+        wrapper.append(handle);
+        wrapper.append(img);
+        
+        imageOut.prepend(wrapper);
+        while (imageOut.children.length > 10) {
+          imageOut.lastChild?.remove();
+        }
+      }
+    }).catch((err) => {
+      console.log(err);
+      flags.isRunning = false;
+    });
   }
 </script>
 

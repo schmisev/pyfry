@@ -62,6 +62,23 @@ plt.scatter(x, y);
 plt.show()`,
   },
   {
+    name: "Scatterplot mit Messdaten (Wertpaare)",
+    preamble: STD_PREAMBLE,
+    pseudo: STD_PSEUDO_PREAMBLE,
+    code: `# Scatterplot mit Messdaten (Wertpaare)
+data = np.array([
+  [0, 1],
+  [0.1, 1.2],
+  [0.2, 1.8],
+  [0.3, 2.3],
+  [0.5, 3.0],
+  [0.6, 5.1],
+])
+
+plt.scatter(data[:,0], data[:,1]);
+plt.show()`
+  },
+  {
     name: "Vollständiges Beispiel mit polynomieller Regression",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
