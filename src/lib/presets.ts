@@ -39,19 +39,6 @@ export const ALL_PRESETS: CodePreset[] = [
     code: `# Hier könnte dein Code stehen`,
   },
   {
-    name: "Sinus und Cosinus",
-    preamble: STD_PREAMBLE,
-    pseudo: STD_PSEUDO_PREAMBLE,
-    code: `# Sinus und Cosinus
-x = np.arange(0, 4 * np.pi, 0.1)
-y1 = np.cos(x)
-y2 = 0.5 * np.sin(x - np.pi) + 0.5
-
-plt.plot(x, y1)
-plt.plot(x, y2)
-plt.show()`,
-  },
-  {
     name: "Scatterplot mit linearer Regression",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
@@ -72,7 +59,9 @@ y_fit =  m * x + t
 
 plt.plot(x, y_fit, 
          color = "red", 
-         linestyle = "-")
+         linestyle = "-",
+         label = f"y = {m:.3f} * x + {t:.3f}")
+plt.legend()
 
 #Beschriftungen
 plt.title("U-I-Kennlinie eines ohmschen Widerstandes", 
@@ -88,6 +77,19 @@ plt.grid(linestyle = "-")
 
 #Erstelle Diagramm
 plt.show()`
+  },
+  {
+    name: "Sinus und Cosinus",
+    preamble: STD_PREAMBLE,
+    pseudo: STD_PSEUDO_PREAMBLE,
+    code: `# Sinus und Cosinus
+x = np.arange(0, 4 * np.pi, 0.1)
+y1 = np.cos(x)
+y2 = 0.5 * np.sin(x - np.pi) + 0.5
+
+plt.plot(x, y1)
+plt.plot(x, y2)
+plt.show()`,
   },
   {
     name: "Scatterplot mit Messdaten",
