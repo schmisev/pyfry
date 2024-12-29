@@ -52,6 +52,44 @@ plt.plot(x, y2)
 plt.show()`,
   },
   {
+    name: "Scatterplot mit linearer Regression",
+    preamble: STD_PREAMBLE,
+    pseudo: STD_PSEUDO_PREAMBLE,
+    code: `import numpy.polynomial.polynomial as pn
+
+# Eingabe der Messdaten
+x = np.array([0, 1, 2.1,   2.9,  4,     5, 6.05, 7.2,  8, 10, 2, 3])
+y = np.array([0, 8,  10, 14.65, 20, 25.02, 30.2,  37, 40, 50, 9.5, 15])
+
+# Messdaten anzeigen
+plt.scatter(x, y, 
+            marker = "x", 
+            color = "blue")
+
+# Lineare Regression
+t, m = pn.polyfit(x, y, 1)
+y_fit =  m * x + t
+
+plt.plot(x, y_fit, 
+         color = "red", 
+         linestyle = "-")
+
+#Beschriftungen
+plt.title("U-I-Kennlinie eines ohmschen Widerstandes", 
+          color = "black", 
+          weight = "bold")
+plt.xlabel("U in V")
+plt.ylabel("I in mA")
+
+#Achsen
+plt.xlim(left = 0)
+plt.ylim(bottom = 0)
+plt.grid(linestyle = "-")
+
+#Erstelle Diagramm
+plt.show()`
+  },
+  {
     name: "Scatterplot mit Messdaten",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
