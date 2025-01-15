@@ -8,6 +8,7 @@ export interface CodePreset {
 export const STD_PREAMBLE = `# Preambel
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.polynomial.polynomial as pn
 from io import BytesIO
 import base64
 
@@ -29,55 +30,61 @@ new_show(False)`;
 
 export const STD_PSEUDO_PREAMBLE = `# Import
 import matplotlib.pyplot as plt
-import numpy as np`;
+import numpy as np
+import numpy.polynomial.polynomial as pn`;
 
 export const ALL_PRESETS: CodePreset[] = [
+  /*
   {
     name: "Startpunkt",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
     code: `# Hier könnte dein Code stehen`,
   },
+  */
   {
     name: "Scatterplot mit linearer Regression",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
-    code: `import numpy.polynomial.polynomial as pn
-
+    code: `
 # Eingabe der Messdaten
-x = np.array([0, 1, 2.1,   2.9,  4,     5, 6.05, 7.2,  8, 10, 2, 3])
-y = np.array([0, 8,  10, 14.65, 20, 25.02, 30.2,  37, 40, 50, 9.5, 15])
+x = np.array([0, 1, 2.1, 2.9])
+y = np.array([0, 8, 10, 14.65])
 
 # Messdaten anzeigen
 plt.scatter(x, y, 
             marker = "x", 
             color = "blue")
 
+''' # auskommentiert
 # Lineare Regression
 t, m = pn.polyfit(x, y, 1)
-y_fit =  m * x + t
+x_fit = np.linspace(0, max(x), 100)
+y_fit =  m * x_fit + t
 
-plt.plot(x, y_fit, 
+plt.plot(x_fit, y_fit, 
          color = "red", 
          linestyle = "-",
          label = f"y = {m:.3f} * x + {t:.3f}")
 plt.legend()
+''' # Ende auskommentiert
 
-#Beschriftungen
-plt.title("U-I-Kennlinie eines ohmschen Widerstandes", 
+# Beschriftungen
+plt.title("Überschrift", 
           color = "black", 
           weight = "bold")
-plt.xlabel("U in V")
-plt.ylabel("I in mA")
+plt.xlabel("x-Achsen Beschriftung")
+plt.ylabel("y-Achsen Beschriftung")
 
-#Achsen
+# Achsen
 plt.xlim(left = 0)
 plt.ylim(bottom = 0)
 plt.grid(linestyle = "-")
 
-#Erstelle Diagramm
+# Erstelle Diagramm
 plt.show()`
   },
+  /*
   {
     name: "Sinus und Cosinus",
     preamble: STD_PREAMBLE,
@@ -231,4 +238,5 @@ ax.set_xlim([0, 1])
 
 plt.show()`
   }
+  */
 ]
