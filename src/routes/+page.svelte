@@ -6,10 +6,23 @@
   import { python } from "@codemirror/lang-python";
   import { page } from "$app/state";
   import { downloadPreset, generatePresetFromString, generateStringFromPreset } from "$lib/preset-loading";
-  import { type PyodideInterface } from "pyodide";
+  import { type PyodideInterface, /* loadPyodide */ } from "pyodide";
   import { replaceState } from "$app/navigation";
-  import { browser } from "$app/environment";
   import Sortable from 'sortablejs';
+  import { parseCSV, type CSVData } from "$lib/csv";
+  import {tags} from "@lezer/highlight"
+  import {HighlightStyle, syntaxHighlighting} from "@codemirror/language"
+
+  const customPythonHighlighting = HighlightStyle.define([
+    {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
+    {tag: tags.comment, color: "#F4A261", fontStyle: "italic"},
+    {tag: tags.string, color: "#2A9D8F"},
+    {tag: tags.number, color: "#A462F4", fontWeight: "bold"},
+    {tag: tags.variableName, fontWeight: "bold"},
+    
+  ])
+
+  const extensions = [syntaxHighlighting(customPythonHighlighting)]
 
   // Helper functions
   let btoa2 = (v: string) => btoa(v);
@@ -26,6 +39,13 @@
 
   let current_presets = $state(ALL_PRESETS.map(copyObj));
   let preset: CodePreset = $state(current_presets[0]); // get first preset
+  let global_csv: CSVData[] = $state([[
+    ["x", "y"],
+    [1, 1],
+    [2, 4],
+    [3, 9],
+    [4, 16],
+  ]]);
   
   // preset uploads
   function uploadFile() {
@@ -60,7 +80,7 @@
 
     if (_name) preset.name = atob2(_name);
     if (_code) preset.code = atob2(_code);
-    if (_preamble) preset.preamble = atob2(_preamble);
+    // if (_preamble) preset.preamble = atob2(_preamble); deactivated, as the same preamble should always be used
     if (_pseudo) preset.pseudo = atob2(_pseudo);
   }
 
@@ -109,12 +129,11 @@
     preset = current_presets[0];
   }
 
-  $effect(
-    updateURL
-  );
+  $effect(updateURL);
 
   loadURLParams(); // fetch from URL
 
+  // setting up the app
   let consoleOut: HTMLElement;
   let imageOut: HTMLElement;
   let pyodide: PyodideInterface;
@@ -128,6 +147,7 @@
     function log(msg: any) {
       consoleOut.textContent += `${msg}\n`;
       old_log(`${msg}`);
+      consoleOut
     }
     console.log = log;
 
@@ -153,6 +173,7 @@
     flags.isRunning = true;
     let ret;
     let pngList: string[] = [];
+    pyodide.globals.set("csv_data", global_csv);
     ret = pyodide.runPythonAsync(generateStringFromPreset(preset));
     ret.then((val) => {
       pngList = pyodide.globals.get("plot_result");
@@ -188,6 +209,30 @@
       flags.isRunning = false;
     });
   }
+
+  function uploadCSV() {
+    const element: HTMLInputElement = document.createElement('input');
+    element.type = "file";
+    element.accept = ".csv";
+    document.body.appendChild(element)
+    element.onchange = (e) => {
+      if (!e.target || !(e.target as any).files) return
+      let file = (e.target as any).files[0];
+      if (!file) return;
+      let reader = new FileReader();
+      reader.onload = function(e) {
+        if (!e.target) return;
+        let contents = e.target.result;
+        if (typeof contents === "string") {
+          let csv = parseCSV(contents);
+          global_csv.push(csv); // set global csv
+        }
+      };
+      reader.readAsText(file);
+    }
+    element.click();
+    document.body.removeChild(element);
+  }
 </script>
 
 <div class="layout main">
@@ -215,9 +260,9 @@
       .py
     </div>
     <div id="editor-wrapper">
-      <CodeMirror lineWrapping={true} readonly={true} bind:value={preset.pseudo} lang={python()}></CodeMirror>
+      <CodeMirror extensions={extensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo} lang={python()}></CodeMirror>
       <div class="layout panel divider"></div>
-      <CodeMirror lineWrapping={true} bind:value={preset.code} lang={python()}></CodeMirror>
+      <CodeMirror extensions={extensions} lineWrapping={true} bind:value={preset.code} lang={python()}></CodeMirror>
     </div>
   </div>
   <div class="layout panel console">
@@ -233,6 +278,15 @@
       <a href="https://matplotlib.org/cheatsheets/_images/handout-beginner.png" target="_blank"><span class="material-symbols-outlined">info</span></a>
     </div>
     <div id="image-out">
+    </div>
+    <button onclick={uploadCSV}><span class="material-symbols-outlined">folder_open</span> .csv →&nbsp;<code>csv_data</code>&nbsp;</button>
+    <div>
+      {#each global_csv.entries() as [index, csv_table]}
+        <div class="holder file-tab">
+          <button onclick={() => global_csv.splice(index, 1)}><span class="material-symbols-outlined">delete</span></button>
+          &nbsp;<code>csv_data[{index}] = {JSON.stringify(csv_table)}</code>
+        </div>
+      {/each}
     </div>
   </div>
 </div>

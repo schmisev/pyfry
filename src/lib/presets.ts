@@ -26,12 +26,16 @@ def new_show(append=True):
     return result
 
 plt.show = new_show
-new_show(False)`;
+new_show(False)
+
+csv_data = csv_data.to_py()
+`;
 
 export const STD_PSEUDO_PREAMBLE = `# Import
 import matplotlib.pyplot as plt
 import numpy as np
-import numpy.polynomial.polynomial as pn`;
+import numpy.polynomial.polynomial as pn
+csv_data = ... # Daten aus csv-Import`;
 
 export const ALL_PRESETS: CodePreset[] = [
   /*

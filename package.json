@@ -25,8 +25,9 @@
 	"dependencies": {
 		"@codemirror/lang-python": "^6.1.6",
 		"@sveltejs/adapter-vercel": "^5.5.2",
+		"csv": "^6.3.11",
 		"lz-string": "^1.5.0",
-		"pyodide": "^0.26.4",
+		"pyodide": "^0.27.3",
 		"shrink-string": "^3.1.9",
 		"sortablejs": "^1.15.6",
 		"svelte-codemirror-editor": "^1.4.1"

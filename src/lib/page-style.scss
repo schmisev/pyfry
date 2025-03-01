@@ -6,6 +6,17 @@
   'opsz' 24
 }
 
+:root {
+  --orange: #F4A261;
+  --yellow: #E9C46A;
+  --dark-green: #264653;
+  --green: #2A9D8F;
+  --hot-pink: #F46281;
+  --light-blue: #62E3F4;
+  --blue: #6281F4;
+  --purple: #A462F4;
+}
+
 button, a {
   border: 2px rgba(0, 0, 0, 0.2) solid;
   background-color: whitesmoke;
@@ -29,17 +40,20 @@ button, a {
   transition: 
     border-color 0.2s, 
     background-color 0.2s,
-    scale 0.2s;
+    scale 0.2s,
+    translate 0.1s;
 }
 
 button:hover, a:hover {
   background-color: #F4A261;
-  scale: 1.05;
-  rotate: 2deg;
+  //scale: 1.05;
+  //rotate: 2deg;
+  translate: 0 -0.1em;
 }
 
 button:active, a:active {
-  scale: 0.9;
+  //scale: 0.9;
+  translate: 0 0.1em;
 }
 
 button.active {
@@ -64,6 +78,21 @@ select:focus, input:focus {
   background-color: #F4A261;
 }
 
+table {
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 0.2em;
+}
+
+td {
+  text-align: center;
+  background-color: white
+}
+
+td.no-fill {
+  background-color: transparent;
+}
+
 .holder {
   display: inline-flex;
   flex-direction: row;
@@ -74,6 +103,22 @@ select:focus, input:focus {
 
 .holder.left {
   justify-content: left;
+}
+
+.file-tab {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: whitesmoke;
+  padding: 0.2em;
+  border-radius: 0.2em;
+  overflow: hidden;
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: left;
+}
+
+.file-tab code {
+  white-space: nowrap;
 }
 
 .layout.panel.label {
