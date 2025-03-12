@@ -52,7 +52,7 @@ export const ALL_PRESETS: CodePreset[] = [
     pseudo: STD_PSEUDO_PREAMBLE,
     code: `
 # Eingabe der Messdaten
-x = np.array([0, 1, 2.1, 2.9])
+x = np.array([0, 1, 2.1, 5])
 y = np.array([0, 8, 10, 14.65])
 
 # Messdaten anzeigen
