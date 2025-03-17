@@ -47,20 +47,31 @@ export const ALL_PRESETS: CodePreset[] = [
   },
   */
   {
-    name: "Scatterplot mit linearer Regression",
+    name: "Scatterplot (standard)",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
     code: `
 # Eingabe der Messdaten
-x = np.array([0, 1, 2.1, 5])
-y = np.array([0, 8, 10, 14.65])
+data = np.array([
+  [1,1],
+  [2,4],
+  [3,9]
+])
+x = data[:,0]
+y = data[:,1]
 
 # Messdaten anzeigen
 plt.scatter(x, y, 
             marker = "x", 
             color = "blue")
-
-''' # auskommentiert
+'''
+# Funktion zeichnen 
+x_f = np.linspace(0,max(x),100)
+y_f = 1 * x_f ** 2
+plt.plot(x_f, y_f, color = "green", label = "f(x) = x^2")
+plt.legend()
+'''
+'''
 # Lineare Regression
 t, m = pn.polyfit(x, y, 1)
 x_fit = np.linspace(0, max(x), 100)
@@ -71,7 +82,7 @@ plt.plot(x_fit, y_fit,
          linestyle = "-",
          label = f"y = {m:.3f} * x + {t:.3f}")
 plt.legend()
-''' # Ende auskommentiert
+'''
 
 # Beschriftungen
 plt.title("Überschrift", 
@@ -83,7 +94,60 @@ plt.ylabel("y-Achsen Beschriftung")
 # Achsen
 plt.xlim(left = 0)
 plt.ylim(bottom = 0)
-plt.grid(linestyle = "-")
+plt.grid(which = 'major', linestyle = '-' , alpha = 0.8)
+plt.grid(which = 'minor', linestyle = "--",  alpha = 0.5)
+plt.minorticks_on()
+
+# Erstelle Diagramm
+plt.show()`
+  },
+  {
+    name: "Scatterplot (csv)",
+    preamble: STD_PREAMBLE,
+    pseudo: STD_PSEUDO_PREAMBLE,
+    code: `
+# Eingabe der Messdaten
+data = np.array(csv_data[0][1:])
+x = data[:,0]
+y = data[:,1]
+
+# Messdaten anzeigen
+plt.scatter(x, y, 
+            marker = "x", 
+            color = "blue")
+'''
+# Funktion zeichnen 
+x_f = np.linspace(0,max(x),100)
+y_f = 1 * x_f ** 2
+plt.plot(x_f, y_f, color = "green", label = "f(x) = x^2")
+plt.legend()
+'''
+'''
+# Lineare Regression
+t, m = pn.polyfit(x, y, 1)
+x_fit = np.linspace(0, max(x), 100)
+y_fit =  m * x_fit + t
+
+plt.plot(x_fit, y_fit, 
+         color = "red", 
+         linestyle = "-",
+         label = f"y = {m:.3f} * x + {t:.3f}")
+plt.legend()
+'''
+
+# Beschriftungen
+plt.title("Überschrift", 
+          color = "black", 
+          weight = "bold")
+plt.xlabel("x-Achsen Beschriftung")
+plt.ylabel("y-Achsen Beschriftung")
+
+# Achsen
+plt.xlim(left = 0)
+plt.ylim(bottom = 0)
+plt.grid(which = 'major', linestyle = '-' , alpha = 0.8)
+plt.grid(which = 'minor', linestyle = "--",  alpha = 0.5)
+plt.minorticks_on()
 
 # Erstelle Diagramm
 plt.show()`
