@@ -15,6 +15,7 @@
   --light-blue: #62E3F4;
   --blue: #6281F4;
   --purple: #A462F4;
+  --dark-orange:  #E76F51;
 }
 
 button, a {
@@ -62,7 +63,10 @@ button.active {
 
 button.special {
   background-color: var(--purple);
-  color: white;
+}
+
+button.bad {
+  background-color: var(--dark-orange);
 }
 
 select {

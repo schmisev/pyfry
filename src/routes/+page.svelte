@@ -4,6 +4,8 @@
   import { onMount } from "svelte";
   import CodeMirror from "svelte-codemirror-editor";
   import { python } from "@codemirror/lang-python";
+  import { undo } from "@codemirror/commands";
+  import { type EditorView } from "@codemirror/view";
   import { page } from "$app/state";
   import { downloadPreset, generatePresetFromString, generateStringFromPreset } from "$lib/preset-loading";
   import { type PyodideInterface, /* loadPyodide */ } from "pyodide";
@@ -110,9 +112,9 @@
 
   function duplicatePreset() {
     const new_preset = copyObj(preset);
-    new_preset.name += "+";
+    new_preset.name += " " + (new Date()).toISOString();
     current_presets.push(new_preset);
-    preset = new_preset;
+    preset = current_presets.at(-1)!; // guaranteed, since we just added it
   }
 
   function removePreset() {
@@ -129,6 +131,10 @@
     preset = current_presets[0];
   }
 
+  function undoChange() {
+    undo(editor);
+  }
+
   $effect(updateURL);
 
   loadURLParams(); // fetch from URL
@@ -137,7 +143,7 @@
   let consoleOut: HTMLElement;
   let imageOut: HTMLElement;
   let pyodide: PyodideInterface;
-  let editor: CodeMirror;
+  let editor: EditorView; // EditorView
 
   onMount(async () => {
     consoleOut = document.getElementById("console-out")!;
@@ -244,9 +250,9 @@
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><span class="material-symbols-outlined">folder_open</span></button>
     </div>
     <div class="holder left">
-      <!--button title="Entferne '{preset.name}'" onclick={removePreset}><span class="material-symbols-outlined">delete</span></button-->
-      <!--button title="Vorlagen zurücksetzen" onclick={reloadPresets}><span class="material-symbols-outlined">history</span></button-->
+      <button title="Entferne '{preset.name}'" class="bad" onclick={removePreset}><span class="material-symbols-outlined">delete</span></button>
       <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}><span class="material-symbols-outlined">content_copy</span></button>
+      <button title="Rückgängig!" onclick={undoChange}><span class="material-symbols-outlined">history</span></button>
       <select id="preset-select" bind:value={preset}>
         {#each current_presets.entries() as [i, p]}
           <option value={p}>{p.name}</option>
@@ -262,7 +268,7 @@
     <div id="editor-wrapper">
       <CodeMirror extensions={extensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo} lang={python()}></CodeMirror>
       <div class="layout panel divider"></div>
-      <CodeMirror extensions={extensions} lineWrapping={true} bind:value={preset.code} lang={python()}></CodeMirror>
+      <CodeMirror on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code} lang={python()}></CodeMirror>
     </div>
   </div>
   <div class="layout panel console">
