@@ -244,15 +244,15 @@
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><span class="material-symbols-outlined">folder_open</span></button>
     </div>
     <div class="holder left">
+      <!--button title="Entferne '{preset.name}'" onclick={removePreset}><span class="material-symbols-outlined">delete</span></button-->
+      <!--button title="Vorlagen zurücksetzen" onclick={reloadPresets}><span class="material-symbols-outlined">history</span></button-->
+      <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}><span class="material-symbols-outlined">content_copy</span></button>
       <select id="preset-select" bind:value={preset}>
         {#each current_presets.entries() as [i, p]}
           <option value={p}>{p.name}</option>
         {/each}
       </select>
-      <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}><span class="material-symbols-outlined">content_copy</span></button>
-      <button title="Entferne '{preset.name}'" onclick={removePreset}><span class="material-symbols-outlined">delete</span></button>
-      <button title="Vorlagen zurücksetzen" onclick={reloadPresets}><span class="material-symbols-outlined">history</span></button>
-      <button title="Starte die Ausführung!" onclick={runCode}>&nbsp;Start <span class="material-symbols-outlined">flag</span></button>
+      <button title="Starte die Ausführung!" class="special" onclick={runCode}>&nbsp;Start <span class="material-symbols-outlined">flag</span></button>
     </div>
     <div class="holder left">
       Name: 

@@ -60,6 +60,11 @@ button.active {
   background-color: #E9C46A;
 }
 
+button.special {
+  background-color: var(--purple);
+  color: white;
+}
+
 select {
   height: 2em;
 }
