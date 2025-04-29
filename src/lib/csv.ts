@@ -1,16 +1,17 @@
 export type CSVData = (string | number)[][];
 
 export function parseCSV(contents: string): CSVData {
-  let txt_csv = contents
+  let txt_csv_rows = contents
     .replace("\r", "")
-    .split("\n")
-    .map((v) => v.split(";"));
+    .split("\n");
 
+  let txt_csv = txt_csv_rows.filter((v) => (v !== "")).map((v) => v.split(";"))
   txt_csv.pop();
 
   let csv = txt_csv.map((v) => v.map((n) => {
-    let numeric = parseFloat(n);
-    if (numeric !== 0 && !numeric) return n;
+    let cleaned = n.replaceAll(",", ".");
+    let numeric = parseFloat(cleaned);
+    if (!numeric && numeric !== 0) return n;
     return numeric;
   }));
 
