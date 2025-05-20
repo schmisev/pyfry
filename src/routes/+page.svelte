@@ -3,7 +3,7 @@
   import { ALL_PRESETS, type CodePreset } from "$lib/presets";
   import { onMount } from "svelte";
   import CodeMirror from "svelte-codemirror-editor";
-  import { python } from "@codemirror/lang-python";
+  import { python, pythonLanguage } from "@codemirror/lang-python";
   import { undo } from "@codemirror/commands";
   import { type EditorView } from "@codemirror/view";
   import { page } from "$app/state";
@@ -12,8 +12,10 @@
   import { replaceState } from "$app/navigation";
   import Sortable from 'sortablejs';
   import { parseCSV, type CSVData } from "$lib/csv";
-  import {tags} from "@lezer/highlight"
-  import {HighlightStyle, syntaxHighlighting} from "@codemirror/language"
+  import { tags } from "@lezer/highlight"
+  import { HighlightStyle, syntaxHighlighting} from "@codemirror/language"
+  import { autocompletion, CompletionContext, snippetCompletion, type CompletionSource } from '@codemirror/autocomplete'
+  import { ALL_SNIPPETS } from "$lib/snippets";
 
   const customPythonHighlighting = HighlightStyle.define([
     {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
@@ -24,7 +26,21 @@
     
   ])
 
-  const extensions = [syntaxHighlighting(customPythonHighlighting)]
+  const extensions = [
+    syntaxHighlighting(customPythonHighlighting),
+    python(),
+    pythonLanguage.data.of({
+      autocomplete: ALL_SNIPPETS.map((sn) => {
+        return snippetCompletion(sn.insert, {
+          label: sn.name,
+          type: "preset",
+          displayLabel: sn.display ?? sn.name,
+          info: sn.info ?? `[ENTER] fügt das Snippet ein!`,
+          boost: 100,
+        })
+      })
+    })
+  ]
 
   // Helper functions
   let btoa2 = (v: string) => btoa(v);
@@ -266,9 +282,9 @@
       .py
     </div>
     <div id="editor-wrapper">
-      <CodeMirror extensions={extensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo} lang={python()}></CodeMirror>
+      <CodeMirror extensions={extensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo}></CodeMirror>
       <div class="layout panel divider"></div>
-      <CodeMirror on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code} lang={python()}></CodeMirror>
+      <CodeMirror on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
     </div>
   </div>
   <div class="layout panel console">

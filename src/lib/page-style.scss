@@ -311,3 +311,8 @@ td.no-fill {
   margin: 0.5em;
   width: 100%;
 }
+
+.cm-completionIcon-preset::before {
+  content: '*';
+  font-weight: bolder;
+}
