@@ -6,6 +6,13 @@
   'opsz' 24
 }
 
+.playpen-sans {
+  font-family: "Playpen Sans", cursive;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
 :root {
   --orange: #F4A261;
   --yellow: #E9C46A;
@@ -70,7 +77,11 @@ button.bad {
 }
 
 select {
-  height: 2em;
+  height: 2rem;
+}
+
+input {
+  height: 1.5rem;
 }
 
 select, input{
@@ -147,7 +158,10 @@ td.no-fill {
 .layout {
   box-sizing: border-box;
   padding: 0.5em;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Playpen Sans', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: 400;
+  font-style: oblique;
+  font-style: normal;
 }
 
 .layout.main {
@@ -195,19 +209,45 @@ td.no-fill {
 
 #console-out-wrapper {
   box-sizing: border-box;
-  background-color: #264653;
   font-weight: bold;
   color: #E9C46A;
   width: 100%;
   height: 20vh;
   overflow-y: auto;
   scrollbar-width: thin;
-  padding: 0.5em;
+  padding: 0.5rem;
   align-self: flex-end;
 }
 
 #console-out {
+  display: flex;
+  flex-flow: column;
   text-wrap: wrap;
+  margin: 0;
+  gap: 0.3rem;
+}
+
+.message {
+  color: black;
+  padding: 0.5rem;
+  border-radius: 0.2em;
+  text-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
+  box-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
+  background-color: var(--green);
+}
+
+.message.plots {
+  background-color: var(--purple);
+}
+
+.message.error {
+  background-color: var(--dark-orange);
+}
+
+.message.standard {
+  padding: 0;
+  box-shadow: none;
+  background-color: transparent;
 }
 
 #editor-wrapper {
@@ -256,12 +296,13 @@ td.no-fill {
 
 #preset-select {
   width: 100%;
+  text-align: center;
 }
 
 #name-input {
   width: 100%;
-  text-align: right;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-align: center;
+  height: 1.5rem;
 }
 
 #image-out > .img-wrapper {
@@ -319,4 +360,42 @@ td.no-fill {
 
 .icon {
   min-width: 1.5rem;
+}
+
+// rotation animation
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.rotating {
+  -webkit-animation: rotating 2s linear infinite;
+  -moz-animation: rotating 2s linear infinite;
+  -ms-animation: rotating 2s linear infinite;
+  -o-animation: rotating 2s linear infinite;
+  animation: rotating 2s linear infinite;
 }

@@ -17,8 +17,10 @@
   import { autocompletion, CompletionContext, snippetCompletion, type CompletionSource } from '@codemirror/autocomplete'
   import { ALL_SNIPPETS } from "$lib/snippets";
   import Fa from 'svelte-fa'
-  import { faArrowRight, faBacon, faCloudDownload, faCloudDownloadAlt, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faQuestion, faRemove, faSplotch, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
+  import { faArrowRight, faBacon, faBreadSlice, faChartPie, faClock, faCloudDownload, faCloudDownloadAlt, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faHourglass, faQuestion, faRemove, faSplotch, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
   import { faPython } from '@fortawesome/free-brands-svg-icons';
+
+  import PythonWorker from '$lib/workers/pyodide-worker.mjs?worker';
 
   const customPythonHighlighting = HighlightStyle.define([
     {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
@@ -160,51 +162,46 @@
 
   // setting up the app
   let consoleOut: HTMLElement;
+  let consoleOutWrapper: HTMLElement;
   let imageOut: HTMLElement;
-  let pyodide: PyodideInterface;
   let editor: EditorView; // EditorView
+  let worker: Worker;
 
   onMount(async () => {
     consoleOut = document.getElementById("console-out")!;
+    consoleOutWrapper = document.getElementById("console-out-wrapper")!;
     imageOut = document.getElementById("image-out")!;
 
     let old_log = console.log;
-    function log(msg: any) {
-      consoleOut.textContent += `${msg}\n`;
+    function log(msg: any, type: string = "standard") {
+      let newMessage = document.createElement("div");
+      newMessage.textContent = `${msg}`;
+      newMessage.classList.add("message");
+      newMessage.classList.add(type);
+      consoleOut.appendChild(newMessage);
+      consoleOutWrapper.scroll({top: consoleOut.scrollHeight, behavior: "smooth"});
       old_log(`${msg}`);
-      consoleOut
     }
     console.log = log;
 
-    pyodide = await loadPyodide({
-      fullStdLib: true,
-      stdout: log,
-    });
+    log("Drücke START, um dein Skript auszuführen!\nBeim ersten Mal kann das etwas länger dauern, da erst die nötigen Bibliotheken heruntergeladen werden müssen.");
 
-    await pyodide.loadPackage("numpy");
-    await pyodide.loadPackage("matplotlib");
+    worker = new PythonWorker();
 
-    
-    new Sortable(imageOut, {
-      handle: ".img-handle",
-      easing: "cubic-bezier(1, 0, 0, 1)",
-    });
-    
-  });
-
-  async function runCode() {
-    if (flags.isRunning) return;
-    consoleOut.innerHTML = ""
-    flags.isRunning = true;
-    let ret;
-    let pngList: string[] = [];
-    pyodide.globals.set("csv_data", global_csv);
-    ret = pyodide.runPythonAsync(generateStringFromPreset(preset));
-    ret.then((val) => {
-      pngList = pyodide.globals.get("plot_result");
+    worker.onmessage = (event) => {
       flags.isRunning = false;
+      const {error, message, result, pngList}: {error: string, result: number, message: string, pngList: string[]} = event.data;
+      
+      if (error) {
+        log(error, "error");
+        return;
+      } else if (message) {
+        log(message, "standard");
+        return;
+      }
+      
       if (pngList) {
-        console.log("Plots generiert: " + pngList.length);
+        log("Plots generiert: " + pngList.length, "plots");
         // console.log("" + pngList);
       }
       if (pngList.length === 0) return;
@@ -229,10 +226,32 @@
           imageOut.lastChild?.remove();
         }
       }
-    }).catch((err) => {
-      console.log(err);
-      flags.isRunning = false;
+    }
+    
+    new Sortable(imageOut, {
+      handle: ".img-handle",
+      easing: "cubic-bezier(1, 0, 0, 1)",
     });
+    
+  });
+
+  async function runCode() {
+    if (flags.isRunning) return;
+    flags.isRunning = true;
+
+    const scriptPackage: {
+        script: string;
+        offset: number;
+    } = generateStringFromPreset(preset);
+    const context = {
+      "csv_data": global_csv
+    };
+
+    worker.postMessage(JSON.stringify({
+      id: 0,
+      scriptPackage,
+      context: context
+    }));
   }
 
   function uploadCSV() {
@@ -260,11 +279,11 @@
   }
 </script>
 
-<div class="layout main">
+<div class="layout main playpen-sans">
   <div class="layout panel code">
     <div class="holder left">
-      <div id="title" class="layout panel"><Fa class="icon" icon={faEgg} />&nbsp;<div id="title-text"><b>PyFryHam</b> by sms & cdr</div></div>
-      <button class="{flags.updateURL ? 'active' : ''}" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"}</button>
+      <div id="title" class="layout panel"><Fa class="icon" icon={faChartPie} />&nbsp;<div id="title-text"><b>PyFryHam</b> by sms & cdr</div></div>
+      <button class="{flags.updateURL ? 'active' : ''} playpen-sans" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"}</button>
       <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}><Fa class="icon" icon={faCloudDownloadAlt} /></button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><Fa class="icon" icon={faFolderOpen} /></button>
     </div>
@@ -272,16 +291,21 @@
       <button title="Entferne '{preset.name}'" class="bad" onclick={removePreset}><Fa class="icon" icon={faTrash} /></button>
       <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}><Fa class="icon" icon={faCopy} /></button>
       <button title="Rückgängig!" onclick={undoChange}><Fa class="icon" icon={faUndoAlt} /></button>
-      <select id="preset-select" bind:value={preset}>
+      <select id="preset-select" class="playpen-sans" bind:value={preset}>
         {#each current_presets.entries() as [i, p]}
           <option value={p}>{p.name}</option>
         {/each}
       </select>
-      <button title="Starte die Ausführung!" class="special" onclick={runCode}>&nbsp;Start&nbsp;<Fa class="icon" icon={faFlagCheckered} /></button>
+      {#if flags.isRunning}
+      <button title="Starte die Ausführung!" class="special playpen-sans">&nbsp;Warte...&nbsp;<Fa class="icon rotating" icon={faHourglass} /></button>
+      {:else}
+      <button title="Starte die Ausführung!" class="special playpen-sans" onclick={runCode}>&nbsp;START&nbsp;<Fa class="icon" icon={faFlagCheckered} /></button>
+      {/if}
+      
     </div>
     <div class="holder left">
       Name: 
-      <input placeholder="Dateienname" id="name-input" bind:value={preset.name}>
+      <input placeholder="Dateienname" id="name-input" class="playpen-sans" bind:value={preset.name}>
       .py
     </div>
     <div id="editor-wrapper">
@@ -292,7 +316,7 @@
   </div>
   <div class="layout panel console">
     <div id="console-out-wrapper">
-      <code><pre id="console-out"></pre></code>
+      <pre id="console-out"></pre>
     </div>
   </div>
 
@@ -302,7 +326,7 @@
     </div>
     <div id="image-out">
     </div>
-    <button onclick={uploadCSV}><Fa icon={faFileUpload} /> .csv <Fa class="icon"  icon={faArrowRight} />&nbsp;<code>csv_data</code>&nbsp;</button>
+    <button onclick={uploadCSV}><Fa class="icon" icon={faFileUpload} /> .csv <Fa class="icon"  icon={faArrowRight} />&nbsp;<code>csv_data</code>&nbsp;</button>
     <div>
       {#each global_csv.entries() as [index, csv_table]}
         <div class="holder file-tab">

@@ -19,25 +19,27 @@ function sectionComment(label: SectionLabel) {
   return `###[${label}]`;
 }
 
-export function generateStringFromPreset(preset: CodePreset): string {
+export function generateStringFromPreset(preset: CodePreset): {script: string, offset: number} {
   let retStr = "";
 
   retStr += sectionComment("name") + ` ${preset.name}\n`;
   retStr += sectionComment("pseudo") + `\n'''${preset.pseudo}'''\n`;
   retStr += sectionComment("preamble") + `\n${preset.preamble}\n`;
+  let offset = retStr.split("\n").length;
   retStr += sectionComment("code") + `\n${preset.code}\n`;
 
-  return retStr;
+  return {
+    script: retStr,
+    offset
+  };
 }
 
 export function downloadPreset(preset: CodePreset) {
   let content = generateStringFromPreset(preset);
 
-  //console.log(JSON.stringify(generatePresetFromString(content), null, 2));
-
   return download(
     (preset.name ? preset.name : "pyfryham").replaceAll(" ", "_").replaceAll(".", "_") + ".py",
-    content
+    content.script
   )
 }
 
