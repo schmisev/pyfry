@@ -33,10 +33,11 @@
 		"codemirror": "^6.0.1",
 		"csv": "^6.3.11",
 		"lz-string": "^1.5.0",
-		"pyodide": "^0.27.3",
+		"pyodide": "^0.27.7",
 		"shrink-string": "^3.1.9",
 		"sortablejs": "^1.15.6",
 		"svelte-codemirror-editor": "^1.4.1",
-		"svelte-fa": "^4.0.4"
+		"svelte-fa": "^4.0.4",
+		"vite-plugin-static-copy": "^3.0.0"
 	}
 }

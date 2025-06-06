@@ -1,4 +1,4 @@
-import { loadPyodide } from "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.mjs";
+import { loadPyodide, version as pyodideVersion } from "pyodide";
 
 let stdOut = (msg) => {
     self.postMessage({
@@ -7,6 +7,7 @@ let stdOut = (msg) => {
 };
 
 let pyodideReadyPromise = loadPyodide({
+    indexURL: `https://cdn.jsdelivr.net/pyodide/v${pyodideVersion}/full/`,
     fullStdLib: true,
     packages: ["numpy", "matplotlib"],
     stdout: stdOut
