@@ -16,6 +16,9 @@
   import { HighlightStyle, syntaxHighlighting} from "@codemirror/language"
   import { autocompletion, CompletionContext, snippetCompletion, type CompletionSource } from '@codemirror/autocomplete'
   import { ALL_SNIPPETS } from "$lib/snippets";
+  import Fa from 'svelte-fa'
+  import { faArrowRight, faBacon, faCloudDownload, faCloudDownloadAlt, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faQuestion, faRemove, faSplotch, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
+  import { faPython } from '@fortawesome/free-brands-svg-icons';
 
   const customPythonHighlighting = HighlightStyle.define([
     {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
@@ -260,21 +263,21 @@
 <div class="layout main">
   <div class="layout panel code">
     <div class="holder left">
-      <div id="title" class="layout panel"><span class="material-symbols-outlined">egg_alt</span>&nbsp;<div id="title-text"><b>PyFryHam</b> by sms & cdr</div></div>
+      <div id="title" class="layout panel"><Fa class="icon" icon={faEgg} />&nbsp;<div id="title-text"><b>PyFryHam</b> by sms & cdr</div></div>
       <button class="{flags.updateURL ? 'active' : ''}" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"}</button>
-      <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}><span class="material-symbols-outlined">download</span></button>
-      <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><span class="material-symbols-outlined">folder_open</span></button>
+      <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}><Fa class="icon" icon={faCloudDownloadAlt} /></button>
+      <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><Fa class="icon" icon={faFolderOpen} /></button>
     </div>
     <div class="holder left">
-      <button title="Entferne '{preset.name}'" class="bad" onclick={removePreset}><span class="material-symbols-outlined">delete</span></button>
-      <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}><span class="material-symbols-outlined">content_copy</span></button>
-      <button title="Rückgängig!" onclick={undoChange}><span class="material-symbols-outlined">history</span></button>
+      <button title="Entferne '{preset.name}'" class="bad" onclick={removePreset}><Fa class="icon" icon={faTrash} /></button>
+      <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}><Fa class="icon" icon={faCopy} /></button>
+      <button title="Rückgängig!" onclick={undoChange}><Fa class="icon" icon={faUndoAlt} /></button>
       <select id="preset-select" bind:value={preset}>
         {#each current_presets.entries() as [i, p]}
           <option value={p}>{p.name}</option>
         {/each}
       </select>
-      <button title="Starte die Ausführung!" class="special" onclick={runCode}>&nbsp;Start <span class="material-symbols-outlined">flag</span></button>
+      <button title="Starte die Ausführung!" class="special" onclick={runCode}>&nbsp;Start&nbsp;<Fa class="icon" icon={faFlagCheckered} /></button>
     </div>
     <div class="holder left">
       Name: 
@@ -295,17 +298,15 @@
 
   <div class="layout panel output">
     <div class="holder">
-      <div class="layout panel label"><span class="material-symbols-outlined">cards_star</span>&nbsp;<span>Meine Plots</span></div>
-      <a href="https://matplotlib.org/cheatsheets/_images/cheatsheets-1.png" target="_blank"><span class="material-symbols-outlined">help</span></a>
-      <a href="https://matplotlib.org/cheatsheets/_images/handout-beginner.png" target="_blank"><span class="material-symbols-outlined">info</span></a>
+      <div class="layout panel label"><Fa class="icon" icon={faSplotch} />&nbsp;<span>Meine Plots</span></div>
     </div>
     <div id="image-out">
     </div>
-    <button onclick={uploadCSV}><span class="material-symbols-outlined">folder_open</span> .csv →&nbsp;<code>csv_data</code>&nbsp;</button>
+    <button onclick={uploadCSV}><Fa icon={faFileUpload} /> .csv <Fa class="icon"  icon={faArrowRight} />&nbsp;<code>csv_data</code>&nbsp;</button>
     <div>
       {#each global_csv.entries() as [index, csv_table]}
         <div class="holder file-tab">
-          <button onclick={() => global_csv.splice(index, 1)}><span class="material-symbols-outlined">delete</span></button>
+          <button onclick={() => global_csv.splice(index, 1)}><Fa class="icon"  icon={faRemove} /></button>
           &nbsp;<code>csv_data[{index}] = {JSON.stringify(csv_table)}</code>
         </div>
       {/each}
