@@ -13,6 +13,13 @@
   font-style: normal;
 }
 
+.mononoki {
+  font-family: "mononoki", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   --orange: #F4A261;
   --yellow: #E9C46A;
@@ -50,6 +57,10 @@ button, a {
     background-color 0.2s,
     scale 0.2s,
     translate 0.1s;
+}
+
+code, pre {
+  font-family: 'mononoki', monospace;
 }
 
 button:hover, a:hover {
@@ -137,8 +148,10 @@ td.no-fill {
   justify-content: left;
 }
 
+
+
 .file-tab code {
-  white-space: nowrap;
+  white-space: nowrap;  
 }
 
 .layout.panel.label {
@@ -257,13 +270,10 @@ td.no-fill {
   scrollbar-width: thin;
 }
 
-:global(.cm-scroller) {
-  scrollbar-width: thin;
-}
-
 #image-out {
-  //display: flex;
-  //flex-flow: column nowrap;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
   background-color: whitesmoke;
   padding: 0.7em;
   gap: 0.7em;
@@ -287,6 +297,11 @@ td.no-fill {
   min-width: 0;
 }
 
+#title-icon {
+  height: 3rem;
+  filter: drop-shadow(0.1em 0.1em 0.5em rgba(0, 0, 0, 0.2));
+}
+
 #title-text {
   white-space: nowrap;
   overflow: hidden;
@@ -301,7 +316,7 @@ td.no-fill {
 
 #name-input {
   width: 100%;
-  text-align: center;
+  text-align: right;
   height: 1.5rem;
 }
 
@@ -322,6 +337,8 @@ td.no-fill {
   flex-direction: column;
   min-height: max-content;
   overflow: hidden;
+
+  max-width: 700px;
 }
 
 .img-handle {
@@ -353,9 +370,26 @@ td.no-fill {
   width: 100%;
 }
 
+:global(.cm-scroller) {
+  scrollbar-width: thin;
+}
+
+.cm-editor .cm-content { 
+  font-family: "mononoki", monospace 
+}
+
 .cm-completionIcon-preset::before {
   content: '*';
   font-weight: bolder;
+}
+
+.cm-completionInfo, .cm-completionLabel {
+  font-size: small;
+  font-family: 'mononoki', monospace;
+}
+
+.cm-completionInfo:first-line {
+    font-weight: bolder;
 }
 
 .icon {

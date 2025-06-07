@@ -1,5 +1,6 @@
 <script lang="ts">
   import "$lib/page-style.scss";
+  import "$lib/fonts.css";
   import { ALL_PRESETS, type CodePreset } from "$lib/presets";
   import { onMount } from "svelte";
   import CodeMirror from "svelte-codemirror-editor";
@@ -14,13 +15,15 @@
   import { parseCSV, type CSVData } from "$lib/csv";
   import { tags } from "@lezer/highlight"
   import { HighlightStyle, syntaxHighlighting} from "@codemirror/language"
-  import { autocompletion, CompletionContext, snippetCompletion, type CompletionSource } from '@codemirror/autocomplete'
+  import { CompletionContext, snippetCompletion, type CompletionSource } from '@codemirror/autocomplete'
   import { ALL_SNIPPETS } from "$lib/snippets";
+  import iconFriedEgg from "$lib/assets/fried-egg.svg"
   import Fa from 'svelte-fa'
-  import { faArrowRight, faBacon, faBreadSlice, faChartPie, faClock, faCloudDownload, faCloudDownloadAlt, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faHourglass, faQuestion, faRemove, faSplotch, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
-  import { faPython } from '@fortawesome/free-brands-svg-icons';
+  import { faArrowRight, faBacon, faBreadSlice, faChartPie, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faHourglass, faQuestion, faRemove, faSplotch, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
 
   import PythonWorker from '$lib/workers/pyodide-worker.mjs?worker';
+  import { pltAutocomplete } from "$lib/python/matplotlib.pyplot";
+  import { npAutocomplete } from "$lib/python/numpy";
 
   const customPythonHighlighting = HighlightStyle.define([
     {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
@@ -43,8 +46,10 @@
           info: sn.info ?? `[ENTER] fügt das Snippet ein!`,
           boost: 100,
         })
-      })
-    })
+      }),
+    }),
+    pythonLanguage.data.of({ autocomplete: npAutocomplete }),
+    pythonLanguage.data.of({ autocomplete: pltAutocomplete }),
   ]
 
   // Helper functions
@@ -114,10 +119,14 @@
     }
 
     let query = new URLSearchParams("");
-    query.set('name', btoa2(preset.name));
-    query.set('code', btoa2(preset.code));
-    query.set('preamble', btoa2(preset.preamble));
-    query.set('pseudo', btoa2(preset.pseudo));
+    try {
+      query.set('name', btoa2(preset.name));
+      query.set('code', btoa2(preset.code));
+      query.set('preamble', btoa2(preset.preamble));
+      query.set('pseudo', btoa2(preset.pseudo));
+    } catch {
+      return;
+    }
     // goto(`?${query.toString()}`);
     try {
       replaceState(`?${query.toString()}`, page.state);
@@ -184,7 +193,7 @@
     }
     console.log = log;
 
-    log("Drücke START, um dein Skript auszuführen!\nBeim ersten Mal kann das etwas länger dauern, da erst die nötigen Bibliotheken heruntergeladen werden müssen.");
+    log("Drücke START, um dein Python-Skript auszuführen!\nBeim ersten Mal kann das etwas länger dauern, da erst die nötigen Bibliotheken heruntergeladen werden müssen.");
 
     worker = new PythonWorker();
 
@@ -282,7 +291,7 @@
 <div class="layout main playpen-sans">
   <div class="layout panel code">
     <div class="holder left">
-      <div id="title" class="layout panel"><Fa class="icon" icon={faChartPie} />&nbsp;<div id="title-text"><b>PyFryHam</b> by sms & cdr</div></div>
+      <div id="title" class="layout panel"><img id="title-icon" src={iconFriedEgg}>&nbsp;<div id="title-text"><b>PYFRYHAM</b> by sms & cdr</div></div>
       <button class="{flags.updateURL ? 'active' : ''} playpen-sans" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"}</button>
       <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}><Fa class="icon" icon={faCloudDownloadAlt} /></button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><Fa class="icon" icon={faFolderOpen} /></button>
@@ -297,7 +306,7 @@
         {/each}
       </select>
       {#if flags.isRunning}
-      <button title="Starte die Ausführung!" class="special playpen-sans">&nbsp;Warte...&nbsp;<Fa class="icon rotating" icon={faHourglass} /></button>
+      <button title="Wird ausgeführt..." class="special playpen-sans">&nbsp;Warte...&nbsp;<Fa class="icon rotating" icon={faHourglass} /></button>
       {:else}
       <button title="Starte die Ausführung!" class="special playpen-sans" onclick={runCode}>&nbsp;START&nbsp;<Fa class="icon" icon={faFlagCheckered} /></button>
       {/if}
@@ -326,7 +335,7 @@
     </div>
     <div id="image-out">
     </div>
-    <button onclick={uploadCSV}><Fa class="icon" icon={faFileUpload} /> .csv <Fa class="icon"  icon={faArrowRight} />&nbsp;<code>csv_data</code>&nbsp;</button>
+    <button onclick={uploadCSV}><Fa class="icon" icon={faTableCells} />&nbsp;Lade .csv in &nbsp;<code>csv_data</code>&nbsp; hoch!</button>
     <div>
       {#each global_csv.entries() as [index, csv_table]}
         <div class="holder file-tab">
