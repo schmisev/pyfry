@@ -241,6 +241,8 @@ td.no-fill {
 }
 
 .message {
+  border: 2px rgba(0, 0, 0, 0.2) solid;
+  box-sizing: border-box;
   color: black;
   padding: 0.5rem;
   border-radius: 0.2em;
@@ -261,6 +263,7 @@ td.no-fill {
   padding: 0;
   box-shadow: none;
   background-color: transparent;
+  border: none;
 }
 
 #editor-wrapper {

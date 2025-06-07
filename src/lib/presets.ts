@@ -40,20 +40,17 @@ import numpy.polynomial.polynomial as pn
 csv_data = ... # Daten aus csv-Import`;
 
 export const ALL_PRESETS: CodePreset[] = [
-  /*
   {
     name: "Startpunkt",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
     code: `# Hier könnte dein Code stehen`,
   },
-  */
   {
     name: "Scatterplot (standard)",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
-    code: `
-# Eingabe der Messdaten
+    code: `# Eingabe der Messdaten
 data = np.array([
   [1,1],
   [2,4],
@@ -66,14 +63,13 @@ y = data[:,1]
 plt.scatter(x, y, 
             marker = "x", 
             color = "blue")
-'''
+
 # Funktion zeichnen 
 x_f = np.linspace(0,max(x),100)
 y_f = 1 * x_f ** 2
 plt.plot(x_f, y_f, color = "green", label = "f(x) = x^2")
 plt.legend()
-'''
-'''
+
 # Lineare Regression
 t, m = pn.polyfit(x, y, 1)
 x_fit = np.linspace(0, max(x), 100)
@@ -84,7 +80,6 @@ plt.plot(x_fit, y_fit,
          linestyle = "-",
          label = f"y = {m:.3f} * x + {t:.3f}")
 plt.legend()
-'''
 
 # Beschriftungen
 plt.title("Überschrift", 
@@ -107,8 +102,7 @@ plt.show()`
     name: "Scatterplot (csv)",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
-    code: `
-# Eingabe der Messdaten
+    code: `# Eingabe der Messdaten
 data = np.array(csv_data[0][1:])
 x = data[:,0]
 y = data[:,1]
@@ -117,14 +111,13 @@ y = data[:,1]
 plt.scatter(x, y, 
             marker = "x", 
             color = "blue")
-'''
+
 # Funktion zeichnen 
 x_f = np.linspace(0,max(x),100)
 y_f = 1 * x_f ** 2
 plt.plot(x_f, y_f, color = "green", label = "f(x) = x^2")
 plt.legend()
-'''
-'''
+
 # Lineare Regression
 t, m = pn.polyfit(x, y, 1)
 x_fit = np.linspace(0, max(x), 100)
@@ -135,7 +128,6 @@ plt.plot(x_fit, y_fit,
          linestyle = "-",
          label = f"y = {m:.3f} * x + {t:.3f}")
 plt.legend()
-'''
 
 # Beschriftungen
 plt.title("Überschrift", 
@@ -158,17 +150,22 @@ plt.show()`
     name: "Scatterplot mit linearer Regression durch y=0",
     preamble: STD_PREAMBLE,
     pseudo: STD_PSEUDO_PREAMBLE,
-    code: `
-# Eingabe der Messdaten
-x = np.array([0, 1, 2.1, 5])
-y = np.array([1, 2, 3, 4])
+    code: `# Eingabe der Messdaten
+data = np.array([
+  [1,1],
+  [2,4],
+  [3,9],
+  [4,7],
+  [5,2]
+])
+x = data[:,0]
+y = data[:,1]
 
 # Messdaten anzeigen
 plt.scatter(x, y, 
             marker = "x", 
             color = "blue")
 
-''' auskommentiert
 # Lineare Regression
 A = np.vstack([x, np.zeros(len(x))]).T
 m, t = np.linalg.lstsq(A, y)[0] # LeaST SQuares
@@ -180,7 +177,6 @@ plt.plot(x_fit, y_fit,
           linestyle = "-",
           label = f"y = {m:.3f} * x + {t:.3f}")
 plt.legend()
-''' # Ende auskommentiert
 
 # Beschriftungen
 plt.title("Überschrift", 
@@ -197,7 +193,6 @@ plt.grid(linestyle = "-")
 # Erstelle Diagramm
 plt.show()`
   },
-  /*
   {
     name: "Sinus und Cosinus",
     preamble: STD_PREAMBLE,
@@ -205,38 +200,11 @@ plt.show()`
     code: `# Sinus und Cosinus
 x = np.arange(0, 4 * np.pi, 0.1)
 y1 = np.cos(x)
-y2 = 0.5 * np.sin(x - np.pi) + 0.5
+y2 = np.sin(x)
 
 plt.plot(x, y1)
 plt.plot(x, y2)
 plt.show()`,
-  },
-  {
-    name: "Scatterplot mit Messdaten",
-    preamble: STD_PREAMBLE,
-    pseudo: STD_PSEUDO_PREAMBLE,
-    code: `# Scatterplot mit Messdaten
-x = np.array([1, 2, 3, 4, 5]);
-y = np.array([1, 4.2, 8.1, 16.5, 25.02]);
-plt.scatter(x, y);
-plt.show()`,
-  },
-  {
-    name: "Scatterplot mit Messdaten (Wertpaare)",
-    preamble: STD_PREAMBLE,
-    pseudo: STD_PSEUDO_PREAMBLE,
-    code: `# Scatterplot mit Messdaten (Wertpaare)
-data = np.array([
-  [0, 1],
-  [0.1, 1.2],
-  [0.2, 1.8],
-  [0.3, 2.3],
-  [0.5, 3.0],
-  [0.6, 5.1],
-])
-
-plt.scatter(data[:,0], data[:,1]);
-plt.show()`
   },
   {
     name: "Vollständiges Beispiel mit polynomieller Regression",
@@ -351,5 +319,4 @@ ax.set_xlim([0, 1])
 
 plt.show()`
   }
-  */
 ]
