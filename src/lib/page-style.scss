@@ -79,12 +79,16 @@ button.active {
   background-color: #E9C46A;
 }
 
-button.special {
+.special {
   background-color: var(--purple);
 }
 
-button.bad {
+.bad {
   background-color: var(--dark-orange);
+}
+
+.good {
+  background-color: var(--green);
 }
 
 select {

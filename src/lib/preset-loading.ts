@@ -3,11 +3,14 @@ import { type CodePreset } from "./presets";
 type SectionLabel = "name" | "code" | "preamble" | "pseudo";
 
 function download(filename: string, text: string) {
-  let element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', filename);
+  let element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+  );
+  element.setAttribute("download", filename);
 
-  element.style.display = 'none';
+  element.style.display = "none";
   document.body.appendChild(element);
 
   element.click();
@@ -19,7 +22,12 @@ function sectionComment(label: SectionLabel) {
   return `###[${label}]`;
 }
 
-export function generateStringFromPreset(preset: CodePreset): {script: string, offset: number} {
+export type ScriptPackage = {
+  script: string;
+  offset: number;
+};
+
+export function generateStringFromPreset(preset: CodePreset): ScriptPackage {
   let retStr = "";
 
   retStr += sectionComment("name") + ` ${preset.name}\n`;
@@ -30,7 +38,7 @@ export function generateStringFromPreset(preset: CodePreset): {script: string, o
 
   return {
     script: retStr,
-    offset
+    offset,
   };
 }
 
@@ -38,9 +46,11 @@ export function downloadPreset(preset: CodePreset) {
   let content = generateStringFromPreset(preset);
 
   return download(
-    (preset.name ? preset.name : "pyfryham").replaceAll(" ", "_").replaceAll(".", "_") + ".py",
+    (preset.name ? preset.name : "pyfryham")
+      .replaceAll(" ", "_")
+      .replaceAll(".", "_") + ".py",
     content.script
-  )
+  );
 }
 
 export function generatePresetFromString(src: string): CodePreset {
@@ -49,9 +59,9 @@ export function generatePresetFromString(src: string): CodePreset {
     preamble: "",
     pseudo: "",
     code: "",
-  }
+  };
 
-  const sections = src.split("###[")
+  const sections = src.split("###[");
   for (let s of sections) {
     let label = "";
     let index = 0;

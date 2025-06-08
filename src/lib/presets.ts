@@ -320,3 +320,63 @@ ax.set_xlim([0, 1])
 plt.show()`
   }
 ]
+
+export const GAME_PREAMBLE = `# Preambel
+import math
+import random
+`;
+
+export const GAME_PSEUDO_PREAMBLE = `# Import
+import hui # Tippe hui. ein um Vorschläge zu bekommen!
+import math
+import random`;
+
+export const ALL_GAME_PRESETS: CodePreset[] = [
+  {
+    name: "Startpunkt",
+    preamble: GAME_PREAMBLE,
+    pseudo: GAME_PSEUDO_PREAMBLE,
+    code: `timer = hui.add_timer(5, True) # Fügt einen neuen Timer hinzu. Dieser wiederholt sich!
+gravity = 10
+ball_radius = 50
+body = hui.new_body(hui.width / 2, hui.height / 2, 0, 0)
+
+# setup() wird beim Spielstart ausgeführt
+def setup():
+  timer.start()
+  hui.bg.background("lightgreen")
+
+# draw() wird 30-mal pro Sekunde ausgeführt
+def draw(t, dt):
+  hui.bg.background(hui.hex(255 * timer.pingpong, 255 - 255 * timer.pingpong, 0))
+  mg = hui.mg # Hol dir die Hauptzeichenebene (middle ground)
+
+  # Wir zeichnen den roten Kreis
+  mg.clear()
+  mg.fill("lightcoral")
+  mg.stroke("white")
+  mg.thick(5)
+  mg.circle(
+    body.x, 
+    body.y, 
+    ball_radius
+  )
+
+  # Gravitation
+  body.vy += gravity
+
+  # Bei Klick springt der Ball nach oben und ein Sound wird abgespielt
+  if (hui.just_pressed("m0")):
+    hui.sound.bleep(250, 0.4)
+    body.vy = -500
+
+  # Wir bewegen den Körper
+  body.move(dt)
+
+  # Hat der Ball den Boden berührt? Dann soll er abprallen!
+  if (body.y > hui.height - ball_radius):
+    body.y = hui.height - ball_radius
+    body.vy = -body.vy * 0.9
+    hui.sound.boop(abs(body.vy), 0.5)`,
+  },
+]
