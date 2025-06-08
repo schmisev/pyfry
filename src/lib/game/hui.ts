@@ -177,8 +177,8 @@ export class HuiGame {
   // "static"
   hex(r: number, g: number, b: number) { return hex(r, g, b); }
   rnd() { return rnd() };
-  rndi(min: number, max: number) { rndi(min, max) };
-  rndr(min: number, max: number) { rndr(min, max) };
+  rndi(min: number, max: number) { return rndi(min, max) };
+  rndr(min: number, max: number) { return rndr(min, max) };
 }
 
 export class HuiSound {
