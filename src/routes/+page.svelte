@@ -323,6 +323,7 @@
       <CodeMirror on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
     </div>
   </div>
+  
   <div class="layout panel console">
     <div id="console-out-wrapper">
       <pre id="console-out"></pre>

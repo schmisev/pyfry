@@ -19,11 +19,13 @@
   import { ALL_SNIPPETS } from "$lib/snippets";
   import iconFriedEgg from "$lib/assets/fried-egg.svg"
   import Fa from 'svelte-fa'
-  import { faArrowRight, faBacon, faBaseball, faBreadSlice, faChartPie, faChess, faChessBoard, faChessPawn, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faGamepad, faHourglass, faL, faPlay, faQuestion, faRemove, faSplotch, faStar, faStop, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
+  import { faA, faArrowRight, faBacon, faBaseball, faBreadSlice, faChartPie, faChess, faChessBoard, faChessPawn, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCompress, faCompressAlt, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faGamepad, faHourglass, faL, faPlay, faQuestion, faRemove, faSplotch, faStar, faStop, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
   import { error } from "@sveltejs/kit";
   import { HuiGame } from "$lib/game/hui";
-  import { faFilesPinwheel } from "@fortawesome/free-brands-svg-icons";
+  import { faFilesPinwheel, faSquareLetterboxd } from "@fortawesome/free-brands-svg-icons";
   import { correctPyodideErrorMessage } from "$lib/python/pyodide.utils";
+  import { huiAutocomplete } from "$lib/game/hui.docs";
+  import LZString from "lz-string";
 
   const customPythonHighlighting = HighlightStyle.define([
     {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
@@ -37,12 +39,12 @@
   const extensions = [
     syntaxHighlighting(customPythonHighlighting),
     python(),
-    // pythonLanguage.data.of({ autocomplete: huiAutocomplete }),
+    pythonLanguage.data.of({ autocomplete: huiAutocomplete }),
   ]
 
   // Helper functions
-  let btoa2 = (v: string) => btoa(v);
-  let atob2 = (v: string) => atob(v);
+  let btoa2 = (v: string) => LZString.compressToBase64(v);
+  let atob2 = (v: string) => LZString.decompressFromBase64(v);
 
   function copyObj<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
@@ -54,8 +56,11 @@
     gameIsRunning: false,
   });
 
-  let current_presets = $state(ALL_GAME_PRESETS.map(copyObj));
-  let preset: CodePreset = $state(current_presets[0]); // get first preset
+  let copied_presets = ALL_GAME_PRESETS.map(copyObj);
+  
+  let current_presets = $state(copied_presets);
+  let preset: CodePreset = $state(copied_presets[0]); // get first preset
+  let compressed_code: string = $derived(btoa2(preset.code));
   
   // preset uploads
   function uploadFile() {
@@ -103,7 +108,7 @@
     let query = new URLSearchParams("");
     try {
       query.set('name', btoa2(preset.name));
-      query.set('code', btoa2(preset.code));
+      query.set('code', compressed_code);
       query.set('preamble', btoa2(preset.preamble));
       query.set('pseudo', btoa2(preset.pseudo));
     } catch {
@@ -183,6 +188,7 @@
       fullStdLib: true,
       stdout: log
     });
+    pyodide.setDebug(true);
     flags.isRunning = false;
   });
 
@@ -202,23 +208,27 @@
     // get code
     const scriptPackage: ScriptPackage = generateStringFromPreset(preset);
     
+    // clear global scope
+    let hui_namespace = pyodide.globals.get("dict")();
+
     // setup game engine
-    const hui = new HuiGame(document, gameCanvas, gameCtx);
-    pyodide.globals.set("hui", hui);
+    const hui = new HuiGame(document, gameCanvas, gameCtx, pyodide.pyimport("pyodide.ffi").create_proxy);
+    hui_namespace.set("hui", hui);
 
     try {
+
       // run the game script
-      await pyodide.runPythonAsync(scriptPackage.script);
-      
+      await pyodide.runPythonAsync(scriptPackage.script, {globals: hui_namespace});
+
       // extract draw function
-      const setupProxy = pyodide.globals.get("setup");
-      const drawProxy = pyodide.globals.get("draw");
+      const setupProxy = hui_namespace.get("setup");
+      const drawProxy = hui_namespace.get("draw");
 
       // run the game
       if (setupProxy) {
-        // setup is optional
-        setupProxy();
-        hui.update(0);
+        // set main setup function
+        hui.setup = setupProxy;
+        hui.prepare();
       }
 
       if (!drawProxy) {
@@ -226,30 +236,37 @@
         return;
       }
 
+      // set main draw function
+      hui.draw = drawProxy;
+
       let lastTimestamp: number;
+      let firstTimestamp: number;
       const gameLoop = (timestamp: number) => {
         try {
-          if (lastTimestamp === undefined) lastTimestamp = timestamp;
+          if (lastTimestamp === undefined || firstTimestamp === undefined) {
+            firstTimestamp = timestamp;
+            lastTimestamp = timestamp;
+          }
           let dt = (timestamp - lastTimestamp) / 1000;
-          let t = timestamp / 1000;
+          let t = (timestamp - firstTimestamp) / 1000;
           lastTimestamp = timestamp;
 
-          drawProxy(t, dt);
-          hui.update(dt);
+          hui.step(t, dt);
 
           if (!flags.gameIsRunning) {
             return;
           }
           requestAnimationFrame(gameLoop);
         } catch (error) {
-          console.log(correctPyodideErrorMessage(error as Error, scriptPackage).correctedMessage, "error");
+          console.log((error as Error).message, "error");
+          throw error;
         }
       }
 
       flags.gameIsRunning = true;
       requestAnimationFrame(gameLoop);
     } catch (error) {
-      console.log(correctPyodideErrorMessage(error as Error, scriptPackage).correctedMessage, "error");
+      console.log((error as Error).message, "error");
     }
     
     flags.isRunning = false;
@@ -261,7 +278,7 @@
   <div class="layout panel code">
     <div class="holder left">
       <div id="title" class="layout panel"><img alt="A fried egg." id="title-icon" src={iconFriedEgg}>&nbsp;<div id="title-text"><b>PYFRY/GAME</b> by sms</div></div>
-      <button class="{flags.updateURL ? 'active' : ''} playpen-sans" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"}</button>
+      <button class="{flags.updateURL ? 'active' : ''} playpen-sans" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"} (<Fa class="icon" icon={faCompressAlt} /> {compressed_code.length} Zeichen)</button>
       <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}><Fa class="icon" icon={faCloudDownloadAlt} /></button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><Fa class="icon" icon={faFolderOpen} /></button>
     </div>
@@ -279,7 +296,7 @@
       {:else if flags.gameIsRunning}
       <span title="Spiel läuft..." class="playpen-sans">&nbsp;Läuft...&nbsp;<Fa class="icon rotating" icon={faStar} /></span>
       {:else}
-      <button title="Starte die Ausführung!" class="good playpen-sans" onclick={runCode}>&nbsp;START&nbsp;<Fa class="icon" icon={faFlagCheckered} /></button>
+      <button title="Starte die Ausführung!" class="good playpen-sans" onclick={runCode}>&nbsp;PLAY&nbsp;<Fa class="icon" icon={faPlay} /></button>
       {/if}
       <button title="Stoppe das Spiel!" class="bad playpen-sans" onclick={stopGame}>&nbsp;STOP&nbsp;<Fa class="icon" icon={faStop} /></button>
       

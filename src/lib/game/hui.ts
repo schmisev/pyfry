@@ -1,53 +1,37 @@
-import { wrapAutocomplete } from "$lib/faux-language-server";
-import { vec2, type Vector2 } from "./hui.vectors";
+import { vec2, HuiVector } from "./hui.vector";
+import { HuiBody } from "./hui.body";
+import { hex, rnd, rndi, rndr } from "./hui.utils";
+import { HuiSound } from "./hui.sound";
+import { HuiTimer } from "./hui.timer";
+import { HuiLayer, HuiSprite } from "./hui.layer";
+import type { HuiThing } from "./hui.thing";
+import { HuiRandom } from "./hui.random";
 
-function componentToHex(c: number) {
-  const hex = Math.floor(c).toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
-};
+import type { PyodideInterface } from "pyodide";
+import { HuiImage } from "./hui.image";
 
-function hex(r: number, g: number, b: number) {
-  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-};
-
-function rnd() {
-  return Math.random();
-}
-
-function rndr(min: number, max: number) {
-  return min + Math.random() * (max - min);
-}
-
-function rndi(min: number, max: number) {
-  return Math.floor(rndr(min, max));
-}
-
-function osc(ctx: AudioContext, type: OscillatorType, frequency: number, duration: number) {
-  const o = ctx.createOscillator()
-  o.type = type;
-  o.frequency.value = frequency;
-
-  const g = ctx.createGain()
-  o.connect(g)
-  g.connect(ctx.destination)
-  o.start(0)
-  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration)
-
-  setTimeout(() => { o.stop(); }, duration * 1000);
-}
+export type HuiSetupFunction = () => void;
+export type HuiDrawFunction = (dt: number) => void;
 
 export class HuiGame {
-  doc: Document;
-  cvs: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
+  #doc: Document;
+  #cvs: HTMLCanvasElement;
+  #ctx: CanvasRenderingContext2D;
+  
+  #pyodide?: PyodideInterface;
+  #create_proxy?: (obj: any) => any;
 
   width: number;
   height: number;
 
-  mouse_x = 0;
-  mouse_y = 0;
+  time: number = 0;
 
-  keymap: Map<string, [boolean, boolean]> = new Map<string, [boolean, boolean]>();
+  mouse: HuiVector = vec2();
+  
+  get mx() { return this.mouse.x };
+  get my() { return this.mouse.y };
+
+  #keymap: Map<string, [boolean, boolean]> = new Map<string, [boolean, boolean]>();
 
   // layers
   bg: HuiLayer;
@@ -55,48 +39,56 @@ export class HuiGame {
   fg: HuiLayer;
   ui: HuiLayer;
 
+  // layers
+  #layers: HuiLayer[] = []
+
   // sound player
   sound = new HuiSound();
 
-  // timers
-  #timers: HuiTimer[] = [];
+  // things (to update)
+  #things: (HuiThing | object)[] = [];
 
-  constructor(doc: Document, cvs: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-    this.cvs = cvs;
-    this.ctx = ctx;
-    this.doc = doc;
+  // debug
+  show_debug: boolean = false;
+
+  constructor(doc: Document, cvs: HTMLCanvasElement, ctx: CanvasRenderingContext2D, create_proxy: (obj: any) => any) {
+    this.#cvs = cvs;
+    this.#ctx = ctx;
+    this.#doc = doc;
+
+    this.#create_proxy = create_proxy;
 
     this.width = cvs.width;
     this.height = cvs.height;
 
-    this.bg = new HuiLayer(cvs);
-    this.mg = new HuiLayer(cvs);
-    this.fg = new HuiLayer(cvs);
-    this.ui = new HuiLayer(cvs);
+    this.bg = new HuiLayer(cvs.width, cvs.height);
+    this.mg = new HuiLayer(cvs.width, cvs.height);
+    this.fg = new HuiLayer(cvs.width, cvs.height);
+    this.ui = new HuiLayer(cvs.width, cvs.height);
 
     cvs.tabIndex = -1;
     cvs.oncontextmenu = (ev: Event) => ev.preventDefault();
 
     cvs.onkeydown = (ev: KeyboardEvent) => {
-      if (this.keymap.has(ev.key)) {
-        this.keymap.set(ev.key, [false, false]);
+      if (this.#keymap.has(ev.key)) {
+        this.#keymap.set(ev.key, [false, false]);
       } else {
-        this.keymap.set(ev.key, [true, false]);
+        this.#keymap.set(ev.key, [true, false]);
       }
     }
 
     cvs.onkeyup = (ev: KeyboardEvent) => {
-      this.keymap.set(ev.key, [false, true]);
+      this.#keymap.set(ev.key, [false, true]);
     }
 
     cvs.onpointerdown = (ev: PointerEvent) => {
       cvs.setPointerCapture(ev.pointerId);
 
       let key = "m" + ev.button;
-      if (this.keymap.has(key)) {
-        this.keymap.set(key, [false, false]);
+      if (this.#keymap.has(key)) {
+        this.#keymap.set(key, [false, false]);
       } else {
-        this.keymap.set(key, [true, false]);
+        this.#keymap.set(key, [true, false]);
       }
     }
 
@@ -104,36 +96,125 @@ export class HuiGame {
       cvs.releasePointerCapture(ev.pointerId);
 
       let key = "m" + ev.button;
-      this.keymap.set(key, [false, true]);
+      this.#keymap.set(key, [false, true]);
     }
 
     doc.onpointermove = (ev: PointerEvent) => {
-      this.mouse_x = ev.clientX - cvs.offsetLeft;
-      this.mouse_y = ev.clientY - cvs.offsetTop;
+      this.mouse.x = ev.clientX - cvs.offsetLeft;
+      this.mouse.y = ev.clientY - cvs.offsetTop;
     }
 
     cvs.onblur = (ev: FocusEvent) => {
-      this.keymap.clear();
+      this.#keymap.clear();
     }
   }
 
-  // input methods
-  is_pressed(key: string) {
-    return this.keymap.has(key);
+  debug(on?: boolean) {
+    if (on === undefined) {
+      this.show_debug = !this.show_debug;
+    } else {
+      this.show_debug = on;
+    }
+  }
+
+  /**
+   * Überprüft, ob eine Tastatur- oder Maustaste gedrückt wurde.
+   * ```python
+   * # Beispiel
+   * if hui.is_pressed("ArrowRight"):
+   *   x += 5
+   * ```
+   * Die Maustasten heißen `"m0"`, `"m1"` und `"m2"`.
+   * Buchstabentasten können z.B. mit "a" oder "z" abgefragt werden. Achtung, Groß- und Kleinschreibung wird beachtet!
+   * Die Namen der restlichen Tasten findet man hier: https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
+   * Häufig verwendet werden `"ArrowDown"`, `"ArrowLeft"`, `"Space"`, `"Enter"` und `"Backspace"`.
+   * @param key z.B. `"m0"`, `"a"` oder `"Space"`
+   * @returns 
+   */
+  is_pressed(key: string): boolean {
+    return this.#keymap.has(key);
   }
 
   just_pressed(key: string) {
-    return this.keymap.get(key)?.[0] || false;
+    this.is_pressed
+    return this.#keymap.get(key)?.[0] || false;
   }
 
   just_released(key: string) {
-    return this.keymap.get(key)?.[1] || false;
+    return this.#keymap.get(key)?.[1] || false;
+  }
+
+  // input convenience
+  axis_pressed(a: string, b: string) {
+    let dir_1d = 0
+    dir_1d += this.is_pressed(a) ? -1 : 0;
+    dir_1d += this.is_pressed(b) ? 1 : 0;
+    return dir_1d;
+  }
+
+  dir_pressed(u: string, d: string, l: string, r: string) {
+    return vec2(
+      this.axis_pressed(l, r),
+      this.axis_pressed(u, d),
+    )
+  }
+
+  // add game object
+  add(anything: Object) {
+    let obj = anything;
+    // to ensure pyodide compatibility
+    if (obj.constructor.name === "PyProxy" && this.#create_proxy) {
+      obj = this.#create_proxy(obj);
+      this.show_debug && console.log(`<hui> added proxy of ${anything}`);
+    }
+    let thing = obj;
+    "setup" in thing && typeof thing.setup === "function" && thing.setup();
+    this.#things.push(thing);
+    return thing;
+  }
+
+  remove(thing: HuiThing | object) {
+    (thing as any)._remove_ = true;
+  }
+
+  // layers
+  add_layer() {
+    const new_layer = new HuiLayer(this.width, this.height);
+    this.#layers.push(new_layer);
+    return new_layer;
   }
 
   // timers
+  new_timer(duration: number, does_repeat: boolean = false) {
+    const new_timer = new HuiTimer(duration, does_repeat, false);
+    return new_timer;
+  }
+
+  /**
+   * Fügt einen neuen (globalen) Timer zum Spiel hinzu.
+   * ACHTUNG: Dieser Timer zerstört sich selbst, nachdem er abgelaufen ist.
+   * Das macht ihn praktisch, wenn man z.B. ein Objekt nach einer bestimmten Zeit zerstören will:
+   * ```python
+   * class Bullet:
+   *   def setup(self):
+   *     self.timer = hui.add_timer(2)
+   *     self.timer.start()
+   *
+   *   def draw(self, dt):
+   *     if (self.timer.just_finished):
+   *       hui.remove(self)
+   *
+   * # ...
+   * def setup():
+   *   hui.add(Bullet())
+   * ```
+   * @param duration 
+   * @param does_repeat 
+   * @return
+   */
   add_timer(duration: number, does_repeat: boolean = false) {
-    const new_timer = new HuiTimer(duration, does_repeat);
-    this.#timers.push(new_timer);
+    const new_timer = new HuiTimer(duration, does_repeat, true);
+    this.#things.push(new_timer);
     return new_timer;
   }
 
@@ -143,212 +224,152 @@ export class HuiGame {
     return new_body;
   }
 
+  // vectors
+  new_vec2(x?: number, y?: number) {
+    const new_vec2 = vec2(x, y);
+    return new_vec2;
+  }
+
+  // sprites
+  new_sprite(w: number, h: number) {
+    const new_sprite = new HuiSprite(w, h);
+    return new_sprite;
+  }
+
+  // sprites
+  new_image(src: string) {
+    const new_image = new HuiImage(src);
+    return new_image;
+  }
+
+  // new random
+  new_random(period: number) {
+    const new_random = new HuiRandom(period);
+    return new_random;
+  }
+
   #update_keymap() {
-    for (const [key, value] of this.keymap.entries()) {
+    for (const [key, value] of this.#keymap.entries()) {
       if (value[1]) {
-        this.keymap.delete(key);
+        this.#keymap.delete(key);
         continue;
       }
       if (value[0]) {
-        this.keymap.set(key, [false, value[1]]);
+        this.#keymap.set(key, [false, value[1]]);
       }
     }
   }
 
-  #advance_timers(dt: number) {
-    for (const timer of this.#timers) {
-      timer.advance(dt);
+  #setup_things() {
+    // not needed right now because hui.add(...) calls the setup function
+  }
+
+  #tick_things(dt: number) {
+    for (const thing of this.#things) {
+      "tick" in thing && typeof thing.tick === "function" && thing.tick(dt);
+    }
+  }
+
+  #draw_things(dt: number) {
+    for (const thing of this.#things) {
+      "draw" in thing && typeof thing.draw === "function" && thing.draw(dt);
+    }
+  }
+
+  #remove_things() {
+    let i = 0;
+    while (i < this.#things.length) {
+      const thing = this.#things[i];
+      if ("_remove_" in thing && thing._remove_) {
+        let thing: any = this.#things.splice(i, 1);
+        this.show_debug && console.log(`<hui> removed ${thing}`);
+      } else i++;
     }
   }
 
   #draw_layers() {
-    this.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
-    for (const layer of [this.bg, this.mg, this.fg, this.ui]) {
-      this.ctx.drawImage(layer.cvs, 0, 0);
+    this.#ctx.clearRect(0, 0, this.#cvs.width, this.#cvs.height);
+
+    this.#ctx.drawImage(this.bg.cvs, 0, 0);
+    this.#ctx.drawImage(this.mg.cvs, 0, 0);
+
+    for (const layer of this.#layers) {
+      this.#ctx.drawImage(layer.cvs, 0, 0);
     }
+
+    this.#ctx.drawImage(this.fg.cvs, 0, 0);
+    this.#ctx.drawImage(this.ui.cvs, 0, 0);
   }
 
-  update(dt: number) {
-    this.#update_keymap();
-    this.#advance_timers(dt);
-    this.#draw_layers();
+  prepare() {
+    this.setup();
+    this.#setup_things();
   }
+
+  step(t: number, dt: number) {
+    // set game time
+    this.time = t;
+    // tick all things
+    this.#tick_things(dt);
+    // run draw function and then draw "things"
+    this.draw(dt);
+    this.#draw_things(dt);
+    // draw layer stack
+    this.#draw_layers();
+    // update inputs
+    this.#update_keymap();
+    // remove things if marked
+    this.#remove_things();
+  }
+
+  // to be overwritten
+  setup: HuiSetupFunction = () => {};
+  draw: HuiDrawFunction = (dt: number) => {};
 
   // "static"
   hex(r: number, g: number, b: number) { return hex(r, g, b); }
   rnd() { return rnd() };
   rndi(min: number, max: number) { return rndi(min, max) };
   rndr(min: number, max: number) { return rndr(min, max) };
-}
 
-export class HuiSound {
-  #ctx = new AudioContext()
-
-  boop(frequency: number, duration: number) {
-    osc(this.#ctx, "sine", frequency, duration);
+  clamp(value: number, min: number, max: number) {
+    return (value < min) ? min : (value > max) ? max : value;
   }
 
-  bleep(frequency: number, duration: number) {
-    osc(this.#ctx, "triangle", frequency, duration);
+  wrap(value: number, min: number, max: number) {
+    return (value > max) ? min + (value - max) : (value < min) ? max - (min - value) : value;
   }
 
-  buzz(frequency: number, duration: number) {
-    osc(this.#ctx, "sawtooth", frequency, duration);
-  }
-
-  humm(frequency: number, duration: number) {
-    osc(this.#ctx, "square", frequency, duration);
-  }
-}
-
-export class HuiTimer {
-  does_repeat: boolean;
-  is_running: boolean = false;
-  duration: number;
-  time: number;
-
-  constructor(duration: number, does_repeat: boolean) {
-    this.does_repeat = does_repeat;
-    this.duration = duration < 0 ? 0 : duration;
-    this.time = 0;
-  }
-
-  get progress(): number {
-    if (this.duration <= 0) return 0;
-    return this.time / this.duration; 
-  }
-
-  
-  get pingpong(): number {
-    return 1 - Math.abs(this.progress * 2 - 1)
-  }
-
-  advance(dt: number) {
-    if (!this.is_running) return;
-    this.time += dt;
-    if (this.time > this.duration) {
-      if (this.does_repeat) {
-        this.time = 0;
-      } else {
-        this.time = this.duration;
-        this.is_running = false;
-      }
-    }
-  }
-
-  start(duration?: number) {
-    this.time = 0;
-    if (duration !== undefined && duration >= 0) {
-      this.duration = duration;
-    }
-    this.is_running = true;
-  }
-
-  pause() {
-    this.is_running = false;
-  }
-}
-
-export class HuiLayer {
-  cvs: OffscreenCanvas;
-  ctx: OffscreenCanvasRenderingContext2D;
-
-  constructor(cvs?: HTMLCanvasElement) {
-    if (cvs)
-      this.cvs = new OffscreenCanvas(cvs.width, cvs.height);
+  lerp(a: number | HuiVector, b: number | HuiVector, t: number) {
+    if (typeof a === "number" && typeof b === "number")
+      return a + (b - a) * t;
+    else if (a instanceof HuiVector && b instanceof HuiVector)
+      return a.add(b.sub(a).scale(t));
     else
-      this.cvs = new OffscreenCanvas(10, 10);
-    this.ctx = this.cvs.getContext("2d")!;
+      throw TypeError("lerp(a, b, t) can only be used on two numbers or two vectors!")
   }
 
-  clear() {
-    this.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
+  sign(value: number | HuiVector) {
+    if (typeof value === "number")
+      return (value < 0) ? -1 : (value > 0) ? 1 : 0;
+    else
+      return value.sign();
   }
 
-  background (color: string) {
-    this.ctx.save();
-    this.ctx.fillStyle = color;
-    this.ctx.fillRect(0, 0, this.cvs.width, this.cvs.height);
-    this.ctx.restore();
-  }
-
-  fill(color: string) {
-    this.ctx.fillStyle = color;
-  }
-
-  stroke(color: string) {
-    this.ctx.strokeStyle = color;
-  }
-
-  shadow() {
-    this.ctx.shadowBlur = 5;
-    this.ctx.shadowColor = "rgb(0, 0, 0, 0.2)";
-    this.ctx.shadowOffsetX = 5;
-    this.ctx.shadowOffsetY = 5;
-  }
-
-  noShadow() {
-    this.ctx.shadowColor = "transparent";
-  }
-
-  thick(width: number) {
-    this.ctx.lineWidth = width;
-  }
-
-  circle(x: number, y: number, r: number) {
-    this.ctx.save();
-    this.ctx.beginPath();
-    this.ctx.ellipse(x, y, r, r, 0, 0, Math.PI * 2);
-    this.ctx.fill();
-    this.noShadow();
-    this.ctx.stroke();
-    this.ctx.restore();
-  }
-
-  rect(x: number, y: number, w: number, h: number) {
-    this.ctx.save();
-    this.ctx.beginPath();
-    this.ctx.rect(x, y, w, h);
-    this.ctx.fill();
-    this.noShadow();
-    this.ctx.stroke();
-    this.ctx.restore();
-  }
-
-  ellipse(x: number, y: number, w: number, h: number) {
-    this.ctx.save();
-    this.ctx.beginPath();
-    this.ctx.ellipse(x, y, w, h, 0, 0, Math.PI * 2);
-    this.ctx.fill();
-    this.noShadow();
-    this.ctx.stroke();
-    this.ctx.restore();
+  move_towards(a: number | HuiVector, b: number | HuiVector, delta: number) {
+    if (typeof a === "number" && typeof b === "number") {
+      let step = Math.min(Math.abs(b - a), delta);
+      let dir = Math.sign(b - a);
+      return a + dir * step;
+    } else if (a instanceof HuiVector && b instanceof HuiVector) {
+      let step = Math.min(a.to(b).len(), delta);
+      let dir = a.to(b).norm();
+      return a.add(dir.scale(step));
+      return 
+    }
+    else
+      throw TypeError("move_towards(a, b, delta) can only be used on two numbers or two vectors!")
   }
 }
 
-export class HuiBody {
-  pos: Vector2;
-  vel: Vector2;
 
-  constructor(x: number, y: number, vx: number, vy: number) {
-    this.pos = vec2(x, y);
-    this.vel = vec2(vx, vy);
-  }
-
-  // for convenience
-  get x(): number { return this.pos.x };
-  get y(): number { return this.pos.y };
-  get vx(): number { return this.vel.x };
-  get vy(): number { return this.vel.y };
-  set x(value: number) { this.pos.x = value };
-  set y(value: number) { this.pos.y = value };
-  set vx(value: number) { this.vel.x = value };
-  set vy(value: number) { this.vel.y = value };
-
-  get speed(): number { return this.vel.len() };
-  set speed(value: number) { this.vel = this.vel.norm(value)};
-
-  move(dt: number) {
-    this.pos = this.pos.add(this.vel.scale(dt));
-  }
-}

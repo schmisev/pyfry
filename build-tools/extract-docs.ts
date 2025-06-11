@@ -3,7 +3,7 @@ import fs from "fs";
 import { Completion } from "@codemirror/autocomplete";
 
 // Prepare completions
-let classCompletions: Record<string, Completion[]> = {};
+let classCompletions: Completion[] = [];
 
 // Helper function to extract JSDoc comments
 function extractJSDoc(node: ts.Node) {
@@ -29,22 +29,25 @@ function visit(node: ts.Node) {
     let autofillSignature = "???";
     
     if (ts.isMethodDeclaration(node) && node.name) {
+      if (node.name.getText()[0] === "#") return;
+
       signature = `${className}.${node.name.getText()}(${node.parameters.map(p => p.getText()).join(", ")})`
-      autofillSignature = `${node.name.getText()}(${node.parameters.map(p => `\${${p.name.getText()}}`).join(", ")})`
+      autofillSignature = `hui.${node.name.getText()}(${node.parameters.map(p => `\${${p.name.getText()}}`).join(", ")})`
     } else if (ts.isGetAccessorDeclaration(node)) {
+      if (node.name.getText()[0] === "#") return;
+
       signature = `${className}.${node.name.getText()}`
-      autofillSignature = `${node.name.getText()}`
+      autofillSignature = `hui.${node.name.getText()}`
     } else if (ts.isPropertyDeclaration(node)) {
+      if (node.name.getText()[0] === "#") return;
+
       signature = `${className}.${node.name.getText()}`
-      autofillSignature = `${node.name.getText()}`
+      autofillSignature = `hui.${node.name.getText()}`
     } else {
       return ts.forEachChild(node, visit);
     }
 
-    if (!(className in classCompletions)) {
-      classCompletions[className] = [];
-    }
-    classCompletions[className].push({ label: autofillSignature, displayLabel: signature, info: signature });
+    classCompletions.push({ label: autofillSignature, displayLabel: signature, info: signature });
   }
 
   ts.forEachChild(node, visit);
@@ -62,8 +65,23 @@ function loadSourceFile(name: string, path: string) {
 
 // Start traversal
 const path = "src/lib/game";
-for (let name of ["hui.ts", "hui.vectors.ts"]) {
-  visit(loadSourceFile(name, path));
-  fs.writeFileSync(path + "/" + name + ".docs.json", JSON.stringify(classCompletions, null, 2));
-  classCompletions = {};
+const head = `import { wrapAutocomplete } from "$lib/faux-language-server"
+import { type Completion } from "@codemirror/autocomplete"
+
+const huiCompletions: Completion[] = `
+
+const tail = `
+export const huiAutocomplete = wrapAutocomplete(/hui\\..*/, huiCompletions); `
+
+for (let name of fs.readdirSync(path + "/")) {
+  try {
+    visit(loadSourceFile(name, path));
+    // classCompletions = {};
+  } catch {
+    console.log("ignored:", name);
+  }
 }
+
+classCompletions = [];
+
+fs.writeFileSync(path + "/hui.docs.ts", head + JSON.stringify(classCompletions, null, 2) + tail);

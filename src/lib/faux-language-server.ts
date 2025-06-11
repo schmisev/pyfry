@@ -1,4 +1,4 @@
-import {CompletionContext, type Completion, type CompletionResult, type CompletionSource} from "@codemirror/autocomplete"
+import {CompletionContext, snippetCompletion, type Completion, type CompletionResult, type CompletionSource} from "@codemirror/autocomplete"
 
 export function wrapAutocomplete(prefix: RegExp, completions: Completion[]) {
   return (context: CompletionContext): null | CompletionResult => {
@@ -7,7 +7,7 @@ export function wrapAutocomplete(prefix: RegExp, completions: Completion[]) {
       return null
     return {
       from: word.from,
-      options: completions
+      options: completions.map(c => snippetCompletion(c.label, c))
     }
   }
 }

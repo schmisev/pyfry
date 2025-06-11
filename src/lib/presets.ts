@@ -333,22 +333,73 @@ import random`;
 
 export const ALL_GAME_PRESETS: CodePreset[] = [
   {
-    name: "Startpunkt",
+    name: "Leeres Spiel",
     preamble: GAME_PREAMBLE,
     pseudo: GAME_PSEUDO_PREAMBLE,
-    code: `timer = hui.add_timer(5, True) # Fügt einen neuen Timer hinzu. Dieser wiederholt sich!
-gravity = 10
-ball_radius = 50
-body = hui.new_body(hui.width / 2, hui.height / 2, 0, 0)
+    code: `# Leeres Spiel
+# setup() wird beim Spielstart ausgeführt
+def setup():
+  pass
+
+# draw() wird 30-mal pro Sekunde ausgeführt
+def draw(dt):
+  pass`,
+  },
+  {
+    name: "Hallo!",
+    preamble: GAME_PREAMBLE,
+    pseudo: GAME_PSEUDO_PREAMBLE,
+    code: `# Hallo!
 
 # setup() wird beim Spielstart ausgeführt
 def setup():
-  timer.start()
-  hui.bg.background("lightgreen")
+  hui.bg.flood("white")
+  hui.bg.font("Arial")
+  hui.bg.text_size(50)
+  hui.bg.no_stroke()
+  
+  hui.mg.font("Arial")
+  hui.mg.text_size(50)
+  hui.mg.stroke("white")
+  hui.mg.shadow()
 
 # draw() wird 30-mal pro Sekunde ausgeführt
-def draw(t, dt):
-  hui.bg.background(hui.hex(255 * timer.pingpong, 255 - 255 * timer.pingpong, 0))
+def draw(dt):
+  x = hui.width / 2 + math.sin(hui.time * 4) * 100
+  y = hui.height / 2 + math.cos(hui.time * 3) * 100
+
+  hui.bg.flood("rgba(255, 255, 255, 0.05)");
+  hui.bg.fill("blue")
+  hui.bg.circle(x , y, 10)
+  
+  hui.mg.clear()
+  hui.mg.text("Hallo!", x - 38, y)`
+  },
+  {
+    name: "Hüpfender Ball",
+    preamble: GAME_PREAMBLE,
+    pseudo: GAME_PSEUDO_PREAMBLE,
+    code: `# Hüpfender Ball
+gravity = 10
+ball_radius = 50
+body = hui.new_body(hui.width / 2, hui.height / 2, 0, 0)
+score = 0
+
+# setup() wird beim Spielstart ausgeführt
+def setup():
+  hui.bg.flood("lightgreen")
+
+  hui.ui.no_stroke()
+  hui.ui.shadow()
+  hui.ui.text_size(30)
+
+  hui.mg.shadow()
+
+# draw() wird 30-mal pro Sekunde ausgeführt
+def draw(dt):
+  global score
+  
+  hui.bg.flood("lightblue")
   mg = hui.mg # Hol dir die Hauptzeichenebene (middle ground)
 
   # Wir zeichnen den roten Kreis
@@ -366,9 +417,13 @@ def draw(t, dt):
   body.vy += gravity
 
   # Bei Klick springt der Ball nach oben und ein Sound wird abgespielt
-  if (hui.just_pressed("m0")):
-    hui.sound.bleep(250, 0.4)
-    body.vy = -500
+  dist = hui.mouse.to(body.pos)
+  if hui.just_pressed("m0") and dist.len() < 50:
+      hui.sound.bleep(250, 1.0)
+      body.vy = -500
+      body.vx = dist.x * 20
+
+      score += 1
 
   # Wir bewegen den Körper
   body.move(dt)
@@ -377,6 +432,62 @@ def draw(t, dt):
   if (body.y > hui.height - ball_radius):
     body.y = hui.height - ball_radius
     body.vy = -body.vy * 0.9
-    hui.sound.boop(abs(body.vy), 0.5)`,
+    hui.sound.boop(abs(body.vy), 0.5)
+    score = 0
+
+  # Der Ball hat den Bildschirm verlassen? Punkte und Ball zurücksetzen!
+  if (body.x < -ball_radius or body.x > hui.width + ball_radius):
+    hui.sound.psh(1000, 1.0)
+    body.x = hui.width / 2
+    body.y = 0
+    body.vx = 0
+    body.vy = 0
+    score = 0
+    
+
+  # Punktestand anzeigen
+  hui.ui.clear();
+  hui.ui.text(f"Punkte: {score}", hui.width / 2, 20)`,
   },
+  {
+    name: "Smiley",
+    preamble: GAME_PREAMBLE,
+    pseudo: GAME_PSEUDO_PREAMBLE,
+    code: `# Smiley
+sprite = hui.new_sprite(70, 70)
+sprite.fill("yellow")
+sprite.circle(0, 0, 25)
+sprite.fill("black")
+sprite.circle(-10, -7, 3)
+sprite.circle(10, -7, 3)
+sprite.move(0, 10)
+sprite.rotate(-math.pi / 2)
+sprite.text("(", 0, 0)
+
+# setup() wird beim Spielstart ausgeführt
+def setup():
+  hui.bg.flood("lightblue")
+  hui.mg.shadow()
+
+# draw() wird 30-mal pro Sekunde ausgeführt
+def draw(dt):
+  hui.mg.clear()
+  hui.mg.show(sprite, hui.mx, hui.my - 30)`
+  },
+  {
+    name: "Bilder importieren",
+    preamble: GAME_PREAMBLE,
+    pseudo: GAME_PSEUDO_PREAMBLE,
+    code: `# Bilder importieren
+snake = hui.new_image("https://img.icons8.com/?size=48&id=OwPRfsLEUW71&format=png")
+
+# setup() wird beim Spielstart ausgeführt
+def setup():
+  pass
+
+# draw() wird 30-mal pro Sekunde ausgeführt
+def draw(dt):
+  hui.mg.clear()
+  hui.mg.show(snake, hui.mx, hui.my)`
+  }
 ]
