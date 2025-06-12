@@ -480,14 +480,25 @@ def draw(dt):
     pseudo: GAME_PSEUDO_PREAMBLE,
     code: `# Bilder importieren
 snake = hui.new_image("https://img.icons8.com/?size=48&id=OwPRfsLEUW71&format=png")
+snake_body = hui.new_body(hui.width/2, hui.height/2, 0, 0)
 
 # setup() wird beim Spielstart ausgeführt
 def setup():
-  pass
+  hui.bg.flood("lightgreen")
+  hui.mg.shadow();
 
 # draw() wird 30-mal pro Sekunde ausgeführt
 def draw(dt):
+  # Schlange auf Maus zubewegen
+  snake_body.vel = hui.lerp(
+    snake_body.vel,
+    snake_body.pos.dirTo(hui.mouse).scale(100), 
+    0.2
+  )
+  snake_body.move(dt)
+  
+  # Schlange anzeigen
   hui.mg.clear()
-  hui.mg.show(snake, hui.mx, hui.my)`
+  hui.mg.show(snake, snake_body.x, snake_body.y)`
   }
 ]

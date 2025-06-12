@@ -68,6 +68,10 @@ export class HuiVector {
         return this.div(this.len()).scale(factor);
     }
 
+    dirTo(other: HuiVector) {
+      return this.to(other).norm();
+    }
+
     distTo(other: HuiVector) {
         return this.to(other).len();
     }

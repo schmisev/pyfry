@@ -1,13 +1,23 @@
 import { HuiVector, vec2 } from "./hui.vector";
 
+export type BodyShapeType = "ellipse" | "rect";
 
 export class HuiBody {
   pos: HuiVector;
   vel: HuiVector;
+  width: number;
+  height: number;
+  angle: number = 0;
+  type: BodyShapeType;
 
-  constructor(x: number, y: number, vx: number, vy: number) {
+  constructor(x: number, y: number, vx: number, vy: number, w: number = 50, h: number = 50, type: BodyShapeType = "rect") {
     this.pos = vec2(x, y);
     this.vel = vec2(vx, vy);
+
+    this.width = w;
+    this.height = h;
+
+    this.type = type;
   }
 
   // for convenience

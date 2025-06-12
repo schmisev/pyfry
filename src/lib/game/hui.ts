@@ -1,11 +1,11 @@
 import { vec2, HuiVector } from "./hui.vector";
 import { HuiBody } from "./hui.body";
-import { hex, rnd, rndi, rndr } from "./hui.utils";
+import { hex, lerp, rnd, rndi, rndr } from "./hui.utils";
 import { HuiSound } from "./hui.sound";
 import { HuiTimer } from "./hui.timer";
 import { HuiLayer, HuiSprite } from "./hui.layer";
 import type { HuiThing } from "./hui.thing";
-import { HuiRandom } from "./hui.random";
+import { HuiRandomTimer } from "./hui.random";
 
 import type { PyodideInterface } from "pyodide";
 import { HuiImage } from "./hui.image";
@@ -185,11 +185,6 @@ export class HuiGame {
   }
 
   // timers
-  new_timer(duration: number, does_repeat: boolean = false) {
-    const new_timer = new HuiTimer(duration, does_repeat, false);
-    return new_timer;
-  }
-
   /**
    * Fügt einen neuen (globalen) Timer zum Spiel hinzu.
    * ACHTUNG: Dieser Timer zerstört sich selbst, nachdem er abgelaufen ist.
@@ -242,9 +237,15 @@ export class HuiGame {
     return new_image;
   }
 
-  // new random
-  new_random(period: number) {
-    const new_random = new HuiRandom(period);
+  // new timer
+  new_timer(duration: number, does_repeat: boolean = false) {
+    const new_timer = new HuiTimer(duration, does_repeat, false);
+    return new_timer;
+  }
+
+  // new random timer
+  new_random(period: number, does_repeat: boolean = false) {
+    const new_random = new HuiRandomTimer(period, does_repeat, false);
     return new_random;
   }
 
@@ -340,14 +341,7 @@ export class HuiGame {
     return (value > max) ? min + (value - max) : (value < min) ? max - (min - value) : value;
   }
 
-  lerp(a: number | HuiVector, b: number | HuiVector, t: number) {
-    if (typeof a === "number" && typeof b === "number")
-      return a + (b - a) * t;
-    else if (a instanceof HuiVector && b instanceof HuiVector)
-      return a.add(b.sub(a).scale(t));
-    else
-      throw TypeError("lerp(a, b, t) can only be used on two numbers or two vectors!")
-  }
+  lerp = lerp;
 
   sign(value: number | HuiVector) {
     if (typeof value === "number")

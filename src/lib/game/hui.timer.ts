@@ -22,8 +22,12 @@ export class HuiTimer extends HuiThing {
     return this.time / this.duration;
   }
 
+  get axis(): number {
+    return 2 * this.progress - 1;
+  }
+
   get pingpong(): number {
-    return 1 - Math.abs(this.progress * 2 - 1);
+    return 1 - Math.abs(this.axis);
   }
 
   tick(dt: number) {

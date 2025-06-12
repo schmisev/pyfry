@@ -57,7 +57,7 @@
   });
 
   let copied_presets = ALL_GAME_PRESETS.map(copyObj);
-  
+
   let current_presets = $state(copied_presets);
   let preset: CodePreset = $state(copied_presets[0]); // get first preset
   let compressed_code: string = $derived(btoa2(preset.code));
@@ -163,6 +163,7 @@
   let gameCanvas: HTMLCanvasElement;
   let gameCtx: CanvasRenderingContext2D;
   let pyodide: PyodideInterface;
+  let fps: number = $state(0);
 
   onMount(async () => {
     consoleOut = document.getElementById("console-out")!;
@@ -250,6 +251,7 @@
           let dt = (timestamp - lastTimestamp) / 1000;
           let t = (timestamp - firstTimestamp) / 1000;
           lastTimestamp = timestamp;
+          fps = Math.round(1 / dt);
 
           hui.step(t, dt);
 
@@ -323,7 +325,10 @@
       <div class="layout panel label"><Fa class="icon" icon={faGamepad} />&nbsp;<span>Mein Spiel</span></div>
     </div>
     <div id="image-out">
-      <canvas id="game-canvas" width="500" height="500"></canvas>
+      <div>{fps} frames per second</div>
+      <div class="game-wrapper">
+        <canvas id="game-canvas" class="game-canvas crt" width="500" height="500"></canvas>
+      </div>
     </div>
   </div>
 </div>

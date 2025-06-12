@@ -440,3 +440,16 @@ td.no-fill {
   -o-animation: rotating 2s linear infinite;
   animation: rotating 2s linear infinite;
 }
+
+.game-canvas {
+  display: block;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+}
+
+.game-wrapper {
+  background-color: black;
+  border: black 2px solid;
+  border-radius: calc(0.5rem + 2px);
+  box-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
+}
