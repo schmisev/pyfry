@@ -1,6 +1,6 @@
 import { vec2, HuiVector } from "./hui.vector";
 import { HuiBody } from "./hui.body";
-import { hex, lerp, rnd, rndi, rndr } from "./hui.utils";
+import { hex, lerp, reavg, rnd, rndi, rndr } from "./hui.utils";
 import { HuiSound } from "./hui.sound";
 import { HuiTimer } from "./hui.timer";
 import { HuiLayer, HuiSprite } from "./hui.layer";
@@ -14,6 +14,19 @@ export type HuiSetupFunction = () => void;
 export type HuiDrawFunction = (dt: number) => void;
 
 export class HuiGame {
+  diagnostics = {
+    frame_times: [0, 0, 0, 0, 0],
+    fps: 0,
+    tick_time: 0,
+    draw_time: 0,
+    draw_things_time: 0,
+    draw_layers_time: 0,
+    key_time: 0,
+    removal_time: 0,
+    full_time: 0,
+    frame_count: 0,
+  }
+
   #doc: Document;
   #cvs: HTMLCanvasElement;
   #ctx: CanvasRenderingContext2D;
@@ -308,19 +321,62 @@ export class HuiGame {
   }
 
   step(t: number, dt: number) {
+    let {
+      frame_count,
+      frame_times: ft,
+      fps,
+      tick_time,
+      draw_time,
+      draw_things_time,
+      draw_layers_time,
+      key_time,
+      removal_time,
+      full_time
+    } = this.diagnostics;
+    // calculate frame times
+    frame_count = Math.min(50, frame_count + 1);
+    ft.push(dt);
+    ft.shift();
+    fps = Math.round(ft.length / (ft[0]+ft[1]+ft[2]+ft[3]+ft[4]));
     // set game time
     this.time = t;
+    // do timing
+    const start_now = performance.now();
     // tick all things
     this.#tick_things(dt);
+    // tick time
+    const tick_now = performance.now();
     // run draw function and then draw "things"
     this.draw(dt);
+    // draw time
+    const draw_now = performance.now();
     this.#draw_things(dt);
+    // draw things time
+    const draw_things_now = performance.now();
     // draw layer stack
     this.#draw_layers();
+    // draw things time
+    const draw_layers_now = performance.now();
     // update inputs
     this.#update_keymap();
+    // key time
+    const key_now = performance.now();
     // remove things if marked
     this.#remove_things();
+    // draw time
+    const removal_now = performance.now();
+    // set diagnostics
+    tick_time = reavg(tick_time, tick_now - start_now, frame_count);
+    draw_time = reavg(draw_time, draw_now - tick_now, frame_count);
+    draw_things_time = reavg(draw_things_time, draw_things_now - draw_now, frame_count);
+    draw_layers_time = reavg(draw_layers_time, draw_layers_now - draw_things_now, frame_count);
+    key_time = reavg(key_time, key_now - draw_layers_now, frame_count);
+    removal_time = reavg(removal_time, removal_now - key_now, frame_count);
+
+    full_time = removal_now - start_now;
+    this.diagnostics = {
+      fps, frame_count, frame_times: ft, draw_time, draw_things_time, draw_layers_time, full_time, key_time, removal_time, tick_time
+    }
   }
 
   // to be overwritten

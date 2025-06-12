@@ -163,7 +163,17 @@
   let gameCanvas: HTMLCanvasElement;
   let gameCtx: CanvasRenderingContext2D;
   let pyodide: PyodideInterface;
-  let fps: number = $state(0);
+  let diagnostics = $state({
+    frame_times: [0, 0, 0, 0, 0],
+    fps: 0,
+    tick_time: 0,
+    draw_time: 0,
+    draw_things_time: 0,
+    draw_layers_time: 0,
+    key_time: 0,
+    removal_time: 0,
+    full_time: 0,
+  });
 
   onMount(async () => {
     consoleOut = document.getElementById("console-out")!;
@@ -251,9 +261,10 @@
           let dt = (timestamp - lastTimestamp) / 1000;
           let t = (timestamp - firstTimestamp) / 1000;
           lastTimestamp = timestamp;
-          fps = Math.round(1 / dt);
 
           hui.step(t, dt);
+
+          diagnostics = hui.diagnostics;
 
           if (!flags.gameIsRunning) {
             return;
@@ -325,9 +336,17 @@
       <div class="layout panel label"><Fa class="icon" icon={faGamepad} />&nbsp;<span>Mein Spiel</span></div>
     </div>
     <div id="image-out">
-      <div>{fps} frames per second</div>
       <div class="game-wrapper">
         <canvas id="game-canvas" class="game-canvas crt" width="500" height="500"></canvas>
+      </div>
+      <div>{diagnostics.fps} frames per second</div>
+      <div class="split-bar">
+        <div id="tick-time" class="bar-segment" style="width: {diagnostics.tick_time*50}px;"></div>
+        <div id="draw-time" class="bar-segment" style="width: {diagnostics.draw_time*50}px;"></div>
+        <div id="draw-things-time" class="bar-segment" style="width: {diagnostics.draw_things_time*50}px;"></div>
+        <div id="draw-layers-time" class="bar-segment" style="width: {diagnostics.draw_layers_time*50}px;"></div>
+        <div id="key-time" class="bar-segment" style="width: {diagnostics.key_time*50}px;"></div>
+        <div id="removal-time" class="bar-segment" style="width: {diagnostics.removal_time*50}px;"></div>
       </div>
     </div>
   </div>

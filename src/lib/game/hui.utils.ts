@@ -33,3 +33,8 @@ export function lerp(a: number | HuiVector, b: number | HuiVector, t: number) {
   else
     throw TypeError("lerp(a, b, t) can only be used on two numbers or two vectors!")
 }
+
+export function reavg(old_v: number, new_v: number, count: number) {
+  if (count <= 0) count = 1;
+  return (old_v * (count-1) + new_v) / count;
+}

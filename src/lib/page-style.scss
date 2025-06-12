@@ -453,3 +453,43 @@ td.no-fill {
   border-radius: calc(0.5rem + 2px);
   box-shadow: rgba(0, 0, 0, 0.2) 0.1em 0.1em 0.5em;
 }
+
+.split-bar {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 2rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: var(--dark-green);
+}
+
+.bar-segment {
+  height: inherit;
+  overflow: hidden;
+  text-align: center;
+}
+
+#tick-time {
+  background-color: var(--light-blue);
+}
+
+#draw-time {
+  background-color: var(--orange);
+}
+
+#draw-things-time {
+  background-color: var(--dark-orange);
+}
+
+#draw-layers-time {
+  background-color: var(--yellow);
+}
+
+#key-time {
+  background-color: var(--purple);
+}
+
+#removal-time {
+  background-color: var(--green);
+}
