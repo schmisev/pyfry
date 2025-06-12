@@ -1,3 +1,3 @@
-- [ ] frame diagnostics
+- [x] frame diagnostics
 - [ ] simple physics
 - [ ] buttons / ui elements

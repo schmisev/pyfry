@@ -341,12 +341,12 @@
       </div>
       <div>{diagnostics.fps} frames per second</div>
       <div class="split-bar">
-        <div id="tick-time" class="bar-segment" style="width: {diagnostics.tick_time*50}px;"></div>
-        <div id="draw-time" class="bar-segment" style="width: {diagnostics.draw_time*50}px;"></div>
-        <div id="draw-things-time" class="bar-segment" style="width: {diagnostics.draw_things_time*50}px;"></div>
-        <div id="draw-layers-time" class="bar-segment" style="width: {diagnostics.draw_layers_time*50}px;"></div>
-        <div id="key-time" class="bar-segment" style="width: {diagnostics.key_time*50}px;"></div>
-        <div id="removal-time" class="bar-segment" style="width: {diagnostics.removal_time*50}px;"></div>
+        <div id="tick-time" class="bar-segment" style="width: {100*diagnostics.tick_time/16}%;"></div>
+        <div id="draw-time" class="bar-segment" style="width: {100*diagnostics.draw_time/16}%;"></div>
+        <div id="draw-things-time" class="bar-segment" style="width: {100*diagnostics.draw_things_time/16}%;"></div>
+        <div id="draw-layers-time" class="bar-segment" style="width: {100*diagnostics.draw_layers_time/16}%;"></div>
+        <div id="key-time" class="bar-segment" style="width: {100*diagnostics.key_time/16}%;"></div>
+        <div id="removal-time" class="bar-segment" style="width: {100*diagnostics.removal_time/16}%;"></div>
       </div>
     </div>
   </div>
