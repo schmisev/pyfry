@@ -1,3 +1,5 @@
+import type { PyProxy } from "pyodide/ffi";
+import { HuiThing } from "./hui.thing";
 import { HuiVector, vec2 } from "./hui.vector";
 
 function component_to_hex(c: number) {
@@ -38,3 +40,17 @@ export function reavg(old_v: number, new_v: number, count: number) {
   if (count <= 0) count = 1;
   return (old_v * (count-1) + new_v) / count;
 }
+
+export function is_py_proxy(obj: Object): obj is PyProxy {
+  return obj.constructor.name === "PyProxy"
+}
+
+// TODO: this is probably super slow
+export function call_method_if_it_exists<T extends unknown>(method_name: keyof T, args: any[], thing: T) {
+  thing && typeof thing === "object" && method_name in thing && typeof thing[method_name] === "function" && thing[method_name](...args);
+}
+
+export function has_method<T extends unknown>(thing: T, method_name: keyof T): boolean {
+  return !!thing && typeof thing === "object" && method_name in thing && typeof thing[method_name] === "function"
+}
+

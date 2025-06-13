@@ -4,3 +4,4 @@
   - [ ] simple point and shape collisions
   - [ ] automatic checking for collisions
 - [ ] buttons / ui elements
+- [ ] "scene" swapping

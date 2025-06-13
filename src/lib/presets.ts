@@ -324,12 +324,21 @@ plt.show()`
 export const GAME_PREAMBLE = `# Preambel
 import math
 import random
+
+class HuiThing:
+  def __init__(self):
+    self.__id__ = None
+
+  def add(self, obj):
+    if self.__id__ == None:
+      raise Exception("Objekt wurde noch nicht mit hui.add(...) zum Spiel hinzugefügt.")
+    return hui.add(obj, self.__id__)
 `;
 
-export const GAME_PSEUDO_PREAMBLE = `# Import
-import hui # Tippe hui. ein um Vorschläge zu bekommen!
+export const GAME_PSEUDO_PREAMBLE = `#Import
 import math
-import random`;
+import random
+from hui import hui, HuiThing`
 
 export const ALL_GAME_PRESETS: CodePreset[] = [
   {
@@ -500,5 +509,34 @@ def draw(dt):
   # Schlange anzeigen
   hui.mg.clear()
   hui.mg.show(snake, snake_body.x, snake_body.y)`
+  },
+  {
+    name: "Scene Tree Test",
+    preamble: GAME_PREAMBLE,
+    pseudo: GAME_PSEUDO_PREAMBLE,
+    code: `# Scene tree test
+class Test(HuiThing):
+  def setup(self):
+    self.timer = self.add(hui.new_timer(4))
+    self.timer.start()
+
+  def tick(self, dt):
+    # print(self.timer.time)
+    if self.timer.just_finished:
+      hui.remove(self)
+
+  def draw(self, dt):
+    hui.mg.fill("red")
+    hui.mg.circle(0, 0, 100)
+
+test = hui.add(Test())
+
+# setup() wird beim Spielstart ausgeführt
+def setup():
+  hui.bg.flood("lightblue")
+
+# draw() wird 30-mal pro Sekunde ausgeführt
+def draw(dt):
+  hui.mg.clear()`
   }
 ]

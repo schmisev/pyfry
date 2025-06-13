@@ -21,7 +21,7 @@
   import Fa from 'svelte-fa'
   import { faA, faArrowRight, faBacon, faBaseball, faBreadSlice, faChartPie, faChess, faChessBoard, faChessPawn, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCompress, faCompressAlt, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faGamepad, faHourglass, faL, faPlay, faQuestion, faRemove, faSplotch, faStar, faStop, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
   import { error } from "@sveltejs/kit";
-  import { HuiGame } from "$lib/game/hui";
+  import { HuiGame, type HuiDiagnostics } from "$lib/game/hui";
   import { faFilesPinwheel, faSquareLetterboxd } from "@fortawesome/free-brands-svg-icons";
   import { correctPyodideErrorMessage } from "$lib/python/pyodide.utils";
   import { huiAutocomplete } from "$lib/game/hui.docs";
@@ -163,16 +163,17 @@
   let gameCanvas: HTMLCanvasElement;
   let gameCtx: CanvasRenderingContext2D;
   let pyodide: PyodideInterface;
-  let diagnostics = $state({
-    frame_times: [0, 0, 0, 0, 0],
+  let diagnostics: HuiDiagnostics = $state({
+    __ft__: [0, 0, 0, 0, 0],
     fps: 0,
-    tick_time: 0,
-    draw_time: 0,
-    draw_things_time: 0,
-    draw_layers_time: 0,
-    key_time: 0,
-    removal_time: 0,
-    full_time: 0,
+    tick_dt: 0,
+    draw_dt: 0,
+    draw_things_dt: 0,
+    draw_layers_dt: 0,
+    key_dt: 0,
+    removal_dt: 0,
+    full_dt: 0,
+    __fc__: 0,
   });
 
   onMount(async () => {
@@ -339,14 +340,14 @@
       <div class="game-wrapper">
         <canvas id="game-canvas" class="game-canvas crt" width="500" height="500"></canvas>
       </div>
-      <div>{diagnostics.fps} frames per second</div>
+      <div>{diagnostics.fps} fps</div>
       <div class="split-bar">
-        <div id="tick-time" class="bar-segment" style="width: {100*diagnostics.tick_time/16}%;"></div>
-        <div id="draw-time" class="bar-segment" style="width: {100*diagnostics.draw_time/16}%;"></div>
-        <div id="draw-things-time" class="bar-segment" style="width: {100*diagnostics.draw_things_time/16}%;"></div>
-        <div id="draw-layers-time" class="bar-segment" style="width: {100*diagnostics.draw_layers_time/16}%;"></div>
-        <div id="key-time" class="bar-segment" style="width: {100*diagnostics.key_time/16}%;"></div>
-        <div id="removal-time" class="bar-segment" style="width: {100*diagnostics.removal_time/16}%;"></div>
+        <div id="tick-time" class="bar-segment" style="width: {100*diagnostics.tick_dt/16}%;"></div>
+        <div id="draw-time" class="bar-segment" style="width: {100*diagnostics.draw_dt/16}%;"></div>
+        <div id="draw-things-time" class="bar-segment" style="width: {100*diagnostics.draw_things_dt/16}%;"></div>
+        <div id="draw-layers-time" class="bar-segment" style="width: {100*diagnostics.draw_layers_dt/16}%;"></div>
+        <div id="key-time" class="bar-segment" style="width: {100*diagnostics.key_dt/16}%;"></div>
+        <div id="removal-time" class="bar-segment" style="width: {100*diagnostics.removal_dt/16}%;"></div>
       </div>
     </div>
   </div>

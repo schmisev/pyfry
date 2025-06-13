@@ -44,7 +44,6 @@ export class HuiTimer extends HuiThing {
       } else {
         this.time = this.duration;
         this.is_running = false;
-        if (this.autoremove) this._remove_ = true;
       }
     }
   }

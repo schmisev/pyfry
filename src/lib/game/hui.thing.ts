@@ -1,13 +1,17 @@
+import type { PyProxy } from "pyodide/ffi";
+
 export abstract class HuiThing {
-  _remove_: boolean = false;
+  __id__: number | undefined;
 
-  setup(): void {};
+  setup?(): void {};
 
-  tick(dt: number): void {};
+  tick?(dt: number): void {};
 
-  draw(dt: number): void {};
+  draw?(dt: number): void {};
 
   toString() {
-    return `<hui:thing _rm_=${!!this._remove_}>`
+    return `<hui:thing>`
   }
 }
+
+export type HuiCursedThing = PyProxy | HuiThing;

@@ -1,37 +1,50 @@
 import { vec2, HuiVector } from "./hui.vector";
 import { HuiBody } from "./hui.body";
-import { hex, lerp, reavg, rnd, rndi, rndr } from "./hui.utils";
+import { call_method_if_it_exists, has_method, hex, is_py_proxy, lerp, reavg, rnd, rndi, rndr } from "./hui.utils";
 import { HuiSound } from "./hui.sound";
 import { HuiTimer } from "./hui.timer";
 import { HuiLayer, HuiSprite } from "./hui.layer";
-import type { HuiThing } from "./hui.thing";
+import type { HuiCursedThing, HuiThing } from "./hui.thing";
 import { HuiRandomTimer } from "./hui.random";
 
 import type { PyodideInterface } from "pyodide";
+import type { PyProxy } from "pyodide/ffi";
 import { HuiImage } from "./hui.image";
 
+export type HuiDiagnostics = {
+  __ft__: [number, number, number, number, number], // frame times
+  __fc__: number, // frame count
+  fps: number,
+  tick_dt: number,
+  draw_dt: number,
+  draw_things_dt: number,
+  draw_layers_dt: number,
+  key_dt: number,
+  removal_dt: number,
+  full_dt: number,
+};
+
 export type HuiSetupFunction = () => void;
+export type HuiTickFunction = (dt: number) => void;
 export type HuiDrawFunction = (dt: number) => void;
 
 export class HuiGame {
-  diagnostics = {
-    frame_times: [0, 0, 0, 0, 0],
+  diagnostics: HuiDiagnostics = {
+    __ft__: [0, 0, 0, 0, 0],
     fps: 0,
-    tick_time: 0,
-    draw_time: 0,
-    draw_things_time: 0,
-    draw_layers_time: 0,
-    key_time: 0,
-    removal_time: 0,
-    full_time: 0,
-    frame_count: 0,
+    tick_dt: 0,
+    draw_dt: 0,
+    draw_things_dt: 0,
+    draw_layers_dt: 0,
+    key_dt: 0,
+    removal_dt: 0,
+    full_dt: 0,
+    __fc__: 0,
   }
 
-  #doc: Document;
   #cvs: HTMLCanvasElement;
   #ctx: CanvasRenderingContext2D;
   
-  #pyodide?: PyodideInterface;
   #create_proxy?: (obj: any) => any;
 
   width: number;
@@ -59,7 +72,12 @@ export class HuiGame {
   sound = new HuiSound();
 
   // things (to update)
-  #things: (HuiThing | object)[] = [];
+  #things: (HuiThing | PyProxy)[] = [];
+  #has_tick: boolean[] = [];
+  #has_draw: boolean[] = [];
+  #to_remove: boolean[] = [];
+  #children_of_thing: Set<number>[] = [];
+  #parent_of_thing: number[] = [];
 
   // debug
   show_debug: boolean = false;
@@ -67,7 +85,6 @@ export class HuiGame {
   constructor(doc: Document, cvs: HTMLCanvasElement, ctx: CanvasRenderingContext2D, create_proxy: (obj: any) => any) {
     this.#cvs = cvs;
     this.#ctx = ctx;
-    this.#doc = doc;
 
     this.#create_proxy = create_proxy;
 
@@ -130,20 +147,6 @@ export class HuiGame {
     }
   }
 
-  /**
-   * Überprüft, ob eine Tastatur- oder Maustaste gedrückt wurde.
-   * ```python
-   * # Beispiel
-   * if hui.is_pressed("ArrowRight"):
-   *   x += 5
-   * ```
-   * Die Maustasten heißen `"m0"`, `"m1"` und `"m2"`.
-   * Buchstabentasten können z.B. mit "a" oder "z" abgefragt werden. Achtung, Groß- und Kleinschreibung wird beachtet!
-   * Die Namen der restlichen Tasten findet man hier: https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
-   * Häufig verwendet werden `"ArrowDown"`, `"ArrowLeft"`, `"Space"`, `"Enter"` und `"Backspace"`.
-   * @param key z.B. `"m0"`, `"a"` oder `"Space"`
-   * @returns 
-   */
   is_pressed(key: string): boolean {
     return this.#keymap.has(key);
   }
@@ -173,21 +176,47 @@ export class HuiGame {
   }
 
   // add game object
-  add(anything: Object) {
-    let obj = anything;
-    // to ensure pyodide compatibility
-    if (obj.constructor.name === "PyProxy" && this.#create_proxy) {
-      obj = this.#create_proxy(obj);
-      this.show_debug && console.log(`<hui> added proxy of ${anything}`);
+  add(anything: HuiCursedThing, parent_id?: number) {
+    let id = this.#things.length;
+    let thing = anything;
+    /***
+     * To ensure pyodide-compatibility, we have to create out own proxy of the pyodide
+     * objects, since it will otherwise be destroyed after the pyodide function terminates
+     */
+    if (is_py_proxy(thing) && this.#create_proxy) {
+      thing = this.#create_proxy(thing);
+      this.show_debug && console.log(`<hui> created proxy of ${anything}`);
     }
-    let thing = obj;
-    "setup" in thing && typeof thing.setup === "function" && thing.setup();
-    this.#things.push(thing);
+    thing.__id__ = id;
+    if (parent_id !== undefined) {
+      this.#parent_of_thing[id] = parent_id;
+      if (!this.#children_of_thing[parent_id]) {
+        this.#children_of_thing[parent_id] = new Set();
+      }
+      this.#children_of_thing[parent_id].add(id);
+    }
+    if (has_method(thing, "tick")) this.#has_tick[id] = true;
+    if (has_method(thing, "draw")) this.#has_draw[id] = true;
+    this.#things[id] = thing;
+
+    this.show_debug && console.log(`<hui> added ${thing}`)
+
+    call_method_if_it_exists("setup", [], thing);
+    
     return thing;
   }
 
-  remove(thing: HuiThing | object) {
-    (thing as any)._remove_ = true;
+  remove(thing: HuiCursedThing) {
+    this.#to_remove[thing.__id__] = true;
+  }
+
+  #proxy(anything: Object) {
+    let obj = anything;
+    if (is_py_proxy(obj) && this.#create_proxy) {
+      obj = this.#create_proxy(obj);
+      this.show_debug && console.log(`<hui> created persistent proxy of ${anything}`);
+    }
+    return obj;
   }
 
   // layers
@@ -195,35 +224,6 @@ export class HuiGame {
     const new_layer = new HuiLayer(this.width, this.height);
     this.#layers.push(new_layer);
     return new_layer;
-  }
-
-  // timers
-  /**
-   * Fügt einen neuen (globalen) Timer zum Spiel hinzu.
-   * ACHTUNG: Dieser Timer zerstört sich selbst, nachdem er abgelaufen ist.
-   * Das macht ihn praktisch, wenn man z.B. ein Objekt nach einer bestimmten Zeit zerstören will:
-   * ```python
-   * class Bullet:
-   *   def setup(self):
-   *     self.timer = hui.add_timer(2)
-   *     self.timer.start()
-   *
-   *   def draw(self, dt):
-   *     if (self.timer.just_finished):
-   *       hui.remove(self)
-   *
-   * # ...
-   * def setup():
-   *   hui.add(Bullet())
-   * ```
-   * @param duration 
-   * @param does_repeat 
-   * @return
-   */
-  add_timer(duration: number, does_repeat: boolean = false) {
-    const new_timer = new HuiTimer(duration, does_repeat, true);
-    this.#things.push(new_timer);
-    return new_timer;
   }
 
   // bodies
@@ -274,31 +274,45 @@ export class HuiGame {
     }
   }
 
-  #setup_things() {
-    // not needed right now because hui.add(...) calls the setup function
-  }
-
   #tick_things(dt: number) {
-    for (const thing of this.#things) {
-      "tick" in thing && typeof thing.tick === "function" && thing.tick(dt);
-    }
+    this.#has_tick.forEach((value, id) => {
+      value && this.#things[id].tick(dt);
+    });
   }
 
   #draw_things(dt: number) {
-    for (const thing of this.#things) {
-      "draw" in thing && typeof thing.draw === "function" && thing.draw(dt);
-    }
+    this.#has_draw.forEach((value, id) => {
+      value && this.#things[id].draw(dt);
+    });
   }
 
   #remove_things() {
-    let i = 0;
-    while (i < this.#things.length) {
-      const thing = this.#things[i];
-      if ("_remove_" in thing && thing._remove_) {
-        let thing: any = this.#things.splice(i, 1);
-        this.show_debug && console.log(`<hui> removed ${thing}`);
-      } else i++;
+    this.#to_remove.forEach((value, id) => {
+      if (value) {
+        this.show_debug && console.log(`<hui> removed: ${this.#things[id]}`);
+        this.#remove_from_tree(id);
+      }
+    });
+  }
+
+  #remove_from_tree(id: number) {
+    // remove from ref list
+    delete this.#things[id];
+    // rmeove from component lists
+    delete this.#has_draw[id];
+    delete this.#has_tick[id];
+    // removing __from__ parent
+    const parent = this.#parent_of_thing[id];
+    parent !== undefined && this.#children_of_thing[parent]?.delete(id);
+    delete this.#parent_of_thing[id];
+    // removing children recursively
+    if (this.#children_of_thing[id] !== undefined)
+    for (let child_id of this.#children_of_thing[id].values()) {
+      this.#remove_from_tree(child_id);
     }
+    delete this.#children_of_thing[id];
+    // remove from remove list
+    delete this.#to_remove[id];
   }
 
   #draw_layers() {
@@ -317,27 +331,17 @@ export class HuiGame {
 
   prepare() {
     this.setup();
-    this.#setup_things();
   }
 
   step(t: number, dt: number) {
-    let {
-      frame_count,
-      frame_times: ft,
-      fps,
-      tick_time,
-      draw_time,
-      draw_things_time,
-      draw_layers_time,
-      key_time,
-      removal_time,
-      full_time
+    let { 
+      __fc__, __ft__, fps, tick_dt, draw_dt, draw_things_dt, draw_layers_dt, key_dt, removal_dt, full_dt 
     } = this.diagnostics;
     // calculate frame times
-    frame_count = Math.min(50, frame_count + 1);
-    ft.push(dt);
-    ft.shift();
-    fps = Math.round(ft.length / (ft[0]+ft[1]+ft[2]+ft[3]+ft[4]));
+    __fc__ = Math.min(50, __fc__ + 1);
+    __ft__.push(dt);
+    __ft__.shift();
+    fps = Math.round(__ft__.length / __ft__.reduce((v1, v2) => v1 + v2));
     // set game time
     this.time = t;
     // do timing
@@ -366,17 +370,24 @@ export class HuiGame {
     // draw time
     const removal_now = performance.now();
     // set diagnostics
-    tick_time = reavg(tick_time, tick_now - start_now, frame_count);
-    draw_time = reavg(draw_time, draw_now - tick_now, frame_count);
-    draw_things_time = reavg(draw_things_time, draw_things_now - draw_now, frame_count);
-    draw_layers_time = reavg(draw_layers_time, draw_layers_now - draw_things_now, frame_count);
-    key_time = reavg(key_time, key_now - draw_layers_now, frame_count);
-    removal_time = reavg(removal_time, removal_now - key_now, frame_count);
-
-    full_time = removal_now - start_now;
+    tick_dt = reavg(tick_dt, tick_now - start_now, __fc__);
+    draw_dt = reavg(draw_dt, draw_now - tick_now, __fc__);
+    draw_things_dt = reavg(draw_things_dt, draw_things_now - draw_now, __fc__);
+    draw_layers_dt = reavg(draw_layers_dt, draw_layers_now - draw_things_now, __fc__);
+    key_dt = reavg(key_dt, key_now - draw_layers_now, __fc__);
+    removal_dt = reavg(removal_dt, removal_now - key_now, __fc__);
+    full_dt = removal_now - start_now;
     this.diagnostics = {
-      fps, frame_count, frame_times: ft, draw_time, draw_things_time, draw_layers_time, full_time, key_time, removal_time, tick_time
+      fps, __fc__, __ft__, draw_dt, draw_things_dt, draw_layers_dt, full_dt, key_dt, removal_dt, tick_dt
     }
+  }
+
+  swap(draw: HuiDrawFunction, setup?: HuiSetupFunction) {
+    if (setup) {
+      this.setup = this.#proxy(setup) as HuiSetupFunction;
+      this.setup(); // call setup again
+    }
+    this.draw = this.#proxy(draw) as HuiDrawFunction;
   }
 
   // to be overwritten
