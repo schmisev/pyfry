@@ -24,7 +24,6 @@
   import { HuiGame, type HuiDiagnostics } from "$lib/game/hui";
   import { faFilesPinwheel, faSquareLetterboxd } from "@fortawesome/free-brands-svg-icons";
   import { correctPyodideErrorMessage } from "$lib/python/pyodide.utils";
-  import { huiAutocomplete } from "$lib/game/hui.docs";
   import LZString from "lz-string";
 
   const customPythonHighlighting = HighlightStyle.define([
@@ -39,7 +38,6 @@
   const extensions = [
     syntaxHighlighting(customPythonHighlighting),
     python(),
-    pythonLanguage.data.of({ autocomplete: huiAutocomplete }),
   ]
 
   // Helper functions

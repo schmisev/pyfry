@@ -1,53 +1,76 @@
 import ts from "typescript";
 import fs from "fs";
-import { Completion } from "@codemirror/autocomplete";
+
+type NodeType = "method" | "set" | "get" | "attribute";
+type NodeAccess = "private" | "hidden" | "public";
 
 // Prepare completions
-let classCompletions: Completion[] = [];
+let classCompletions: Record<string, {
+  className: string,
+  signature: string,
+  jsDoc: string,
+  type: NodeType,
+  access: NodeAccess,
+}[]> = {};
 
 // Helper function to extract JSDoc comments
 function extractJSDoc(node: ts.Node) {
   const jsDocs = (node as any).jsDoc as ts.JSDoc[] | undefined;
+  let comment = "";
   if (jsDocs) {
     for (const doc of jsDocs) {
-      console.log("Comment:", doc.comment);
+      comment += doc.comment || "";
       if (doc.tags) {
         doc.tags.forEach(tag => {
-          console.log(`@${tag.tagName.text}`, tag.comment);
+          comment += `\n@${tag.tagName.text}: ${tag.comment}`
         });
       }
     }
   }
+  return comment;
 }
 
 // Traverse AST and find functions
 function visit(node: ts.Node) {
 
-  if (node.parent && ts.isClassDeclaration(node.parent) && node.parent.name) {
-    const className = node.parent.name.getText();
-    let signature = "???";
-    let autofillSignature = "???";
-    
-    if (ts.isMethodDeclaration(node) && node.name) {
-      if (node.name.getText()[0] === "#") return;
+  if (node.parent && ts.isClassDeclaration(node.parent)) {
+    // we are in a class
+    let className: string = node.parent.name!.getText();
+    let signature: string = "???";
+    let type: NodeType = "method";
+    let access: NodeAccess = "public";
 
-      signature = `${className}.${node.name.getText()}(${node.parameters.map(p => p.getText()).join(", ")})`
-      autofillSignature = `hui.${node.name.getText()}(${node.parameters.map(p => `\${${p.name.getText()}}`).join(", ")})`
-    } else if (ts.isGetAccessorDeclaration(node)) {
-      if (node.name.getText()[0] === "#") return;
-
-      signature = `${className}.${node.name.getText()}`
-      autofillSignature = `hui.${node.name.getText()}`
+    if (ts.isMethodDeclaration(node)) {
+      signature = `${node.name.getText()}(${node.parameters.map(p => p.getText()).join(", ")})`
+      type = "method";
     } else if (ts.isPropertyDeclaration(node)) {
-      if (node.name.getText()[0] === "#") return;
-
-      signature = `${className}.${node.name.getText()}`
-      autofillSignature = `hui.${node.name.getText()}`
+      signature = `${node.name.getText()}`
+      type = "attribute";
+    } else if (ts.isGetAccessorDeclaration(node)) {
+      signature = `${node.name.getText()}`
+      type = "get";
+    } else if (ts.isSetAccessor(node)) {
+      signature = `${node.name.getText()}`
+      type = "set";
     } else {
-      return ts.forEachChild(node, visit);
+      ts.forEachChild(node, visit);
+      return;
     }
 
-    classCompletions.push({ label: autofillSignature, displayLabel: signature, info: signature });
+    if (node.name.getText()[0] === "#") access = "private"
+    else if (node.name.getText()[0] == "_" && node.name.getText()[1] == "_") access = "hidden"
+
+    let jsDoc = extractJSDoc(node);
+
+    !(className in classCompletions) && (classCompletions[className] = []);
+
+    classCompletions[className].push({
+      className,
+      signature, 
+      jsDoc,
+      type,
+      access
+    });
   }
 
   ts.forEachChild(node, visit);
@@ -65,13 +88,6 @@ function loadSourceFile(name: string, path: string) {
 
 // Start traversal
 const path = "src/lib/game";
-const head = `import { wrapAutocomplete } from "$lib/faux-language-server"
-import { type Completion } from "@codemirror/autocomplete"
-
-const huiCompletions: Completion[] = `
-
-const tail = `
-export const huiAutocomplete = wrapAutocomplete(/hui\\..*/, huiCompletions); `
 
 for (let name of fs.readdirSync(path + "/")) {
   try {
@@ -82,6 +98,6 @@ for (let name of fs.readdirSync(path + "/")) {
   }
 }
 
-classCompletions = [];
+// classCompletions = [];
 
-fs.writeFileSync(path + "/hui.docs.ts", head + JSON.stringify(classCompletions, null, 2) + tail);
+fs.writeFileSync(path + "/hui.docs.json", JSON.stringify(classCompletions, null, 2));

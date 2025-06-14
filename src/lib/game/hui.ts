@@ -4,11 +4,8 @@ import { call_method_if_it_exists, has_method, hex, is_py_proxy, lerp, reavg, rn
 import { HuiSound } from "./hui.sound";
 import { HuiTimer } from "./hui.timer";
 import { HuiLayer, HuiSprite } from "./hui.layer";
-import type { HuiCursedThing, HuiThing } from "./hui.thing";
+import type { HuiCursedThing } from "./hui.thing";
 import { HuiRandomTimer } from "./hui.random";
-
-import type { PyodideInterface } from "pyodide";
-import type { PyProxy } from "pyodide/ffi";
 import { HuiImage } from "./hui.image";
 
 export type HuiDiagnostics = {

@@ -36,6 +36,17 @@ export function lerp(a: number | HuiVector, b: number | HuiVector, t: number) {
     throw TypeError("lerp(a, b, t) can only be used on two numbers or two vectors!")
 }
 
+export function querp(a: number, b: number, t: number): number;
+export function querp(a: HuiVector, b: HuiVector, t: number): HuiVector;
+export function querp(a: number | HuiVector, b: number | HuiVector, t: number) {
+  if (typeof a === "number" && typeof b === "number")
+    return lerp(a, b, t*t);
+  else if (a instanceof HuiVector && b instanceof HuiVector)
+    return lerp(a, b, t*t);
+  else
+    throw TypeError("querp(a, b, t) can only be used on two numbers or two vectors!")
+}
+
 export function reavg(old_v: number, new_v: number, count: number) {
   if (count <= 0) count = 1;
   return (old_v * (count-1) + new_v) / count;
@@ -54,3 +65,6 @@ export function has_method<T extends unknown>(thing: T, method_name: keyof T): b
   return !!thing && typeof thing === "object" && method_name in thing && typeof thing[method_name] === "function"
 }
 
+export function quadInOut(x: number): number {
+  return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+}

@@ -1,4 +1,5 @@
 import { HuiImage } from "./hui.image";
+import { lerp, quadInOut } from "./hui.utils";
 
 export class HuiLayer {
   cvs: OffscreenCanvas;
@@ -10,6 +11,10 @@ export class HuiLayer {
 
     this.ctx.textAlign = "center";
     this.ctx.textBaseline = "middle";
+    this.ctx.fillStyle = "white";
+    this.ctx.strokeStyle = "black";
+    this.ctx.lineCap = "round";
+    this.ctx.lineJoin = "round";
   }
 
   save() {
@@ -33,11 +38,16 @@ export class HuiLayer {
   }
 
   clear() {
+    this.ctx.save();
+    this.ctx.resetTransform();
     this.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
+    this.ctx.restore();
   }
 
   flood(color: string) {
     this.ctx.save();
+    this.ctx.resetTransform();
+    this.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
     this.ctx.fillStyle = color;
     this.ctx.fillRect(0, 0, this.cvs.width, this.cvs.height);
     this.ctx.restore();
@@ -100,6 +110,46 @@ export class HuiLayer {
     this.ctx.restore();
   }
 
+  ngon(x: number, y: number, n: number, r: number) {
+    this.ctx.save();
+    this.ctx.beginPath();
+    this.ctx.moveTo(x + r, y);
+    const angle = (2 * Math.PI) / n;
+    for (let i = 1; i <= n; i++) {
+      this.ctx.lineTo(x + Math.cos(i * angle) * r, y + Math.sin(i * angle) * r);
+    }
+    this.ctx.closePath();
+    this.ctx.fill();
+    this.no_shadow();
+    this.ctx.stroke();
+
+    this.ctx.restore();
+  }
+
+  star(x: number, y: number, n: number, r1: number, r2: number) {
+    this.ctx.save();
+    this.ctx.beginPath();
+    this.ctx.moveTo(x + r1, y);
+    const angle = (2 * Math.PI) / n;
+    for (let i = 0; i <= n; i++) {
+      this.ctx.lineTo(
+        x + Math.cos(i * angle) * r1,
+        y + Math.sin(i * angle) * r1
+      );
+      let offset = n - i < 1 ? (n - i) / 2 : 0.5;
+      this.ctx.lineTo(
+        x + Math.cos((i + offset) * angle) * lerp(r1, r2, quadInOut(2 * offset)),
+        y + Math.sin((i + offset) * angle) * lerp(r1, r2, quadInOut(2 * offset))
+      );
+    }
+    this.ctx.closePath();
+    this.ctx.fill();
+    this.no_shadow();
+    this.ctx.stroke();
+
+    this.ctx.restore();
+  }
+
   text(text: string, x: number, y: number) {
     this.ctx.save();
     this.ctx.beginPath();
@@ -124,7 +174,13 @@ export class HuiLayer {
     this.ctx.font = `${this.ctx.font.split(" ")[0]} ${font}`;
   }
 
-  show(sprite: HuiSprite | HuiImage, x: number, y: number, w?: number, h?: number) {
+  show(
+    sprite: HuiSprite | HuiImage,
+    x: number,
+    y: number,
+    w?: number,
+    h?: number
+  ) {
     let src: OffscreenCanvas | HTMLImageElement;
     if (sprite instanceof HuiImage) {
       src = sprite.img;
@@ -133,14 +189,14 @@ export class HuiLayer {
       src = sprite.cvs;
     }
 
-    let draw_w = (w ? w : src.width);
-    let draw_h = (h ? h : src.height)
-    let draw_x = sprite.centered ?  x - draw_w / 2 : x;
-    let draw_y = sprite.centered ?  y - draw_h / 2 : y;
+    let draw_w = w ? w : src.width;
+    let draw_h = h ? h : src.height;
+    let draw_x = sprite.centered ? x - draw_w / 2 : x;
+    let draw_y = sprite.centered ? y - draw_h / 2 : y;
 
-    this.ctx.save()
+    this.ctx.save();
     this.ctx.drawImage(src, draw_x, draw_y, draw_w, draw_h);
-    this.ctx.restore()
+    this.ctx.restore();
   }
 }
 
@@ -150,7 +206,7 @@ export class HuiSprite extends HuiLayer {
   constructor(w: number, h: number, centered = true) {
     super(w, h);
     this.centered = centered;
-    
+
     if (centered) {
       this.ctx.translate(w / 2, h / 2);
     }

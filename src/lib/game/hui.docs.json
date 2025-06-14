@@ -1,0 +1,1396 @@
+{
+  "HuiBody": [
+    {
+      "className": "HuiBody",
+      "signature": "pos",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "vel",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "acc",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "angle",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "x",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "y",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "vx",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "vy",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "ax",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "ay",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "x",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "y",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "vx",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "vy",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "ax",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "ay",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "speed",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "speed",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "move(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "tick(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiImage": [
+    {
+      "className": "HuiImage",
+      "signature": "img",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiImage",
+      "signature": "centered",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiImage",
+      "signature": "width",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiImage",
+      "signature": "height",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiImage",
+      "signature": "width",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiImage",
+      "signature": "height",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiImage",
+      "signature": "resize(w: number, h: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiLayer": [
+    {
+      "className": "HuiLayer",
+      "signature": "cvs",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "ctx",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "save()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "restore()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "rotate(radians: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "scale(fx: number, fy: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "move(dx: number, dy: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "clear()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "flood(color: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "fill(color: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "stroke(color: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "no_stroke()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "shadow()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "no_shadow()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "thick(width: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "circle(x: number, y: number, r: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "rect(x: number, y: number, w: number, h: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "ellipse(x: number, y: number, w: number, h: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "ngon(x: number, y: number, n: number, r: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "star(x: number, y: number, n: number, r1: number, r2: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "text(text: string, x: number, y: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "text_align(alignment: CanvasTextAlign)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "text_baseline(baseline: CanvasTextBaseline)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "text_size(size: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "font(font: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "show(sprite: HuiSprite | HuiImage, x: number, y: number, w?: number, h?: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiSprite": [
+    {
+      "className": "HuiSprite",
+      "signature": "centered",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    }
+  ],
+  "HuiRandomTimer": [
+    {
+      "className": "HuiRandomTimer",
+      "signature": "expected_duration",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "current",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "last",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "current_axis",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "current_pingpong",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "current_dir",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "between",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "between_axis",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "between_pingpong",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "between_dir",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "reroll()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiRandomTimer",
+      "signature": "tick(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiSound": [
+    {
+      "className": "HuiSound",
+      "signature": "#ctx",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiSound",
+      "signature": "boop(frequency: number, duration: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiSound",
+      "signature": "bleep(frequency: number, duration: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiSound",
+      "signature": "buzz(frequency: number, duration: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiSound",
+      "signature": "humm(frequency: number, duration: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiSound",
+      "signature": "psh(frequency: number, duration: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiThing": [
+    {
+      "className": "HuiThing",
+      "signature": "__id__",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "hidden"
+    },
+    {
+      "className": "HuiThing",
+      "signature": "setup()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiThing",
+      "signature": "tick(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiThing",
+      "signature": "draw(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiThing",
+      "signature": "toString()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiTimer": [
+    {
+      "className": "HuiTimer",
+      "signature": "autoremove",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "does_repeat",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "is_running",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "just_started",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "just_finished",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "duration",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "time",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "progress",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "axis",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "pingpong",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "tick(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "start(duration?: number, does_repeat?: boolean)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "pause()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "stop()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiTimer",
+      "signature": "toString()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiGame": [
+    {
+      "className": "HuiGame",
+      "signature": "diagnostics",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#cvs",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#ctx",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#create_proxy",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "width",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "height",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "time",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "mouse",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "mx",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "my",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#keymap",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "bg",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "mg",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "fg",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "ui",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#layers",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "sound",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#things",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#has_tick",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#has_draw",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#to_remove",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#children_of_thing",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#parent_of_thing",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "show_debug",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "debug(on?: boolean)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "is_pressed(key: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "just_pressed(key: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "just_released(key: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "axis_pressed(a: string, b: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "dir_pressed(u: string, d: string, l: string, r: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "add(anything: HuiCursedThing, parent_id?: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "remove(thing: HuiCursedThing)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#proxy(anything: Object)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "add_layer()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "new_body(x: number, y: number, vx: number = 0, vy: number = 0, ax: number = 0, ay: number = 0)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "new_vec2(x?: number, y?: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "new_sprite(w: number, h: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "new_image(src: string)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "new_timer(duration: number, does_repeat: boolean = false)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "new_random(period: number, does_repeat: boolean = false)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#update_keymap()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#tick_things(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#draw_things(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#remove_things()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#remove_from_tree(id: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#draw_layers()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "prepare()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "step(t: number, dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "swap(draw: HuiDrawFunction, setup?: HuiSetupFunction)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "setup",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "draw",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "hex(r: number, g: number, b: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "rnd()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "rndi(min: number, max: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "rndr(min: number, max: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "clamp(value: number, min: number, max: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "wrap(value: number, min: number, max: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "lerp",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "sign(value: number | HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "move_towards(a: number | HuiVector, b: number | HuiVector, delta: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiVector": [
+    {
+      "className": "HuiVector",
+      "signature": "x",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "y",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "xy",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "xyHalf",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "copy()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "add(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "sub(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "to(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "dot(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "times(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "abs(factor = 1)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "scale(factor: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "scaleFrom(from: HuiVector, factor: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "div(divisor: number | HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "len()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "norm(factor = 1)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "dirTo(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "distTo(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "rotate(theta: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "rotateAround(mid: HuiVector, theta: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "angle()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "angleTo(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "angleBetween(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "min(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "max(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "signedIsoMin()",
+      "jsDoc": "Makes x- & y-axis equal to the signed MINIMUM of the axes.\r\nThis is useful for scaling isotropically.",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "signedIsoMax()",
+      "jsDoc": "Makes x- & y-axis equal to the signed MAXIMUM of the axes.\r\nThis is useful for scaling isotropically.",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "sign(factor = 1)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "proj(onto: HuiVector)",
+      "jsDoc": "Safe projection onto a vector.\r\nProjects onto [1, 1] if onto is [0, 0].\n@param: undefined\n@returns: projected vector",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "signedProj(onto: HuiVector)",
+      "jsDoc": "Safe SIGN-PRESERVING projection onto a vector.\r\nProjects onto [1, 1] if onto is [0, 0].\n@param: undefined\n@returns: signed projected vector",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "isZero()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "ZEROS()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "ONES()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "sum(...vectors: HuiVector[])",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "avg(...vectors: HuiVector[])",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "min(...vectors: HuiVector[])",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "max(...vectors: HuiVector[])",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "BoundingBox": [
+    {
+      "className": "BoundingBox",
+      "signature": "topLeft",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "BoundingBox",
+      "signature": "bottomRight",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "BoundingBox",
+      "signature": "isInside(pos: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "BoundingBox",
+      "signature": "left",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "BoundingBox",
+      "signature": "right",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "BoundingBox",
+      "signature": "top",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "BoundingBox",
+      "signature": "bottom",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    }
+  ]
+}
