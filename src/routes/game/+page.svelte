@@ -4,27 +4,39 @@
   import { ALL_GAME_PRESETS, ALL_PRESETS, type CodePreset } from "$lib/presets";
   import { onMount } from "svelte";
   import CodeMirror from "svelte-codemirror-editor";
-  import { python, pythonLanguage } from "@codemirror/lang-python";
+  import { python } from "@codemirror/lang-python";
   import { undo } from "@codemirror/commands";
   import { type EditorView } from "@codemirror/view";
   import { page } from "$app/state";
   import { downloadPreset, generatePresetFromString, generateStringFromPreset, type ScriptPackage } from "$lib/preset-loading";
   import { loadPyodide, type PyodideInterface, version as pyodideVersion } from "pyodide";
   import { replaceState } from "$app/navigation";
-  import Sortable from 'sortablejs';
-  import { parseCSV, type CSVData } from "$lib/csv";
   import { tags } from "@lezer/highlight"
   import { HighlightStyle, syntaxHighlighting} from "@codemirror/language"
-  import { CompletionContext, snippetCompletion, type CompletionSource } from '@codemirror/autocomplete'
-  import { ALL_SNIPPETS } from "$lib/snippets";
   import iconFriedEgg from "$lib/assets/fried-egg.svg"
   import Fa from 'svelte-fa'
-  import { faA, faArrowRight, faBacon, faBaseball, faBreadSlice, faChartPie, faChess, faChessBoard, faChessPawn, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCompress, faCompressAlt, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faGamepad, faHourglass, faL, faPlay, faQuestion, faRemove, faSplotch, faStar, faStop, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
-  import { error } from "@sveltejs/kit";
-  import { HuiGame, type HuiDiagnostics } from "$lib/game/hui";
-  import { faFilesPinwheel, faSquareLetterboxd } from "@fortawesome/free-brands-svg-icons";
-  import { correctPyodideErrorMessage } from "$lib/python/pyodide.utils";
+  import { HuiGame, type HuiDiagnostics, type NodeDoc } from "$lib/game/hui";
   import LZString from "lz-string";
+  import huiDocsStr from "$lib/game/hui.docs.json?raw";
+  import { faCompressAlt, faCloudDownloadAlt, faFolderOpen, faTrash, faCopy, faUndoAlt, faHourglass, faStar, faPlay, faStop, faGamepad } from "@fortawesome/free-solid-svg-icons";
+  import { parse } from "marked";
+  import { Marked } from "marked";
+  import { markedHighlight } from "marked-highlight";
+  import hljs from 'highlight.js';
+  import "$lib/python/custom-python-highlighting.css";
+
+  const marked = new Marked(
+  markedHighlight({
+    emptyLangClass: 'hljs',
+      langPrefix: 'hljs language-',
+      highlight(code, lang, info) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+      }
+    })
+  );
+
+  let huiDocs: Record<string, NodeDoc[]> = JSON.parse(huiDocsStr);
 
   const customPythonHighlighting = HighlightStyle.define([
     {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
@@ -346,6 +358,22 @@
         <div id="draw-layers-time" class="bar-segment" style="width: {100*diagnostics.draw_layers_dt/16}%;"></div>
         <div id="key-time" class="bar-segment" style="width: {100*diagnostics.key_dt/16}%;"></div>
         <div id="removal-time" class="bar-segment" style="width: {100*diagnostics.removal_dt/16}%;"></div>
+      </div>
+      <div id="game-docs" class="wiki">
+        {#each Object.entries(huiDocs) as [cls, docs]}
+          <div>
+            <h3>{cls}</h3>
+            <ul>
+              {#each docs as d}
+                {#if (d.access === "public" || d.access === "hidden") && d.type !== "set"}
+                  <li><span class="access {d.access}"></span> <span class="signature">{d.signature}</span> 
+                    {#if d.jsDoc !== ""} <div class="jsdoc">{@html marked.parse(d.jsDoc)}</div>{/if}
+                  </li>
+                {/if}
+              {/each}
+            </ul>
+          </div>
+        {/each}
       </div>
     </div>
   </div>

@@ -493,3 +493,36 @@ td.no-fill {
 #removal-time {
   background-color: var(--green);
 }
+
+.access:before {
+  border-radius: 0.5rem;
+  padding: 0 0.3rem;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: small;
+}
+
+.access.public:before {
+  content: "pub.";
+  background-color: var(--light-blue);
+}
+
+.access.hidden:before {
+  content: "versteckt";
+  background-color: var(--dark-orange);
+}
+
+.jsdoc {
+  border-radius: 0.5rem;
+  font-size: small;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.1)
+}
+
+.jsdoc p, pre {
+  margin: 0;
+}
+
+.signature {
+  @extend .mononoki;
+  font-weight: bold;
+}

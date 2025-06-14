@@ -21,6 +21,16 @@ export type HuiDiagnostics = {
   full_dt: number,
 };
 
+export type NodeType = "class" | "method" | "set" | "get" | "attribute";
+export type NodeAccess = "private" | "hidden" | "public";
+export type NodeDoc = {
+  className: string,
+  signature: string,
+  jsDoc: string,
+  type: NodeType,
+  access: NodeAccess,
+};
+
 export type HuiSetupFunction = () => void;
 export type HuiTickFunction = (dt: number) => void;
 export type HuiDrawFunction = (dt: number) => void;

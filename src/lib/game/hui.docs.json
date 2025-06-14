@@ -2,29 +2,36 @@
   "HuiBody": [
     {
       "className": "HuiBody",
+      "signature": "HuiBody",
+      "jsDoc": "Enthält Informationen über einen Körper, der sich bewegt.\r\nDas schließt die Position, Geschwindigkeit und die aktuelle Beschleunigung ein.\r\nUm einen neuen HuiBody zu erzeugen, nutzt man `hui.new_body(...)`.<br>\r\n_Kopieren und Probieren!_\r\n```python\r\n# Erstellt einen neuen HuiBody in der Bildmitte, gibt ihm eine Startgeschwindigkeit von [100, 30], eine Beschleunigung von 100 nach unten und fügt ihn dem Spiel hinzu, damit er automatisch geupdated wird.\r\nbody = hui.new_body(hui.width / 2, hui.height / 2, 100, 30, 0, 100)\r\nhui.add(body)\r\n\r\n# Nun zeichnen wir dort, wo sich der Körper befindet, einen Kreis\r\ndef setup():\r\n  hui.bg.flood(\"lightblue\")\r\n\r\ndef draw(dt):\r\n  hui.mg.clear()\r\n  hui.mg.circle(body.x, body.y, 30)\r\n```",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
       "signature": "pos",
-      "jsDoc": "",
+      "jsDoc": "**Pos**ition als Vektor.<br>\r\nBeispiel: _Ausgabe der x- und y-Koordinate_\r\n```python\r\nbody = hui.new_body(15, 10)\r\nprint(body.pos.x) # Ausgabe: 15\r\nprint(body.pos.y) # Ausgabe: 10\r\n```",
       "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiBody",
       "signature": "vel",
-      "jsDoc": "",
+      "jsDoc": "Geschwindigkeit (**vel**ocity) als Vektor.<br>\r\nBeispiel: _Ausgabe der Gesamtgeschwindigkeit_\r\n```python\r\nbody = hui.new_body(0, 0, 4, 3) # 4 & 3 sind die x- und y-Geschwindigkeit\r\nprint(body.vel.len()) # Ausgabe: 5\r\n```",
       "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiBody",
       "signature": "acc",
-      "jsDoc": "",
+      "jsDoc": "Beschleunigung (**acc**eleration) als Vektor.<br>\r\nBeispiel: _Setzen der Beschleunigung in y-Richtung_\r\n```python\r\nbody = hui.new_body(0, 0, 0, 0, 0, 0) # Die letzten 2 Nullen geben die Beschleunigung an\r\nbody.acc.y = 9.81 # Die Beschleunigung in y-Richtung ist nun 9.81px/s^2\r\n```",
       "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiBody",
       "signature": "angle",
-      "jsDoc": "",
+      "jsDoc": "Rotationswinkel des Körpers<br>\r\nAktuell nutzlos.",
       "type": "attribute",
       "access": "public"
     },
@@ -144,6 +151,13 @@
   "HuiImage": [
     {
       "className": "HuiImage",
+      "signature": "HuiImage",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiImage",
       "signature": "img",
       "jsDoc": "",
       "type": "attribute",
@@ -193,6 +207,13 @@
     }
   ],
   "HuiLayer": [
+    {
+      "className": "HuiLayer",
+      "signature": "HuiLayer",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
     {
       "className": "HuiLayer",
       "signature": "cvs",
@@ -379,6 +400,13 @@
   "HuiSprite": [
     {
       "className": "HuiSprite",
+      "signature": "HuiSprite",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiSprite",
       "signature": "centered",
       "jsDoc": "",
       "type": "attribute",
@@ -386,6 +414,13 @@
     }
   ],
   "HuiRandomTimer": [
+    {
+      "className": "HuiRandomTimer",
+      "signature": "HuiRandomTimer",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
     {
       "className": "HuiRandomTimer",
       "signature": "expected_duration",
@@ -474,6 +509,13 @@
   "HuiSound": [
     {
       "className": "HuiSound",
+      "signature": "HuiSound",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiSound",
       "signature": "#ctx",
       "jsDoc": "",
       "type": "attribute",
@@ -518,6 +560,13 @@
   "HuiThing": [
     {
       "className": "HuiThing",
+      "signature": "HuiThing",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiThing",
       "signature": "__id__",
       "jsDoc": "",
       "type": "attribute",
@@ -553,6 +602,13 @@
     }
   ],
   "HuiTimer": [
+    {
+      "className": "HuiTimer",
+      "signature": "HuiTimer",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
     {
       "className": "HuiTimer",
       "signature": "autoremove",
@@ -660,6 +716,13 @@
     }
   ],
   "HuiGame": [
+    {
+      "className": "HuiGame",
+      "signature": "HuiGame",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
     {
       "className": "HuiGame",
       "signature": "diagnostics",
@@ -1084,6 +1147,13 @@
   "HuiVector": [
     {
       "className": "HuiVector",
+      "signature": "HuiVector",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
       "signature": "x",
       "jsDoc": "",
       "type": "attribute",
@@ -1281,14 +1351,14 @@
     {
       "className": "HuiVector",
       "signature": "proj(onto: HuiVector)",
-      "jsDoc": "Safe projection onto a vector.\r\nProjects onto [1, 1] if onto is [0, 0].\n@param: undefined\n@returns: projected vector",
+      "jsDoc": "Safe projection onto a vector.\r\nProjects onto [1, 1] if onto is [0, 0].<br>@param: undefined<br>@returns: projected vector",
       "type": "method",
       "access": "public"
     },
     {
       "className": "HuiVector",
       "signature": "signedProj(onto: HuiVector)",
-      "jsDoc": "Safe SIGN-PRESERVING projection onto a vector.\r\nProjects onto [1, 1] if onto is [0, 0].\n@param: undefined\n@returns: signed projected vector",
+      "jsDoc": "Safe SIGN-PRESERVING projection onto a vector.\r\nProjects onto [1, 1] if onto is [0, 0].<br>@param: undefined<br>@returns: signed projected vector",
       "type": "method",
       "access": "public"
     },
@@ -1343,6 +1413,13 @@
     }
   ],
   "BoundingBox": [
+    {
+      "className": "BoundingBox",
+      "signature": "BoundingBox",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
     {
       "className": "BoundingBox",
       "signature": "topLeft",

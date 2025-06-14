@@ -3,10 +3,58 @@ import { HuiVector, vec2 } from "./hui.vector";
 
 export type BodyShapeType = "ellipse" | "rect";
 
+/**
+ * Enthält Informationen über einen Körper, der sich bewegt.
+ * Das schließt die Position, Geschwindigkeit und die aktuelle Beschleunigung ein.
+ * Um einen neuen HuiBody zu erzeugen, nutzt man `hui.new_body(...)`.<br>
+ * _Kopieren und Probieren!_
+ * ```python
+ * # Erstellt einen neuen HuiBody in der Bildmitte, gibt ihm eine Startgeschwindigkeit von [100, 30], eine Beschleunigung von 100 nach unten und fügt ihn dem Spiel hinzu, damit er automatisch geupdated wird.
+ * body = hui.new_body(hui.width / 2, hui.height / 2, 100, 30, 0, 100)
+ * hui.add(body)
+ * 
+ * # Nun zeichnen wir dort, wo sich der Körper befindet, einen Kreis
+ * def setup():
+ *   hui.bg.flood("lightblue")
+ * 
+ * def draw(dt):
+ *   hui.mg.clear()
+ *   hui.mg.circle(body.x, body.y, 30)
+ * ```
+ */
 export class HuiBody extends HuiThing {
+  /**
+   * **Pos**ition als Vektor.<br>
+   * Beispiel: _Ausgabe der x- und y-Koordinate_
+   * ```python
+   * body = hui.new_body(15, 10)
+   * print(body.pos.x) # Ausgabe: 15
+   * print(body.pos.y) # Ausgabe: 10
+   * ```
+   */
   pos: HuiVector;
+  /**
+   * Geschwindigkeit (**vel**ocity) als Vektor.<br>
+   * Beispiel: _Ausgabe der Gesamtgeschwindigkeit_
+   * ```python
+   * body = hui.new_body(0, 0, 4, 3) # 4 & 3 sind die x- und y-Geschwindigkeit
+   * print(body.vel.len()) # Ausgabe: 5
+   * ```
+   */
   vel: HuiVector;
+  /**
+   * Beschleunigung (**acc**eleration) als Vektor.<br>
+   * Beispiel: _Setzen der Beschleunigung in y-Richtung_
+   * ```python
+   * body = hui.new_body(0, 0, 0, 0, 0, 0) # Die letzten 2 Nullen geben die Beschleunigung an
+   * body.acc.y = 9.81 # Die Beschleunigung in y-Richtung ist nun 9.81px/s^2
+   * ```
+   */
   acc: HuiVector;
+  /**
+   * Rotationswinkel des Körpers<br>
+   * Aktuell nutzlos.
+   */
   angle: number = 0;
 
   constructor(x: number, y: number, vx: number = 0, vy: number = 0, ax: number = 0, ay: number = 0) {

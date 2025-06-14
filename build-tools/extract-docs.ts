@@ -1,17 +1,9 @@
 import ts from "typescript";
 import fs from "fs";
-
-type NodeType = "method" | "set" | "get" | "attribute";
-type NodeAccess = "private" | "hidden" | "public";
+import { NodeDoc, NodeAccess, NodeType } from "../src/lib/game/hui";
 
 // Prepare completions
-let classCompletions: Record<string, {
-  className: string,
-  signature: string,
-  jsDoc: string,
-  type: NodeType,
-  access: NodeAccess,
-}[]> = {};
+let classCompletions: Record<string, NodeDoc[]> = {};
 
 // Helper function to extract JSDoc comments
 function extractJSDoc(node: ts.Node) {
@@ -22,7 +14,7 @@ function extractJSDoc(node: ts.Node) {
       comment += doc.comment || "";
       if (doc.tags) {
         doc.tags.forEach(tag => {
-          comment += `\n@${tag.tagName.text}: ${tag.comment}`
+          comment += `<br>@${tag.tagName.text}: ${tag.comment}`
         });
       }
     }
@@ -32,8 +24,23 @@ function extractJSDoc(node: ts.Node) {
 
 // Traverse AST and find functions
 function visit(node: ts.Node) {
+  if (ts.isClassDeclaration(node)) {
+    let className: string = node.name!.getText();
+    let signature: string = className;
+    let type: NodeType = "class";
+    let access: NodeAccess = "public";
+    let jsDoc: string = extractJSDoc(node);
 
-  if (node.parent && ts.isClassDeclaration(node.parent)) {
+    !(className in classCompletions) && (classCompletions[className] = []);
+
+    classCompletions[className].push({
+      className,
+      signature, 
+      jsDoc,
+      type,
+      access
+    });
+  } else if (node.parent && ts.isClassDeclaration(node.parent)) {
     // we are in a class
     let className: string = node.parent.name!.getText();
     let signature: string = "???";
