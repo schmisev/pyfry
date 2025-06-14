@@ -72,7 +72,7 @@ export class HuiGame {
   sound = new HuiSound();
 
   // things (to update)
-  #things: (HuiThing | PyProxy)[] = [];
+  #things: HuiCursedThing[] = [];
   #has_tick: boolean[] = [];
   #has_draw: boolean[] = [];
   #to_remove: boolean[] = [];
@@ -227,8 +227,8 @@ export class HuiGame {
   }
 
   // bodies
-  new_body(x: number, y: number, vx: number, vy: number) {
-    const new_body = new HuiBody(x, y, vx, vy);
+  new_body(x: number, y: number, vx: number = 0, vy: number = 0, ax: number = 0, ay: number = 0) {
+    const new_body = new HuiBody(x, y, vx, vy, ax, ay);
     return new_body;
   }
 
