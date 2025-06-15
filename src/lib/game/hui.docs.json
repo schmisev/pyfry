@@ -1075,6 +1075,13 @@
     },
     {
       "className": "HuiGame",
+      "signature": "tick",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
       "signature": "draw",
       "jsDoc": "",
       "type": "attribute",

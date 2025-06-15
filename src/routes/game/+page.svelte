@@ -245,6 +245,7 @@
       // extract draw function
       const setupProxy = hui_namespace.get("setup");
       const drawProxy = hui_namespace.get("draw");
+      const tickProxy = hui_namespace.get("tick");
 
       // run the game
       if (setupProxy) {
@@ -253,13 +254,16 @@
         hui.prepare();
       }
 
-      if (!drawProxy) {
+      if (!drawProxy && !tickProxy) {
         flags.isRunning = false;
         return;
       }
 
       // set main draw function
-      hui.draw = drawProxy;
+      if (drawProxy)
+        hui.draw = drawProxy;
+      if (tickProxy)
+        hui.tick = tickProxy;
 
       let lastTimestamp: number;
       let firstTimestamp: number;

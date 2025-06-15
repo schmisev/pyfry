@@ -353,6 +353,8 @@ export class HuiGame {
     this.time = t;
     // do timing
     const start_now = performance.now();
+    // run tick function and then tick "things"
+    this.tick(dt);
     // tick all things
     this.#tick_things(dt);
     // tick time
@@ -399,6 +401,7 @@ export class HuiGame {
 
   // to be overwritten
   setup: HuiSetupFunction = () => {};
+  tick: HuiTickFunction = (dt: number) => {};
   draw: HuiDrawFunction = (dt: number) => {};
 
   // "static"
