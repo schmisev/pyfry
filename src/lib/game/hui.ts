@@ -1,5 +1,5 @@
 import { vec2, HuiVector } from "./hui.vector";
-import { HuiBody } from "./hui.body";
+import { HuiBody, HuiBox } from "./hui.body";
 import { call_method_if_it_exists, clamp, has_method, hex, is_py_proxy, lerp, move_towards, reavg, rnd, rndi, rndr, sign, wrap } from "./hui.utils";
 import { HuiSound } from "./hui.sound";
 import { HuiTimer } from "./hui.timer";
@@ -94,6 +94,7 @@ export class HuiGame {
   #things: HuiCursedThing[] = [];
   #has_tick: boolean[] = [];
   #has_draw: boolean[] = [];
+  #has_draw_debug: boolean[] = [];
   #to_remove: boolean[] = [];
   #children_of_thing: Set<number>[] = [];
   #parent_of_thing: number[] = [];
@@ -224,6 +225,7 @@ export class HuiGame {
     }
     if (has_method(thing, "tick")) this.#has_tick[id] = true;
     if (has_method(thing, "draw")) this.#has_draw[id] = true;
+    if (has_method(thing, "draw_debug")) this.#has_draw_debug[id] = true;
     this.#things[id] = thing;
 
     this.show_debug && console.log(`<hui> added ${thing}`)
@@ -257,6 +259,11 @@ export class HuiGame {
   new_body(x: number, y: number, vx: number = 0, vy: number = 0, ax: number = 0, ay: number = 0) {
     const new_body = new HuiBody(x, y, vx, vy, ax, ay);
     return new_body;
+  }
+
+  new_box(x: number, y: number, w: number, h: number) {
+    const new_box = new HuiBox(x, y, w, h);
+    return new_box;
   }
 
   // vectors
@@ -313,6 +320,12 @@ export class HuiGame {
     });
   }
 
+  #draw_debug_things(layer: HuiLayer) {
+    this.#has_draw_debug.forEach((value, id) => {
+      value && this.#things[id].draw_debug(layer);
+    });
+  }
+
   #remove_things() {
     this.#to_remove.forEach((value, id) => {
       if (value) {
@@ -327,6 +340,7 @@ export class HuiGame {
     delete this.#things[id];
     // rmeove from component lists
     delete this.#has_draw[id];
+    delete this.#has_draw_debug[id];
     delete this.#has_tick[id];
     // removing __from__ parent
     const parent = this.#parent_of_thing[id];
@@ -378,6 +392,7 @@ export class HuiGame {
     // draw time
     const draw_now = performance.now();
     this.#draw_things(dt);
+    if (this.show_debug) this.#draw_debug_things(this.ui);
     // draw things time
     const draw_things_now = performance.now();
     // draw layer stack

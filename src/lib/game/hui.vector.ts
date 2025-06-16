@@ -24,6 +24,10 @@ export class HuiVector {
         return new HuiVector(this.x + other.x, this.y + other.y);
     }
 
+    move(dx: number, dy: number): HuiVector {
+      return new HuiVector(this.x + dx, this.y + dy);
+    }
+
     sub(other: HuiVector): HuiVector {
         return new HuiVector(this.x - other.x, this.y - other.y);
     }
