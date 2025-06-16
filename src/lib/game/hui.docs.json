@@ -11,15 +11,43 @@
       "className": "HuiBody",
       "signature": "pos",
       "jsDoc": "**Pos**ition als Vektor.<br>\r\nBeispiel: _Ausgabe der x- und y-Koordinate_\r\n```python\r\nbody = hui.new_body(15, 10)\r\nprint(body.pos.x) # Ausgabe: 15\r\nprint(body.pos.y) # Ausgabe: 10\r\n```",
-      "type": "attribute",
+      "type": "get",
       "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "pos",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#pos",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
     },
     {
       "className": "HuiBody",
       "signature": "vel",
       "jsDoc": "Geschwindigkeit (**vel**ocity) als Vektor.<br>\r\nBeispiel: _Ausgabe der Gesamtgeschwindigkeit_\r\n```python\r\nbody = hui.new_body(0, 0, 4, 3) # 4 & 3 sind die x- und y-Geschwindigkeit\r\nprint(body.vel.len()) # Ausgabe: 5\r\n```",
-      "type": "attribute",
+      "type": "get",
       "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "vel",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#vel",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
     },
     {
       "className": "HuiBody",
@@ -30,10 +58,45 @@
     },
     {
       "className": "HuiBody",
-      "signature": "angle",
-      "jsDoc": "Rotationswinkel des Körpers<br>\r\nAktuell nutzlos.",
+      "signature": "#last_pos",
+      "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#current_pos",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#last_vel",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#current_vel",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#accumulator",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#fixed_dt",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
     },
     {
       "className": "HuiBody",
@@ -238,6 +301,13 @@
     {
       "className": "HuiLayer",
       "signature": "restore()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "reset()",
       "jsDoc": "",
       "type": "method",
       "access": "public"
@@ -837,6 +907,13 @@
     },
     {
       "className": "HuiGame",
+      "signature": "#all_layers()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
       "signature": "sound",
       "jsDoc": "",
       "type": "attribute",
@@ -1146,6 +1223,13 @@
     {
       "className": "HuiGame",
       "signature": "move_towards(a: number | HuiVector, b: number | HuiVector, delta: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "clear_all()",
       "jsDoc": "",
       "type": "method",
       "access": "public"

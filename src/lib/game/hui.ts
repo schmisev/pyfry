@@ -73,7 +73,18 @@ export class HuiGame {
   ui: HuiLayer;
 
   // layers
-  #layers: HuiLayer[] = []
+  #layers: HuiLayer[] = [];
+  *#all_layers(): Generator<HuiLayer, void, unknown> {
+    yield this.bg;
+    yield this.mg;
+
+    for (const layer of this.#layers) {
+      yield layer;
+    }
+
+    yield this.fg;
+    yield this.ui;
+  }
 
   // sound player
   sound = new HuiSound();
@@ -325,15 +336,9 @@ export class HuiGame {
   #draw_layers() {
     this.#ctx.clearRect(0, 0, this.#cvs.width, this.#cvs.height);
 
-    this.#ctx.drawImage(this.bg.cvs, 0, 0);
-    this.#ctx.drawImage(this.mg.cvs, 0, 0);
-
-    for (const layer of this.#layers) {
+    for (const layer of this.#all_layers()) {
       this.#ctx.drawImage(layer.cvs, 0, 0);
     }
-
-    this.#ctx.drawImage(this.fg.cvs, 0, 0);
-    this.#ctx.drawImage(this.ui.cvs, 0, 0);
   }
 
   prepare() {
@@ -440,6 +445,12 @@ export class HuiGame {
     }
     else
       throw TypeError("move_towards(a, b, delta) can only be used on two numbers or two vectors!")
+  }
+
+  clear_all() {
+    for(const layer of this.#all_layers()) {
+      layer.clear();
+    }
   }
 }
 

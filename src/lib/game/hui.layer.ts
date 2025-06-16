@@ -9,12 +9,23 @@ export class HuiLayer {
     this.cvs = new OffscreenCanvas(w, h);
     this.ctx = this.cvs.getContext("2d")!;
 
-    this.ctx.textAlign = "center";
-    this.ctx.textBaseline = "middle";
-    this.ctx.fillStyle = "white";
-    this.ctx.strokeStyle = "black";
-    this.ctx.lineCap = "round";
-    this.ctx.lineJoin = "round";
+    this.preset("standard")
+  }
+
+  preset(name: "standard") {
+    switch (name) {
+      case "standard": {
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillStyle = "white";
+        this.ctx.strokeStyle = "black";
+        this.ctx.lineCap = "round";
+        this.ctx.lineJoin = "round";
+        break;
+      }
+      default:
+        const UNREACHABLE: never = name;
+    }
   }
 
   save() {
@@ -23,6 +34,10 @@ export class HuiLayer {
 
   restore() {
     this.ctx.restore();
+  }
+
+  reset() {
+    this.ctx.reset();
   }
 
   rotate(radians: number) {
@@ -47,7 +62,6 @@ export class HuiLayer {
   flood(color: string) {
     this.ctx.save();
     this.ctx.resetTransform();
-    this.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
     this.ctx.fillStyle = color;
     this.ctx.fillRect(0, 0, this.cvs.width, this.cvs.height);
     this.ctx.restore();
