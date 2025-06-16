@@ -145,3 +145,4 @@ export class HuiBody extends HuiThing {
     this.move(dt);
   }
 }
+

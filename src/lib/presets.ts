@@ -324,7 +324,10 @@ plt.show()`
 export const GAME_PREAMBLE = `# Preambel
 import math
 import random
+import hui
+from hui import HuiThing
 
+'''
 class HuiThing:
   def __init__(self):
     self.__id__ = None
@@ -333,12 +336,15 @@ class HuiThing:
     if self.__id__ == None:
       raise Exception("Objekt wurde noch nicht mit hui.add(...) zum Spiel hinzugefügt.")
     return hui.add(obj, self.__id__)
+'''
 `;
 
 export const GAME_PSEUDO_PREAMBLE = `#Import
 import math
 import random
-from hui import hui, HuiThing`
+import hui
+from hui import HuiThing
+`
 
 export const ALL_GAME_PRESETS: CodePreset[] = [
   {

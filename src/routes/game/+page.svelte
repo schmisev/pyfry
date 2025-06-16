@@ -24,6 +24,7 @@
   import { markedHighlight } from "marked-highlight";
   import hljs from 'highlight.js';
   import "$lib/python/custom-python-highlighting.css";
+  import { HuiThing } from "$lib/game/hui.thing";
 
   const marked = new Marked(
   markedHighlight({
@@ -235,17 +236,33 @@
 
     // setup game engine
     const hui = new HuiGame(document, gameCanvas, gameCtx, pyodide.pyimport("pyodide.ffi").create_proxy);
-    hui_namespace.set("hui", hui);
+
+    // hui_namespace.set("hui", hui);
+    pyodide.runPython(`import sys; sys.modules.pop("hui", None)`);
+    pyodide.registerJsModule("hui", hui);
+
+    const py_hui_thing = pyodide.runPython(
+`class HuiThing:
+  def __init__(self):
+    self.__id__ = None
+
+  def add(self, obj):
+    if self.__id__ == None:
+      raise Exception("Objekt wurde noch nicht mit hui.add(...) zum Spiel hinzugefügt.")
+    return hui.add(obj, self.__id__)
+    
+HuiThing`, {globals: hui_namespace});
+
+    hui.HuiThing = py_hui_thing;
 
     try {
-
       // run the game script
       await pyodide.runPythonAsync(scriptPackage.script, {globals: hui_namespace});
 
-      // extract draw function
+      // extract function s
       const setupProxy = hui_namespace.get("setup");
-      const drawProxy = hui_namespace.get("draw");
       const tickProxy = hui_namespace.get("tick");
+      const drawProxy = hui_namespace.get("draw");
 
       // run the game
       if (setupProxy) {

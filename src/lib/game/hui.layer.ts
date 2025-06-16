@@ -1,5 +1,5 @@
 import { HuiImage } from "./hui.image";
-import { lerp, quadInOut } from "./hui.utils";
+import { lerp, quad_in_out } from "./hui.utils";
 
 export class HuiLayer {
   cvs: OffscreenCanvas;
@@ -152,8 +152,8 @@ export class HuiLayer {
       );
       let offset = n - i < 1 ? (n - i) / 2 : 0.5;
       this.ctx.lineTo(
-        x + Math.cos((i + offset) * angle) * lerp(r1, r2, quadInOut(2 * offset)),
-        y + Math.sin((i + offset) * angle) * lerp(r1, r2, quadInOut(2 * offset))
+        x + Math.cos((i + offset) * angle) * lerp(r1, r2, quad_in_out(2 * offset)),
+        y + Math.sin((i + offset) * angle) * lerp(r1, r2, quad_in_out(2 * offset))
       );
     }
     this.ctx.closePath();

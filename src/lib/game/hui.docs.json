@@ -293,6 +293,13 @@
     },
     {
       "className": "HuiLayer",
+      "signature": "preset(name: \"standard\")",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiLayer",
       "signature": "save()",
       "jsDoc": "",
       "type": "method",
@@ -964,6 +971,13 @@
     {
       "className": "HuiGame",
       "signature": "show_debug",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "HuiThing",
       "jsDoc": "",
       "type": "attribute",
       "access": "public"

@@ -1,12 +1,13 @@
 import { vec2, HuiVector } from "./hui.vector";
 import { HuiBody } from "./hui.body";
-import { call_method_if_it_exists, has_method, hex, is_py_proxy, lerp, reavg, rnd, rndi, rndr } from "./hui.utils";
+import { call_method_if_it_exists, clamp, has_method, hex, is_py_proxy, lerp, move_towards, reavg, rnd, rndi, rndr, sign, wrap } from "./hui.utils";
 import { HuiSound } from "./hui.sound";
 import { HuiTimer } from "./hui.timer";
 import { HuiLayer, HuiSprite } from "./hui.layer";
-import type { HuiCursedThing } from "./hui.thing";
+import { HuiThing, type HuiCursedThing } from "./hui.thing";
 import { HuiRandomTimer } from "./hui.random";
 import { HuiImage } from "./hui.image";
+import type { PyProxy } from "pyodide/ffi";
 
 export type HuiDiagnostics = {
   __ft__: [number, number, number, number, number], // frame times
@@ -100,7 +101,15 @@ export class HuiGame {
   // debug
   show_debug: boolean = false;
 
-  constructor(doc: Document, cvs: HTMLCanvasElement, ctx: CanvasRenderingContext2D, create_proxy: (obj: any) => any) {
+  // "classes"
+  HuiThing: typeof HuiThing | PyProxy = HuiThing;
+
+  constructor(
+    doc: Document, 
+    cvs: HTMLCanvasElement, 
+    ctx: CanvasRenderingContext2D, 
+    create_proxy: (obj: any) => any, 
+  ) {
     this.#cvs = cvs;
     this.#ctx = ctx;
 
@@ -275,7 +284,7 @@ export class HuiGame {
   }
 
   // new random timer
-  new_random(period: number, does_repeat: boolean = false) {
+  new_random_timer(period: number, does_repeat: boolean = false) {
     const new_random = new HuiRandomTimer(period, does_repeat, false);
     return new_random;
   }
@@ -410,44 +419,17 @@ export class HuiGame {
   draw: HuiDrawFunction = (dt: number) => {};
 
   // "static"
-  hex(r: number, g: number, b: number) { return hex(r, g, b); }
-  rnd() { return rnd() };
-  rndi(min: number, max: number) { return rndi(min, max) };
-  rndr(min: number, max: number) { return rndr(min, max) };
-
-  clamp(value: number, min: number, max: number) {
-    return (value < min) ? min : (value > max) ? max : value;
-  }
-
-  wrap(value: number, min: number, max: number) {
-    return (value > max) ? min + (value - max) : (value < min) ? max - (min - value) : value;
-  }
-
+  hex = hex;
+  rnd = rnd;
+  rndi = rndi;
+  rndr = rndr;
+  clamp = clamp;
+  wrap = wrap;
   lerp = lerp;
+  sign = sign;
+  move_towards = move_towards;
 
-  sign(value: number | HuiVector) {
-    if (typeof value === "number")
-      return (value < 0) ? -1 : (value > 0) ? 1 : 0;
-    else
-      return value.sign();
-  }
-
-  move_towards(a: number | HuiVector, b: number | HuiVector, delta: number) {
-    if (typeof a === "number" && typeof b === "number") {
-      let step = Math.min(Math.abs(b - a), delta);
-      let dir = Math.sign(b - a);
-      return a + dir * step;
-    } else if (a instanceof HuiVector && b instanceof HuiVector) {
-      let step = Math.min(a.to(b).len(), delta);
-      let dir = a.to(b).norm();
-      return a.add(dir.scale(step));
-      return 
-    }
-    else
-      throw TypeError("move_towards(a, b, delta) can only be used on two numbers or two vectors!")
-  }
-
-  clear_all() {
+  clear_all = () => {
     for(const layer of this.#all_layers()) {
       layer.clear();
     }
