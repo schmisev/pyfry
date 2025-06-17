@@ -1,6 +1,6 @@
 import type { HuiLayer } from "./hui.layer";
 import { HuiThing } from "./hui.thing";
-import { lerp } from "./hui.utils";
+import { lerp, SAT_collision } from "./hui.utils";
 import { HuiVector, vec2 } from "./hui.vector";
 
 export type BodyShapeType = "point" | "rectangle";
@@ -26,6 +26,8 @@ export type BodyShapeType = "point" | "rectangle";
  */
 export class HuiBody extends HuiThing {
   type: BodyShapeType = "point";
+  static: boolean = false;
+
   /**
    * **Pos**ition als Vektor.<br>
    * Beispiel: _Ausgabe der x- und y-Koordinate_
@@ -58,21 +60,46 @@ export class HuiBody extends HuiThing {
   }
   #vel: HuiVector;
   /**
-   * Beschleunigung (**acc**eleration) als Vektor.<br>
-   * Beispiel: _Setzen der Beschleunigung in y-Richtung_
+   * Kraft, die auf den Körper wirkt, als Vektor.<br>
+   * Beispiel: _Setzen der Kraft in y-Richtung_
    * ```python
    * body = hui.new_body(0, 0, 0, 0, 0, 0) # Die letzten 2 Nullen geben die Beschleunigung an
-   * body.acc.y = 9.81 # Die Beschleunigung in y-Richtung ist nun 9.81px/s^2
+   * body.force.y = 9.81 # Die Kraft in y-Richtung ist nun 9.81px/s^2
    * ```
    */
   force: HuiVector;
+  gravity: number = 0;
   mass: number = 1;
+
+  get angle() { return this.#angle; }
+  set angle(value: number) {
+    this.#last_angle = value;
+    this.#current_angle = value;
+    this.#angle = value;
+  }
+
+  get angular_vel() { return this.#angular_vel; }
+  set angular_vel(value: number) {
+    this.#last_angular_vel = value;
+    this.#current_angular_vel = value;
+    this.#angular_vel = value;
+  }
 
   #last_pos: HuiVector;
   #current_pos: HuiVector;
 
   #last_vel: HuiVector;
   #current_vel: HuiVector;
+
+  #last_angle: number = 0;
+  #current_angle: number = 0;
+  #angle: number = 0;
+
+  #last_angular_vel: number = 0;
+  #current_angular_vel: number = 0;
+  #angular_vel: number = 0;
+
+  torque: number = 0;
 
   #accumulator: number = 0;
   #fixed_dt: number = 0.01; // 100fps
@@ -136,10 +163,18 @@ export class HuiBody extends HuiThing {
     while (this.#accumulator >= this.#fixed_dt) {
       this.#last_pos = this.#current_pos;
       this.#last_vel = this.#current_vel;
+      
+      this.#last_angle = this.#current_angle;
+      this.#last_angular_vel = this.#current_angular_vel;
 
       // do the integration
-      this.#current_vel = this.#current_vel.add(this.force.scale(this.#fixed_dt));
-      this.#current_pos = this.#current_pos.add(this.#current_vel.scale(this.#fixed_dt));
+      if (!this.static) {
+        this.#current_vel = this.#current_vel.add(this.force.scale(this.#fixed_dt / this.mass));
+        this.#current_vel.y += this.gravity * this.#fixed_dt; // apply gravity seperately
+        this.#current_pos = this.#current_pos.add(this.#current_vel.scale(this.#fixed_dt));
+        this.#current_angular_vel += this.torque / this.mass * this.#fixed_dt;
+        this.#current_angle += this.#current_angular_vel * this.#fixed_dt;
+      }
 
       this.#accumulator -= this.#fixed_dt; // consume simulation time
     }
@@ -149,29 +184,40 @@ export class HuiBody extends HuiThing {
 
     this.#vel = lerp(this.#last_vel, this.#current_vel, a);
     this.#pos = lerp(this.#last_pos, this.#current_pos, a);
+    this.#angular_vel = lerp(this.#last_angular_vel, this.#current_angular_vel, a);
+    this.#angle = lerp(this.#last_angle, this.#current_angle, a);
   }
 
   tick(dt: number) {
     this.move(dt);
   }
-}
-
-export abstract class HuiPhysicsBody extends HuiBody {
-  abstract angle: number;
-
-  abstract is_inside(pos: HuiVector): boolean;
-  abstract is_touching(body: HuiPhysicsBody): boolean;
 
   local_pos(pos: HuiVector) {
     return this.pos.to(pos).rotate(-this.angle);
   }
 
-  abstract collision_points(): Generator<HuiVector, void, unknown>;
+  *collision_points(): Generator<HuiVector, void, unknown> {
+    yield this.pos;
+  }
+
+  contains(pos: HuiVector): boolean {
+    return false;
+  };
+
+  is_touching(body: HuiBody) {
+    switch (body.type) {
+      case "point":
+        return this.contains(body.pos);
+      case "rectangle":
+        return body.contains(this.pos);
+    }
+    const UNREACHABLE: never = body.type;
+  }
 }
 
-export class HuiBox extends HuiPhysicsBody {
+export class HuiBox extends HuiBody {
+  type: BodyShapeType = "rectangle";
   size: HuiVector;
-  angle: number;
 
   get w(): number {
     return this.size.x;
@@ -187,41 +233,52 @@ export class HuiBox extends HuiPhysicsBody {
     this.angle = 0;
   }
 
-  is_inside(pos: HuiVector) {
+  contains(pos: HuiVector) {
     const lp = this.local_pos(pos);
-    return lp.x < -this.size.x / 2 || lp.x > this.size.x / 2 || lp.y < -this.size.y / 2 || lp.y > this.size.y / 2;
+    return lp.x > -this.size.x / 2 && lp.x < this.size.x / 2 && lp.y > -this.size.y / 2 && lp.y < this.size.y / 2;
   }
 
   *collision_points(): Generator<HuiVector, void, unknown> {
     const [w, h] = this.size.xyHalf;
-    yield this.pos.move(w, h); // top right
-    yield this.pos.move(-w, h); // top left
-    yield this.pos.move(w, -h); // bottom left
-    yield this.pos.move(-w, -h); // bottom left
+    yield this.pos.add(vec2(w, h).rotate(this.angle));
+    yield this.pos.add(vec2(-w, h).rotate(this.angle));
+    yield this.pos.add(vec2(w, -h).rotate(this.angle));
+    yield this.pos.add(vec2(-w, -h).rotate(this.angle));
   }
 
-  is_touching(body: HuiPhysicsBody) {
+  is_touching(body: HuiBody) {
     switch (body.type) {
       case "point":
-        return this.is_inside(body.pos);
+        return this.contains(body.pos);
       case "rectangle":
-        for (const p of body.collision_points()) {
-          if (this.is_inside(p)) return true;
-        }
-        for (const p of this.collision_points()) {
-          if (body.is_inside(p)) return true;
-        }
-        return false;
+        return SAT_collision(this, body as HuiBox).collided;
     }
     const UNREACHABLE: never = body.type;
   }
 
-  draw_debug(layer: HuiLayer): void {
+  draw_debug(layer: HuiLayer, mouse?: HuiVector): void {
     const ctx = layer.ctx;
     ctx.save();
-    ctx.reset();
+    ctx.resetTransform();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
     ctx.strokeStyle = "red";
-    ctx.strokeRect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
+    ctx.fillStyle = "rgba(255, 0, 0, 0.2)"
+    ctx.strokeRect(-this.w/2, -this.h/2, this.w, this.h);
+    if (mouse && this.contains(mouse)) {
+      ctx.fillRect(-this.w/2, -this.h/2, this.w, this.h);
+    }
+    ctx.resetTransform();
+    for (const point of this.collision_points()) {
+      ctx.fillStyle = "red";
+      ctx.beginPath();
+      ctx.ellipse(...point.xy, 2, 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
     ctx.restore();
+  }
+
+  toString(): string {
+    return `<hui:box>`
   }
 }

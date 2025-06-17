@@ -9,6 +9,13 @@
     },
     {
       "className": "HuiBody",
+      "signature": "type",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
       "signature": "pos",
       "jsDoc": "**Pos**ition als Vektor.<br>\r\nBeispiel: _Ausgabe der x- und y-Koordinate_\r\n```python\r\nbody = hui.new_body(15, 10)\r\nprint(body.pos.x) # Ausgabe: 15\r\nprint(body.pos.y) # Ausgabe: 10\r\n```",
       "type": "get",
@@ -51,9 +58,51 @@
     },
     {
       "className": "HuiBody",
-      "signature": "acc",
-      "jsDoc": "Beschleunigung (**acc**eleration) als Vektor.<br>\r\nBeispiel: _Setzen der Beschleunigung in y-Richtung_\r\n```python\r\nbody = hui.new_body(0, 0, 0, 0, 0, 0) # Die letzten 2 Nullen geben die Beschleunigung an\r\nbody.acc.y = 9.81 # Die Beschleunigung in y-Richtung ist nun 9.81px/s^2\r\n```",
+      "signature": "force",
+      "jsDoc": "Kraft, die auf den Körper wirkt, als Vektor.<br>\r\nBeispiel: _Setzen der Kraft in y-Richtung_\r\n```python\r\nbody = hui.new_body(0, 0, 0, 0, 0, 0) # Die letzten 2 Nullen geben die Beschleunigung an\r\nbody.force.y = 9.81 # Die Kraft in y-Richtung ist nun 9.81px/s^2\r\n```",
       "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "gravity",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "mass",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "angle",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "angle",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "angular_vel",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "angular_vel",
+      "jsDoc": "",
+      "type": "set",
       "access": "public"
     },
     {
@@ -86,6 +135,55 @@
     },
     {
       "className": "HuiBody",
+      "signature": "#last_angle",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#current_angle",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#angle",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#last_angular_vel",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#current_angular_vel",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "#angular_vel",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "torque",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
       "signature": "#accumulator",
       "jsDoc": "",
       "type": "attribute",
@@ -114,34 +212,6 @@
     },
     {
       "className": "HuiBody",
-      "signature": "vx",
-      "jsDoc": "",
-      "type": "get",
-      "access": "public"
-    },
-    {
-      "className": "HuiBody",
-      "signature": "vy",
-      "jsDoc": "",
-      "type": "get",
-      "access": "public"
-    },
-    {
-      "className": "HuiBody",
-      "signature": "ax",
-      "jsDoc": "",
-      "type": "get",
-      "access": "public"
-    },
-    {
-      "className": "HuiBody",
-      "signature": "ay",
-      "jsDoc": "",
-      "type": "get",
-      "access": "public"
-    },
-    {
-      "className": "HuiBody",
       "signature": "x",
       "jsDoc": "",
       "type": "set",
@@ -158,6 +228,20 @@
       "className": "HuiBody",
       "signature": "vx",
       "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "vy",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "vx",
+      "jsDoc": "",
       "type": "set",
       "access": "public"
     },
@@ -166,6 +250,48 @@
       "signature": "vy",
       "jsDoc": "",
       "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "fx",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "fy",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "fx",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "fy",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "ax",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "ay",
+      "jsDoc": "",
+      "type": "get",
       "access": "public"
     },
     {
@@ -206,6 +332,106 @@
     {
       "className": "HuiBody",
       "signature": "tick(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "local_pos(pos: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "collision_points()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "contains(pos: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
+      "signature": "is_touching(body: HuiBody)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiBox": [
+    {
+      "className": "HuiBox",
+      "signature": "HuiBox",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "type",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "size",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "w",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "h",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "contains(pos: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "collision_points()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "is_touching(body: HuiBody)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "draw_debug(layer: HuiLayer, mouse?: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiBox",
+      "signature": "toString()",
       "jsDoc": "",
       "type": "method",
       "access": "public"
@@ -672,6 +898,13 @@
     },
     {
       "className": "HuiThing",
+      "signature": "draw_debug(layer: HuiLayer)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiThing",
       "signature": "toString()",
       "jsDoc": "",
       "type": "method",
@@ -949,6 +1182,13 @@
     },
     {
       "className": "HuiGame",
+      "signature": "#has_draw_debug",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
       "signature": "#to_remove",
       "jsDoc": "",
       "type": "attribute",
@@ -1061,6 +1301,13 @@
     },
     {
       "className": "HuiGame",
+      "signature": "new_box(x: number, y: number, w: number, h: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
       "signature": "new_vec2(x?: number, y?: number)",
       "jsDoc": "",
       "type": "method",
@@ -1089,7 +1336,7 @@
     },
     {
       "className": "HuiGame",
-      "signature": "new_random(period: number, does_repeat: boolean = false)",
+      "signature": "new_random_timer(period: number, does_repeat: boolean = false)",
       "jsDoc": "",
       "type": "method",
       "access": "public"
@@ -1111,6 +1358,13 @@
     {
       "className": "HuiGame",
       "signature": "#draw_things(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#draw_debug_things(layer: HuiLayer)",
       "jsDoc": "",
       "type": "method",
       "access": "private"
@@ -1180,44 +1434,44 @@
     },
     {
       "className": "HuiGame",
-      "signature": "hex(r: number, g: number, b: number)",
+      "signature": "hex",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiGame",
-      "signature": "rnd()",
+      "signature": "rnd",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiGame",
-      "signature": "rndi(min: number, max: number)",
+      "signature": "rndi",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiGame",
-      "signature": "rndr(min: number, max: number)",
+      "signature": "rndr",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiGame",
-      "signature": "clamp(value: number, min: number, max: number)",
+      "signature": "clamp",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiGame",
-      "signature": "wrap(value: number, min: number, max: number)",
+      "signature": "wrap",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     },
     {
@@ -1229,23 +1483,23 @@
     },
     {
       "className": "HuiGame",
-      "signature": "sign(value: number | HuiVector)",
+      "signature": "sign",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiGame",
-      "signature": "move_towards(a: number | HuiVector, b: number | HuiVector, delta: number)",
+      "signature": "move_towards",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiGame",
-      "signature": "clear_all()",
+      "signature": "clear_all",
       "jsDoc": "",
-      "type": "method",
+      "type": "attribute",
       "access": "public"
     }
   ],
@@ -1295,6 +1549,13 @@
     {
       "className": "HuiVector",
       "signature": "add(other: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "move(dx: number, dy: number)",
       "jsDoc": "",
       "type": "method",
       "access": "public"

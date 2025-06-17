@@ -544,5 +544,31 @@ def setup():
 # draw() wird 30-mal pro Sekunde ausgeführt
 def draw(dt):
   hui.mg.clear()`
+  },
+  {
+    name: "Collision Test",
+    preamble: GAME_PREAMBLE,
+    pseudo: GAME_PSEUDO_PREAMBLE,
+    code: `# Collision Test
+from hui import width, height, bg, ui
+
+g = hui.new_box(width /2, height - 50, 400, 20)
+g.static = True
+
+b = hui.new_box(width /2, height/2, 100, 70)
+b.angle = 0.4
+b.gravity = 500
+
+hui.debug(True)
+hui.add(g)
+hui.add(b)
+
+# setup() wird beim Spielstart ausgeführt
+def setup():
+  bg.flood("lightblue")
+
+# draw() wird 30-mal pro Sekunde ausgeführt
+def draw(dt):
+  ui.clear()`
   }
 ]

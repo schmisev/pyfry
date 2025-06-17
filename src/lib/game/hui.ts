@@ -95,6 +95,7 @@ export class HuiGame {
   #has_tick: boolean[] = [];
   #has_draw: boolean[] = [];
   #has_draw_debug: boolean[] = [];
+  #is_physics_body: boolean[] = [];
   #to_remove: boolean[] = [];
   #children_of_thing: Set<number>[] = [];
   #parent_of_thing: number[] = [];
@@ -226,6 +227,7 @@ export class HuiGame {
     if (has_method(thing, "tick")) this.#has_tick[id] = true;
     if (has_method(thing, "draw")) this.#has_draw[id] = true;
     if (has_method(thing, "draw_debug")) this.#has_draw_debug[id] = true;
+    if (thing instanceof HuiBody) this.#is_physics_body[id] = true;
     this.#things[id] = thing;
 
     this.show_debug && console.log(`<hui> added ${thing}`)
@@ -322,7 +324,7 @@ export class HuiGame {
 
   #draw_debug_things(layer: HuiLayer) {
     this.#has_draw_debug.forEach((value, id) => {
-      value && this.#things[id].draw_debug(layer);
+      value && this.#things[id].draw_debug(layer, this.mouse);
     });
   }
 
@@ -333,6 +335,18 @@ export class HuiGame {
         this.#remove_from_tree(id);
       }
     });
+  }
+
+  #solve_collisions() {
+    for (const id_1 in this.#is_physics_body) {
+      const body_1 = this.#things[id_1] as HuiBody;
+      for (const id_2 in this.#is_physics_body) {
+        if (id_2 <= id_1) continue;
+        const body_2 = this.#things[id_2] as HuiBody;
+        if (body_1.is_touching(body_2)) console.log("touching!")
+        else console.log("not touching")
+      }
+    }
   }
 
   #remove_from_tree(id: number) {
@@ -385,6 +399,8 @@ export class HuiGame {
     this.tick(dt);
     // tick all things
     this.#tick_things(dt);
+    // physics step
+    this.#solve_collisions();
     // tick time
     const tick_now = performance.now();
     // run draw function and then draw "things"

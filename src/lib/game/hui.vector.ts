@@ -72,6 +72,10 @@ export class HuiVector {
         return this.div(this.len()).scale(factor);
     }
 
+    perp() {
+      return new HuiVector(-this.y, this.x);
+    }
+
     dirTo(other: HuiVector) {
       return this.to(other).norm();
     }

@@ -1,6 +1,7 @@
 import type { PyProxy } from "pyodide/ffi";
 import { HuiThing } from "./hui.thing";
 import { HuiVector, vec2 } from "./hui.vector";
+import type { HuiBox } from "./hui.body";
 
 function component_to_hex(c: number) {
   const hex = Math.floor(c).toString(16);
@@ -97,4 +98,70 @@ export function call_method_if_it_exists<T extends unknown>(method_name: keyof T
 
 export function has_method<T extends unknown>(thing: T, method_name: keyof T): boolean {
   return !!thing && typeof thing === "object" && method_name in thing && typeof thing[method_name] === "function"
+}
+
+function get_axes_of_rect(rect: HuiVector[]): HuiVector[] {
+    const axes: HuiVector[] = [];
+    for (let i = 0; i < 4; i++) {
+        const p1 = rect[i];
+        const p2 = rect[(i + 1) % 4];
+        axes.push(p1.to(p2).perp().norm());
+    }
+    return axes.slice(0, 2); // Only 2 unique axes for rectangle
+}
+
+function project_rect(rect: HuiVector[], axis: HuiVector): { min: number, max: number } {
+    const dots = rect.map(p => p.dot(axis));
+    return {
+        min: Math.min(...dots),
+        max: Math.max(...dots)
+    };
+}
+
+function overlap_on_axis(a: { min: number, max: number }, b: { min: number, max: number }): number {
+    return Math.min(a.max, b.max) - Math.max(a.min, b.min);
+}
+
+export function SAT_collision(a: HuiBox, b: HuiBox): { collided: false } | { collided: true, mtv: HuiVector } {
+    const rect_a = [...a.collision_points()];
+    const rect_b = [...b.collision_points()];
+
+    const axes_a = get_axes_of_rect(rect_a);
+    const axes_b = get_axes_of_rect(rect_b);
+    const axes = [...axes_a, ...axes_b]
+
+    let min_overlap = Infinity;
+    let smallest_axis: HuiVector | null = null;
+
+
+    for (const axis of axes) {
+        const proj_a = project_rect(rect_a, axis);
+        const proj_b = project_rect(rect_b, axis);
+        const overlap = overlap_on_axis(proj_a, proj_b);
+
+        if (overlap <= 0) return { collided: false };
+
+        if (overlap < min_overlap) {
+          min_overlap = overlap;
+          smallest_axis = axis;
+        }
+    }
+
+    if (smallest_axis) {
+        // Determine the direction of MTV: from A to B
+        const direction = a.pos.to(b.pos);
+        const dot = direction.dot(smallest_axis);
+
+        // If dot < 0, reverse the axis
+        const mtv_direction = dot < 0
+            ? smallest_axis.scale(-1)
+            : smallest_axis;
+
+        return {
+            collided: true,
+            mtv: mtv_direction.scale(min_overlap)
+        };
+    }
+
+    return { collided: false };
 }
