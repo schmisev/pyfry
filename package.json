@@ -41,6 +41,8 @@
 		"lz-string": "^1.5.0",
 		"marked": "^15.0.12",
 		"marked-highlight": "^2.2.1",
+		"planck": "^1.4.2",
+		"planck-js": "^1.3.0",
 		"pyodide": "^0.27.7",
 		"pyright": "^1.1.402",
 		"shrink-string": "^3.1.9",

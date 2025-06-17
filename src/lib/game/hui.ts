@@ -1,6 +1,6 @@
 import { vec2, HuiVector } from "./hui.vector";
 import { HuiBody, HuiBox } from "./hui.body";
-import { call_method_if_it_exists, clamp, has_method, hex, is_py_proxy, lerp, move_towards, reavg, rnd, rndi, rndr, sign, wrap } from "./hui.utils";
+import { call_method_if_it_exists, clamp, has_method, hex, is_py_proxy, lerp, move_towards, reavg, rnd, rndi, rndr, SAT_collision, sign, wrap } from "./hui.utils";
 import { HuiSound } from "./hui.sound";
 import { HuiTimer } from "./hui.timer";
 import { HuiLayer, HuiSprite } from "./hui.layer";
@@ -8,6 +8,7 @@ import { HuiThing, type HuiCursedThing } from "./hui.thing";
 import { HuiRandomTimer } from "./hui.random";
 import { HuiImage } from "./hui.image";
 import type { PyProxy } from "pyodide/ffi";
+import { HuiPhysics } from "./hui.physics";
 
 export type HuiDiagnostics = {
   __ft__: [number, number, number, number, number], // frame times
@@ -89,6 +90,9 @@ export class HuiGame {
 
   // sound player
   sound = new HuiSound();
+
+  // planck physics
+  physics = new HuiPhysics();
 
   // things (to update)
   #things: HuiCursedThing[] = [];
@@ -343,8 +347,7 @@ export class HuiGame {
       for (const id_2 in this.#is_physics_body) {
         if (id_2 <= id_1) continue;
         const body_2 = this.#things[id_2] as HuiBody;
-        if (body_1.is_touching(body_2)) console.log("touching!")
-        else console.log("not touching")
+        // do stuff
       }
     }
   }
@@ -400,7 +403,7 @@ export class HuiGame {
     // tick all things
     this.#tick_things(dt);
     // physics step
-    this.#solve_collisions();
+    this.physics.step(dt);
     // tick time
     const tick_now = performance.now();
     // run draw function and then draw "things"

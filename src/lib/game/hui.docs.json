@@ -16,6 +16,13 @@
     },
     {
       "className": "HuiBody",
+      "signature": "static",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiBody",
       "signature": "pos",
       "jsDoc": "**Pos**ition als Vektor.<br>\r\nBeispiel: _Ausgabe der x- und y-Koordinate_\r\n```python\r\nbody = hui.new_body(15, 10)\r\nprint(body.pos.x) # Ausgabe: 15\r\nprint(body.pos.y) # Ausgabe: 10\r\n```",
       "type": "get",
@@ -1189,6 +1196,13 @@
     },
     {
       "className": "HuiGame",
+      "signature": "#is_physics_body",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
       "signature": "#to_remove",
       "jsDoc": "",
       "type": "attribute",
@@ -1372,6 +1386,13 @@
     {
       "className": "HuiGame",
       "signature": "#remove_things()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#solve_collisions()",
       "jsDoc": "",
       "type": "method",
       "access": "private"
@@ -1626,6 +1647,13 @@
     {
       "className": "HuiVector",
       "signature": "norm(factor = 1)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiVector",
+      "signature": "perp()",
       "jsDoc": "",
       "type": "method",
       "access": "public"
