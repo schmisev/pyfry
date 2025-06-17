@@ -570,5 +570,30 @@ def setup():
 # draw() wird 30-mal pro Sekunde ausgeführt
 def draw(dt):
   ui.clear()`
+  },
+  {
+    name: "Planck.js Test",
+    preamble: GAME_PREAMBLE,
+    pseudo: GAME_PSEUDO_PREAMBLE,
+    code: `# Collision Test
+from hui import width, height, bg, ui, physics
+hui.debug(True)
+
+g = physics.add_box(width /2, height - 50, 400, 20, "static")
+b = physics.add_box(width /2, height/2, 100, 70, "dynamic")
+
+hui.add(g)
+hui.add(b)
+
+# setup() wird beim Spielstart ausgeführt
+def setup():
+  bg.flood("lightblue")
+
+def tick(dt):
+  b.apply_force(5, 0)
+
+# draw() wird 30-mal pro Sekunde ausgeführt
+def draw(dt):
+  ui.clear()`
   }
 ]

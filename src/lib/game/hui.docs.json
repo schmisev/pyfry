@@ -723,6 +723,196 @@
       "access": "public"
     }
   ],
+  "HuiPhysics": [
+    {
+      "className": "HuiPhysics",
+      "signature": "HuiPhysics",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysics",
+      "signature": "#accumulator",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiPhysics",
+      "signature": "#fixed_dt",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiPhysics",
+      "signature": "world",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysics",
+      "signature": "add_box(x: number, y: number, w: number, h: number, type: BodyType = \"dynamic\")",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysics",
+      "signature": "add_disc(x: number, y: number, r: number, type: BodyType = \"dynamic\")",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysics",
+      "signature": "step(dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiPhysicsBody": [
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "HuiPhysicsBody",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "body",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "pos",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "pos",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "vel",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "vel",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "angle",
+      "jsDoc": "",
+      "type": "get",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "angle",
+      "jsDoc": "",
+      "type": "set",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "apply_force(fx: number, fy: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBody",
+      "signature": "apply_torque(torque: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiPhysicsBox": [
+    {
+      "className": "HuiPhysicsBox",
+      "signature": "HuiPhysicsBox",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBox",
+      "signature": "body",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBox",
+      "signature": "w",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBox",
+      "signature": "h",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsBox",
+      "signature": "draw_debug(layer: HuiLayer, mouse?: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
+  "HuiPhysicsDisc": [
+    {
+      "className": "HuiPhysicsDisc",
+      "signature": "HuiPhysicsDisc",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsDisc",
+      "signature": "body",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsDisc",
+      "signature": "r",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiPhysicsDisc",
+      "signature": "draw_debug(layer: HuiLayer, mouse?: HuiVector)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
   "HuiRandomTimer": [
     {
       "className": "HuiRandomTimer",
@@ -1162,6 +1352,13 @@
     {
       "className": "HuiGame",
       "signature": "sound",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "physics",
       "jsDoc": "",
       "type": "attribute",
       "access": "public"
