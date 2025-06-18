@@ -92,7 +92,7 @@ export class HuiGame {
   sound = new HuiSound();
 
   // planck physics
-  physics = new HuiPhysics();
+  physics: HuiPhysics;
 
   // things (to update)
   #things: HuiCursedThing[] = [];
@@ -128,6 +128,8 @@ export class HuiGame {
     this.mg = new HuiLayer(cvs.width, cvs.height);
     this.fg = new HuiLayer(cvs.width, cvs.height);
     this.ui = new HuiLayer(cvs.width, cvs.height);
+
+    this.physics = new HuiPhysics(this.width, this.height);
 
     cvs.tabIndex = -1;
     cvs.oncontextmenu = (ev: Event) => ev.preventDefault();

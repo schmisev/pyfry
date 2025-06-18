@@ -102,7 +102,7 @@ export class HuiBody extends HuiThing {
   torque: number = 0;
 
   #accumulator: number = 0;
-  #fixed_dt: number = 0.01; // 100fps
+  #fixed_dt: number = 0.01666; // 60fps
 
   constructor(x: number, y: number, vx: number = 0, vy: number = 0, fx: number = 0, fy: number = 0) {
     super();

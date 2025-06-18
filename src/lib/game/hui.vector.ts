@@ -1,3 +1,4 @@
+import type { Vec2Value } from "planck";
 
 export class HuiVector {
     x: number;
@@ -172,6 +173,14 @@ export class HuiVector {
         return this.x === 0 && this.y === 0;
     }
 
+    toVec2(): Vec2Value {
+      return {x: this.x, y: this.y};
+    }
+
+    static fromVec2(v: Vec2Value) {
+      return new HuiVector(v.x, v.y);
+    }
+
     static ZEROS() {
         return new HuiVector(0, 0);
     }
@@ -209,7 +218,7 @@ export class HuiVector {
     }
 }
 
-export class BoundingBox {
+export class HuiBoundingBox {
     topLeft: HuiVector;
     bottomRight: HuiVector;
 
@@ -241,9 +250,9 @@ export function vec2(x?: number, y?: number): HuiVector {
     return new HuiVector(x, y)
 };
 
-export function bbox(v1: HuiVector, v2: HuiVector): BoundingBox {
-    return new BoundingBox(v1, v2);
+export function bbox(v1: HuiVector, v2: HuiVector): HuiBoundingBox {
+    return new HuiBoundingBox(v1, v2);
 }
-export function bbox2(x1: number, y1: number, x2: number, y2: number): BoundingBox {
+export function bbox2(x1: number, y1: number, x2: number, y2: number): HuiBoundingBox {
     return bbox(vec2(x1, y1), vec2(x2, y2));
 }
