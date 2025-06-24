@@ -56,29 +56,20 @@ data = np.array([
   [2,4],
   [3,9]
 ])
-x = data[:,0]
-y = data[:,1]
+data_x = data[:,0]
+data_y = data[:,1]
 
 # Messdaten anzeigen
-plt.scatter(x, y, 
+plt.scatter(data_x, data_y, 
             marker = "x", 
             color = "blue")
 
 # Funktion zeichnen 
-x_f = np.linspace(0,max(x),100)
-y_f = 1 * x_f ** 2
-plt.plot(x_f, y_f, color = "green", label = "f(x) = x^2")
-plt.legend()
+x = np.linspace(0,max(data_x),100)
 
-# Lineare Regression
-t, m = pn.polyfit(x, y, 1)
-x_fit = np.linspace(0, max(x), 100)
-y_fit =  m * x_fit + t
+y = 2 * x + 1
 
-plt.plot(x_fit, y_fit, 
-         color = "red", 
-         linestyle = "-",
-         label = f"y = {m:.3f} * x + {t:.3f}")
+plt.plot(x, y, color = "green", label = "f(x) = ")
 plt.legend()
 
 # Beschriftungen
@@ -91,8 +82,12 @@ plt.ylabel("y-Achsen Beschriftung")
 # Achsen
 plt.xlim(left = 0)
 plt.ylim(bottom = 0)
-plt.grid(which = 'major', linestyle = '-' , alpha = 0.8)
-plt.grid(which = 'minor', linestyle = "--",  alpha = 0.5)
+plt.grid(which = 'major', 
+        linestyle = '-', 
+        alpha = 0.8)
+plt.grid(which = 'minor', 
+        linestyle = "--",  
+        alpha = 0.5)
 plt.minorticks_on()
 
 # Erstelle Diagramm
@@ -104,29 +99,20 @@ plt.show()`
     pseudo: STD_PSEUDO_PREAMBLE,
     code: `# Eingabe der Messdaten
 data = np.array(csv_data[0][1:])
-x = data[:,0]
-y = data[:,1]
+data_x = data[:,0]
+data_y = data[:,1]
 
 # Messdaten anzeigen
-plt.scatter(x, y, 
+plt.scatter(data_x, data_y, 
             marker = "x", 
             color = "blue")
 
 # Funktion zeichnen 
-x_f = np.linspace(0,max(x),100)
-y_f = 1 * x_f ** 2
-plt.plot(x_f, y_f, color = "green", label = "f(x) = x^2")
-plt.legend()
+x = np.linspace(0,max(data_x),100)
 
-# Lineare Regression
-t, m = pn.polyfit(x, y, 1)
-x_fit = np.linspace(0, max(x), 100)
-y_fit =  m * x_fit + t
+y = 2 * x + 1
 
-plt.plot(x_fit, y_fit, 
-         color = "red", 
-         linestyle = "-",
-         label = f"y = {m:.3f} * x + {t:.3f}")
+plt.plot(x, y, color = "green", label = "f(x) = ")
 plt.legend()
 
 # Beschriftungen
@@ -139,13 +125,18 @@ plt.ylabel("y-Achsen Beschriftung")
 # Achsen
 plt.xlim(left = 0)
 plt.ylim(bottom = 0)
-plt.grid(which = 'major', linestyle = '-' , alpha = 0.8)
-plt.grid(which = 'minor', linestyle = "--",  alpha = 0.5)
+plt.grid(which = 'major', 
+        linestyle = '-', 
+        alpha = 0.8)
+plt.grid(which = 'minor', 
+        linestyle = "--",  
+        alpha = 0.5)
 plt.minorticks_on()
 
 # Erstelle Diagramm
 plt.show()`
   },
+  /*
   {
     name: "Scatterplot mit linearer Regression durch y=0",
     preamble: STD_PREAMBLE,
@@ -319,6 +310,7 @@ ax.set_xlim([0, 1])
 
 plt.show()`
   }
+  */
 ]
 
 export const GAME_PREAMBLE = `# Preambel
