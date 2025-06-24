@@ -1,5 +1,5 @@
 import { vec2, HuiVector } from "./hui.vector";
-import { HuiBody, HuiBox } from "./hui.body";
+import { HuiMover, HuiBox, HuiDisc } from "./hui.mover";
 import { call_method_if_it_exists, clamp, has_method, hex, is_py_proxy, lerp, move_towards, reavg, rnd, rndi, rndr, SAT_collision, sign, wrap } from "./hui.utils";
 import { HuiSound } from "./hui.sound";
 import { HuiTimer } from "./hui.timer";
@@ -73,6 +73,7 @@ export class HuiGame {
   mg: HuiLayer;
   fg: HuiLayer;
   ui: HuiLayer;
+  dbg: HuiLayer;
 
   // layers
   #layers: HuiLayer[] = [];
@@ -86,6 +87,7 @@ export class HuiGame {
 
     yield this.fg;
     yield this.ui;
+    yield this.dbg;
   }
 
   // sound player
@@ -128,6 +130,7 @@ export class HuiGame {
     this.mg = new HuiLayer(cvs.width, cvs.height);
     this.fg = new HuiLayer(cvs.width, cvs.height);
     this.ui = new HuiLayer(cvs.width, cvs.height);
+    this.dbg = new HuiLayer(cvs.width, cvs.height);
 
     this.physics = new HuiPhysics(this.width, this.height);
 
@@ -233,7 +236,7 @@ export class HuiGame {
     if (has_method(thing, "tick")) this.#has_tick[id] = true;
     if (has_method(thing, "draw")) this.#has_draw[id] = true;
     if (has_method(thing, "draw_debug")) this.#has_draw_debug[id] = true;
-    if (thing instanceof HuiBody) this.#is_physics_body[id] = true;
+    if (thing instanceof HuiMover) this.#is_physics_body[id] = true;
     this.#things[id] = thing;
 
     this.show_debug && console.log(`<hui> added ${thing}`)
@@ -264,14 +267,19 @@ export class HuiGame {
   }
 
   // bodies
-  new_body(x: number, y: number, vx: number = 0, vy: number = 0, ax: number = 0, ay: number = 0) {
-    const new_body = new HuiBody(x, y, vx, vy, ax, ay);
+  new_mover(x: number, y: number, vx: number = 0, vy: number = 0, ax: number = 0, ay: number = 0) {
+    const new_body = new HuiMover(x, y, vx, vy, ax, ay);
     return new_body;
   }
 
   new_box(x: number, y: number, w: number, h: number) {
     const new_box = new HuiBox(x, y, w, h);
     return new_box;
+  }
+
+  new_disc(x: number, y: number, r: number) {
+    const new_disc = new HuiDisc(x, y, r);
+    return new_disc;
   }
 
   // vectors
@@ -345,10 +353,10 @@ export class HuiGame {
 
   #solve_collisions() {
     for (const id_1 in this.#is_physics_body) {
-      const body_1 = this.#things[id_1] as HuiBody;
+      const body_1 = this.#things[id_1] as HuiMover;
       for (const id_2 in this.#is_physics_body) {
         if (id_2 <= id_1) continue;
-        const body_2 = this.#things[id_2] as HuiBody;
+        const body_2 = this.#things[id_2] as HuiMover;
         // do stuff
       }
     }
@@ -411,9 +419,10 @@ export class HuiGame {
     // run draw function and then draw "things"
     this.draw(dt);
     // draw time
+    this.dbg.clear();
     const draw_now = performance.now();
     this.#draw_things(dt);
-    if (this.show_debug) this.#draw_debug_things(this.ui);
+    if (this.show_debug) this.#draw_debug_things(this.dbg);
     // draw things time
     const draw_things_now = performance.now();
     // draw layer stack

@@ -1,7 +1,7 @@
 import type { PyProxy } from "pyodide/ffi";
 import { HuiThing } from "./hui.thing";
 import { HuiVector, vec2 } from "./hui.vector";
-import type { HuiBox } from "./hui.body";
+import type { HuiBox, HuiDisc } from "./hui.mover";
 
 function component_to_hex(c: number) {
   const hex = Math.floor(c).toString(16);
@@ -120,6 +120,23 @@ function project_rect(rect: HuiVector[], axis: HuiVector): { min: number, max: n
 
 function overlap_on_axis(a: { min: number, max: number }, b: { min: number, max: number }): number {
     return Math.min(a.max, b.max) - Math.max(a.min, b.min);
+}
+
+export function disc_disc_collision(a: HuiDisc, b: HuiDisc): boolean {
+  return a.pos.dist_to(b.pos) < (a.r + b.r);
+}
+
+export function disc_box_collision(a: HuiDisc, b: HuiBox): boolean {
+  const lp = b.local_pos(a.pos);
+  const ext_w = (b.w/2 + a.r);
+  const ext_h = (b.h/2 + a.r);
+  const closest = vec2(clamp(lp.x, -ext_w, ext_w), clamp(lp.y, -ext_h, ext_h));
+
+  return closest.dist_to(lp) < a.r;
+}
+
+export function box_box_collision(a: HuiBox, b: HuiBox): boolean {
+  return SAT_collision(a, b).collided;
 }
 
 export function SAT_collision(a: HuiBox, b: HuiBox): { collided: false } | { collided: true, mtv: HuiVector } {

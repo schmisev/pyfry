@@ -1,18 +1,18 @@
 import type { HuiLayer } from "./hui.layer";
 import { HuiThing } from "./hui.thing";
-import { lerp, SAT_collision } from "./hui.utils";
+import { box_box_collision, disc_box_collision, disc_disc_collision, lerp, SAT_collision } from "./hui.utils";
 import { HuiVector, vec2 } from "./hui.vector";
 
-export type BodyShapeType = "point" | "rectangle";
+export type HuiMoverShapeType = "point" | "rectangle" | "circle";
 
 /**
  * Enthält Informationen über einen Körper, der sich bewegt.
  * Das schließt die Position, Geschwindigkeit und die aktuelle Beschleunigung ein.
- * Um einen neuen HuiBody zu erzeugen, nutzt man `hui.new_body(...)`.<br>
+ * Um einen neuen HuiBody zu erzeugen, nutzt man `hui.new_mover(...)`.<br>
  * _Kopieren und Probieren!_
  * ```python
  * # Erstellt einen neuen HuiBody in der Bildmitte, gibt ihm eine Startgeschwindigkeit von [100, 30], eine Beschleunigung von 100 nach unten und fügt ihn dem Spiel hinzu, damit er automatisch geupdated wird.
- * body = hui.new_body(hui.width / 2, hui.height / 2, 100, 30, 0, 100)
+ * body = hui.new_mover(hui.width / 2, hui.height / 2, 100, 30, 0, 100)
  * hui.add(body)
  * 
  * # Nun zeichnen wir dort, wo sich der Körper befindet, einen Kreis
@@ -24,15 +24,15 @@ export type BodyShapeType = "point" | "rectangle";
  *   hui.mg.circle(body.x, body.y, 30)
  * ```
  */
-export class HuiBody extends HuiThing {
-  type: BodyShapeType = "point";
+export class HuiMover extends HuiThing {
+  type: HuiMoverShapeType = "point";
   static: boolean = false;
 
   /**
    * **Pos**ition als Vektor.<br>
    * Beispiel: _Ausgabe der x- und y-Koordinate_
    * ```python
-   * body = hui.new_body(15, 10)
+   * body = hui.new_mover(15, 10)
    * print(body.pos.x) # Ausgabe: 15
    * print(body.pos.y) # Ausgabe: 10
    * ```
@@ -48,7 +48,7 @@ export class HuiBody extends HuiThing {
    * Geschwindigkeit (**vel**ocity) als Vektor.<br>
    * Beispiel: _Ausgabe der Gesamtgeschwindigkeit_
    * ```python
-   * body = hui.new_body(0, 0, 4, 3) # 4 & 3 sind die x- und y-Geschwindigkeit
+   * body = hui.new_mover(0, 0, 4, 3) # 4 & 3 sind die x- und y-Geschwindigkeit
    * print(body.vel.len()) # Ausgabe: 5
    * ```
    */
@@ -63,7 +63,7 @@ export class HuiBody extends HuiThing {
    * Kraft, die auf den Körper wirkt, als Vektor.<br>
    * Beispiel: _Setzen der Kraft in y-Richtung_
    * ```python
-   * body = hui.new_body(0, 0, 0, 0, 0, 0) # Die letzten 2 Nullen geben die Beschleunigung an
+   * body = hui.new_mover(0, 0, 0, 0, 0, 0) # Die letzten 2 Nullen geben die Beschleunigung an
    * body.force.y = 9.81 # Die Kraft in y-Richtung ist nun 9.81px/s^2
    * ```
    */
@@ -204,19 +204,13 @@ export class HuiBody extends HuiThing {
     return false;
   };
 
-  is_touching(body: HuiBody) {
-    switch (body.type) {
-      case "point":
-        return this.contains(body.pos);
-      case "rectangle":
-        return body.contains(this.pos);
-    }
-    const UNREACHABLE: never = body.type;
+  is_touching(body: HuiMover) {
+    return body.contains(this.pos);
   }
 }
 
-export class HuiBox extends HuiBody {
-  type: BodyShapeType = "rectangle";
+export class HuiBox extends HuiMover {
+  type: HuiMoverShapeType = "rectangle";
   size: HuiVector;
 
   get w(): number {
@@ -246,14 +240,12 @@ export class HuiBox extends HuiBody {
     yield this.pos.add(vec2(-w, -h).rotate(this.angle));
   }
 
-  is_touching(body: HuiBody) {
-    switch (body.type) {
-      case "point":
-        return this.contains(body.pos);
-      case "rectangle":
-        return SAT_collision(this, body as HuiBox).collided;
-    }
-    const UNREACHABLE: never = body.type;
+  is_touching(body: HuiMover) {
+    if (body instanceof HuiBox)
+      return box_box_collision(this, body);
+    else if (body instanceof HuiDisc)
+      return disc_box_collision(body, this);
+    return this.contains(body.pos);
   }
 
   draw_debug(layer: HuiLayer, mouse?: HuiVector): void {
@@ -280,5 +272,61 @@ export class HuiBox extends HuiBody {
 
   toString(): string {
     return `<hui:box>`
+  }
+}
+
+export class HuiDisc extends HuiMover {
+  type: HuiMoverShapeType = "circle";
+  r: number;
+
+  constructor(x: number, y: number, r: number) {
+    super(x, y);
+    this.r = r;
+    this.angle = 0;
+  }
+
+  contains(pos: HuiVector) {
+    const lp = this.local_pos(pos);
+    return lp.len() < this.r;
+  }
+
+  *collision_points(): Generator<HuiVector, void, unknown> {
+    yield this.pos;
+  }
+
+  is_touching(body: HuiMover) {
+    if (body instanceof HuiBox)
+      return disc_box_collision(this, body);
+    else if (body instanceof HuiDisc)
+      return disc_disc_collision(this, body);
+    return this.contains(body.pos);
+  }
+
+  draw_debug(layer: HuiLayer, mouse?: HuiVector): void {
+    const ctx = layer.ctx;
+    ctx.save();
+    ctx.resetTransform();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
+    ctx.strokeStyle = "red";
+    ctx.fillStyle = "rgba(255, 0, 0, 0.2)"
+    ctx.beginPath();
+    ctx.ellipse(0, 0, this.r, this.r, 0, 0, Math.PI * 2);
+    if (mouse && this.contains(mouse)) {
+      ctx.fill();
+    }
+    ctx.stroke();
+    ctx.resetTransform();
+    for (const point of this.collision_points()) {
+      ctx.fillStyle = "red";
+      ctx.beginPath();
+      ctx.ellipse(...point.xy, 2, 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  toString(): string {
+    return `<hui:disc>`
   }
 }

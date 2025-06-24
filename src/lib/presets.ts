@@ -387,7 +387,7 @@ def draw(dt):
     code: `# Hüpfender Ball
 gravity = 10
 ball_radius = 50
-body = hui.new_body(hui.width / 2, hui.height / 2, 0, 0)
+body = hui.new_mover(hui.width / 2, hui.height / 2, 0, 0)
 score = 0
 
 # setup() wird beim Spielstart ausgeführt
@@ -485,7 +485,7 @@ def draw(dt):
     pseudo: GAME_PSEUDO_PREAMBLE,
     code: `# Bilder importieren
 snake = hui.new_image("https://img.icons8.com/?size=48&id=OwPRfsLEUW71&format=png")
-snake_body = hui.new_body(hui.width/2, hui.height/2, 0, 0)
+snake_body = hui.new_mover(hui.width/2, hui.height/2, 0, 0)
 
 # setup() wird beim Spielstart ausgeführt
 def setup():
