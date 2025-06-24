@@ -239,7 +239,7 @@ export class HuiBox extends HuiBody {
   }
 
   *collision_points(): Generator<HuiVector, void, unknown> {
-    const [w, h] = this.size.xyHalf;
+    const [w, h] = this.size.xy_half;
     yield this.pos.add(vec2(w, h).rotate(this.angle));
     yield this.pos.add(vec2(-w, h).rotate(this.angle));
     yield this.pos.add(vec2(w, -h).rotate(this.angle));

@@ -132,7 +132,7 @@ export abstract class HuiPhysicsBody extends HuiThing {
       let c = ce.contact;
       let n = c.getWorldManifold(null)?.normal;
       if (!n) continue;
-      let v = HuiVector.fromVec2(n);
+      let v = HuiVector.from_vec2(n);
       let angle = v.angle();
       if (!this.is_on_ground && angle > -Math.PI * 0.7 && angle < -Math.PI * 0.3) this.is_on_ground = true;
       if (!this.is_on_ceiling && angle > Math.PI * 0.3 && angle > Math.PI * 0.7) this.is_on_ceiling = true;

@@ -342,12 +342,17 @@ td.no-fill {
 
   display: flex;
   flex-direction: column;
-  height: 500px;
-  min-height: 500px;
+  flex: 0 0 auto;
   overflow: hidden;
 
   max-width: 700px;
   min-width: 100%;
+}
+
+#image-out > .img-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .img-handle {

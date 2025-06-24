@@ -13,7 +13,7 @@ export class HuiVector {
         return [this.x, this.y];
     }
 
-    get xyHalf(): [number, number] {
+    get xy_half(): [number, number] {
         return [this.x / 2, this.y / 2];
     }
 
@@ -53,7 +53,7 @@ export class HuiVector {
         return new HuiVector(this.x * factor, this.y * factor);
     }
 
-    scaleFrom(from: HuiVector, factor: number) {
+    scale_from(from: HuiVector, factor: number) {
         return from.add(from.to(this).scale(factor));
     }
 
@@ -77,11 +77,11 @@ export class HuiVector {
       return new HuiVector(-this.y, this.x);
     }
 
-    dirTo(other: HuiVector) {
+    dir_to(other: HuiVector) {
       return this.to(other).norm();
     }
 
-    distTo(other: HuiVector) {
+    dist_to(other: HuiVector) {
         return this.to(other).len();
     }
 
@@ -92,7 +92,7 @@ export class HuiVector {
         return rp;
     }
 
-    rotateAround(mid: HuiVector, theta: number) {
+    rotate_around(mid: HuiVector, theta: number) {
         return mid.add(mid.to(this).rotate(theta));
     }
 
@@ -100,11 +100,11 @@ export class HuiVector {
         return Math.atan2(this.y, this.x);
     }
 
-    angleTo(other: HuiVector) {
+    angle_to(other: HuiVector) {
         return this.to(other).angle();
     }
 
-    angleBetween(other: HuiVector) {
+    angle_between(other: HuiVector) {
         return other.angle() - this.angle();
     }
 
@@ -122,22 +122,14 @@ export class HuiVector {
         )
     }
 
-    /**
-     * Makes x- & y-axis equal to the signed MINIMUM of the axes.
-     * This is useful for scaling isotropically.
-     */
-    signedIsoMin() {
+    signed_iso_min() {
         const signed = this.sign();
         const abs = this.abs();
         const val = Math.min(abs.x, abs.y);
         return signed.scale(val);
     }
 
-    /**
-     * Makes x- & y-axis equal to the signed MAXIMUM of the axes.
-     * This is useful for scaling isotropically.
-     */
-    signedIsoMax() {
+    signed_iso_max() {
         const signed = this.sign();
         const abs = this.abs();
         const val = Math.max(abs.x, abs.y);
@@ -148,14 +140,8 @@ export class HuiVector {
         return new HuiVector(Math.sign(this.x) * factor, Math.sign(this.y) * factor);
     }
 
-    /**
-     * Safe projection onto a vector.
-     * Projects onto [1, 1] if onto is [0, 0].
-     * @param onto 
-     * @returns projected vector
-     */
     proj(onto: HuiVector): HuiVector {
-        const safeOnto = onto.isZero() ? HuiVector.ONES() : onto;
+        const safeOnto = onto.is_zero() ? HuiVector.ONES() : onto;
         return safeOnto.scale(this.dot(safeOnto) / safeOnto.dot(safeOnto));
     }
 
@@ -165,19 +151,19 @@ export class HuiVector {
      * @param onto 
      * @returns signed projected vector
      */
-    signedProj(onto: HuiVector): HuiVector {
+    signed_proj(onto: HuiVector): HuiVector {
         return this.proj(onto.times(this.sign()));
     }
 
-    isZero() {
+    is_zero() {
         return this.x === 0 && this.y === 0;
     }
 
-    toVec2(): Vec2Value {
+    to_vec2(): Vec2Value {
       return {x: this.x, y: this.y};
     }
 
-    static fromVec2(v: Vec2Value) {
+    static from_vec2(v: Vec2Value) {
       return new HuiVector(v.x, v.y);
     }
 
@@ -227,7 +213,7 @@ export class HuiBoundingBox {
         this.bottomRight = v1.max(v2);
     }
 
-    isInside(pos: HuiVector) {
+    contains(pos: HuiVector) {
         return pos.x >= this.topLeft.x && pos.y >= this.topLeft.y && pos.x <= this.bottomRight.x && pos.y <= this.bottomRight.y;
     }
 
