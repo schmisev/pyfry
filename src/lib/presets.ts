@@ -59,7 +59,13 @@ data = np.array([
 data_x = data[:,0]
 data_y = data[:,1]
 
-# Messdaten anzeigen
+# Messdaten in Diagramm anzeigen
+plt.title("Überschrift", 
+          color = "black", 
+          weight = "bold")
+plt.xlabel("x-Achsen Beschriftung")
+plt.ylabel("y-Achsen Beschriftung")
+
 plt.scatter(data_x, data_y, 
             marker = "x", 
             color = "blue")
@@ -71,13 +77,6 @@ y = 2 * x + 1
 
 plt.plot(x, y, color = "green", label = "f(x) = ")
 plt.legend()
-
-# Beschriftungen
-plt.title("Überschrift", 
-          color = "black", 
-          weight = "bold")
-plt.xlabel("x-Achsen Beschriftung")
-plt.ylabel("y-Achsen Beschriftung")
 
 # Achsen
 plt.xlim(left = 0)
@@ -102,7 +101,13 @@ data = np.array(csv_data[0][1:])
 data_x = data[:,0]
 data_y = data[:,1]
 
-# Messdaten anzeigen
+# Messdaten in Diagramm anzeigen
+plt.title("Überschrift", 
+          color = "black", 
+          weight = "bold")
+plt.xlabel("x-Achsen Beschriftung")
+plt.ylabel("y-Achsen Beschriftung")
+
 plt.scatter(data_x, data_y, 
             marker = "x", 
             color = "blue")
@@ -114,13 +119,6 @@ y = 2 * x + 1
 
 plt.plot(x, y, color = "green", label = "f(x) = ")
 plt.legend()
-
-# Beschriftungen
-plt.title("Überschrift", 
-          color = "black", 
-          weight = "bold")
-plt.xlabel("x-Achsen Beschriftung")
-plt.ylabel("y-Achsen Beschriftung")
 
 # Achsen
 plt.xlim(left = 0)
