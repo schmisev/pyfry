@@ -1,4 +1,64 @@
 {
+  "HuiDOMElement": [
+    {
+      "className": "HuiDOMElement",
+      "signature": "HuiDOMElement",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    }
+  ],
+  "HuiButton": [
+    {
+      "className": "HuiButton",
+      "signature": "HuiButton",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "#el",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "is_pressed",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "just_pressed",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "just_released",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "update()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "remove()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    }
+  ],
   "HuiImage": [
     {
       "className": "HuiImage",
@@ -1047,14 +1107,14 @@
     },
     {
       "className": "HuiPhysicsBox",
-      "signature": "w",
+      "signature": "width",
       "jsDoc": "",
       "type": "attribute",
       "access": "public"
     },
     {
       "className": "HuiPhysicsBox",
-      "signature": "h",
+      "signature": "height",
       "jsDoc": "",
       "type": "attribute",
       "access": "public"
@@ -1084,7 +1144,7 @@
     },
     {
       "className": "HuiPhysicsDisc",
-      "signature": "r",
+      "signature": "radius",
       "jsDoc": "",
       "type": "attribute",
       "access": "public"
@@ -1279,7 +1339,21 @@
     },
     {
       "className": "HuiThing",
+      "signature": "update()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiThing",
       "signature": "draw_debug(layer: HuiLayer)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiThing",
+      "signature": "remove()",
       "jsDoc": "",
       "type": "method",
       "access": "public"
@@ -1437,6 +1511,13 @@
     },
     {
       "className": "HuiGame",
+      "signature": "#doc",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
       "signature": "#create_proxy",
       "jsDoc": "",
       "type": "attribute",
@@ -1584,6 +1665,13 @@
     },
     {
       "className": "HuiGame",
+      "signature": "#has_update",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private"
+    },
+    {
+      "className": "HuiGame",
       "signature": "#is_physics_body",
       "jsDoc": "",
       "type": "attribute",
@@ -1717,6 +1805,13 @@
     },
     {
       "className": "HuiGame",
+      "signature": "new_button(txt: string, x: number, y: number, w: number, h: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
       "signature": "new_vec2(x?: number, y?: number)",
       "jsDoc": "",
       "type": "method",
@@ -1780,14 +1875,14 @@
     },
     {
       "className": "HuiGame",
-      "signature": "#remove_things()",
+      "signature": "#update_things()",
       "jsDoc": "",
       "type": "method",
       "access": "private"
     },
     {
       "className": "HuiGame",
-      "signature": "#solve_collisions()",
+      "signature": "#remove_things()",
       "jsDoc": "",
       "type": "method",
       "access": "private"
@@ -1816,6 +1911,13 @@
     {
       "className": "HuiGame",
       "signature": "step(t: number, dt: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "stop()",
       "jsDoc": "",
       "type": "method",
       "access": "public"
