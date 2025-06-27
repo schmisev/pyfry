@@ -458,10 +458,12 @@ export class HuiGame {
     }
   }
 
-  stop() {
+  end() {
     for (const id in this.#things) {
       has_method(this.#things[id], "remove") && (this.#things[id] as any).remove();
     }
+    this.clear_all();
+    this.#draw_layers();
   }
 
   swap(draw: HuiDrawFunction, setup?: HuiSetupFunction) {

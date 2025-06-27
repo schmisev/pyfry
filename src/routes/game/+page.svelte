@@ -299,7 +299,7 @@ HuiThing`, {globals: hui_namespace});
           diagnostics = hui.diagnostics;
 
           if (!flags.gameIsRunning) {
-            hui.stop();
+            hui.end();
             return;
           }
           requestAnimationFrame(gameLoop);

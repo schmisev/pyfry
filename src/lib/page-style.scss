@@ -455,6 +455,7 @@ td.no-fill {
 }
 
 .game-wrapper {
+  position: relative;
   background-color: black;
   border: black 2px solid;
   border-radius: calc(0.5rem + 2px);
