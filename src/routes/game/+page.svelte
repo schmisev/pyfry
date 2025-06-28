@@ -18,7 +18,7 @@
   import { HuiGame, type HuiDiagnostics, type NodeDoc } from "$lib/game/hui";
   import LZString from "lz-string";
   import huiDocsStr from "$lib/game/hui.docs.json?raw";
-  import { faCompressAlt, faCloudDownloadAlt, faFolderOpen, faTrash, faCopy, faUndoAlt, faHourglass, faStar, faPlay, faStop, faGamepad } from "@fortawesome/free-solid-svg-icons";
+  import { faCompressAlt, faCloudDownloadAlt, faFolderOpen, faTrash, faCopy, faUndoAlt, faHourglass, faStar, faPlay, faStop, faGamepad, faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
   import { parse } from "marked";
   import { Marked } from "marked";
   import { markedHighlight } from "marked-highlight";
@@ -65,6 +65,7 @@
     isRunning: false,
     updateURL: true,
     gameIsRunning: false,
+    showPseudo: false,
   });
 
   let copied_presets = ALL_GAME_PRESETS.map(copyObj);
@@ -353,12 +354,18 @@ HuiThing`, {globals: hui_namespace});
       .py
     </div>
     <div id="editor-wrapper">
+      {#if flags.showPseudo}
       <CodeMirror extensions={extensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo}></CodeMirror>
-      <div class="layout panel divider"></div>
+      {/if}
+      <button class="layout panel divider" onclick={() => {flags.showPseudo = !(flags.showPseudo)}}>
+        {#if flags.showPseudo}<Fa class="icon" icon={faCaretUp}></Fa>
+        {:else}<Fa class="icon" icon={faCaretDown}></Fa>
+        {/if}
+      </button>
       <CodeMirror on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
     </div>
   </div>
-  <div class="layout panel console">
+  <div class="layout panel console right">
     <div id="console-out-wrapper">
       <pre id="console-out"></pre>
     </div>
