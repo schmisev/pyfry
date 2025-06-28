@@ -411,7 +411,7 @@ def draw(dt):
   mg.clear()
   mg.fill("lightcoral")
   mg.stroke("white")
-  mg.thick(5)
+  mg.thickness(5)
   mg.circle(
     body.x, 
     body.y, 

@@ -37,7 +37,7 @@ export class HuiMover extends HuiThing {
    * print(body.pos.y) # Ausgabe: 10
    * ```
    */
-  get pos() { return this.#pos; }
+  get pos(): HuiVector { return this.#pos; }
   set pos(value) {
     this.#current_pos = value;
     this.#last_pos = value;
@@ -52,7 +52,7 @@ export class HuiMover extends HuiThing {
    * print(body.vel.len()) # Ausgabe: 5
    * ```
    */
-  get vel() { return this.#vel; }
+  get vel(): HuiVector { return this.#vel; }
   set vel(value) {
     this.#current_vel = value;
     this.#last_vel = value;

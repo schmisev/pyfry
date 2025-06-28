@@ -32,6 +32,7 @@ export type NodeDoc = {
   jsDoc: string,
   type: NodeType,
   access: NodeAccess,
+  return_type: string,
 };
 
 export type HuiSetupFunction = () => void;
@@ -172,8 +173,8 @@ export class HuiGame {
     }
 
     doc.onpointermove = (ev: PointerEvent) => {
-      this.mouse.x = ev.clientX - cvs.offsetLeft;
-      this.mouse.y = ev.clientY - cvs.offsetTop;
+      this.mouse.x = ev.clientX - cvs.getBoundingClientRect().left;
+      this.mouse.y = ev.clientY - cvs.getBoundingClientRect().top;
     }
 
     cvs.onblur = (ev: FocusEvent) => {
@@ -350,6 +351,10 @@ export class HuiGame {
     this.#has_draw_debug.forEach((value, id) => {
       value && this.#things[id].draw_debug(layer, this.mouse);
     });
+
+    this.dbg.push_preset("debug");
+    this.dbg.circle(...this.mouse.xy, 5);
+    this.dbg.pop();
   }
 
   #update_things() {
@@ -369,13 +374,14 @@ export class HuiGame {
 
   #remove_from_tree(id: number) {
     // run removal method
-    has_method(this.#things[id], "remove") && (this.#things as any).remove();
+    has_method(this.#things[id], "remove") && (this.#things[id] as any).remove();
     // remove from ref list
     delete this.#things[id];
-    // rmeove from component lists
+    // remove from component lists
     delete this.#has_draw[id];
     delete this.#has_draw_debug[id];
     delete this.#has_tick[id];
+    delete this.#has_update[id];
     // removing __from__ parent
     const parent = this.#parent_of_thing[id];
     parent !== undefined && this.#children_of_thing[parent]?.delete(id);
@@ -429,7 +435,7 @@ export class HuiGame {
     this.dbg.clear();
     const draw_now = performance.now();
     this.#draw_things(dt);
-    if (this.show_debug) this.#draw_debug_things(this.dbg);
+    if (this.show_debug) { this.#draw_debug_things(this.dbg); }
     // draw things time
     const draw_things_now = performance.now();
     // draw layer stack

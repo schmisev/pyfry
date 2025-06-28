@@ -12,7 +12,7 @@ export class HuiLayer {
     this.preset("standard")
   }
 
-  preset(name: "standard") {
+  preset(name: "standard" | "debug") {
     switch (name) {
       case "standard": {
         this.ctx.textAlign = "center";
@@ -23,21 +23,36 @@ export class HuiLayer {
         this.ctx.lineJoin = "round";
         break;
       }
+      case "debug": {
+        this.ctx.lineWidth = 1;
+        this.ctx.strokeStyle = "red";
+        this.ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
+        break;
+      }
       default:
         const UNREACHABLE: never = name;
     }
   }
 
-  save() {
+  push_preset(name: "standard" | "debug") {
+    this.push();
+    this.preset(name);
+  }
+
+  push() {
     this.ctx.save();
   }
 
-  restore() {
+  pop() {
     this.ctx.restore();
   }
 
   reset() {
     this.ctx.reset();
+  }
+
+  reset_movement() {
+    this.ctx.resetTransform();
   }
 
   rotate(radians: number) {
@@ -90,7 +105,7 @@ export class HuiLayer {
     this.ctx.shadowColor = "transparent";
   }
 
-  thick(width: number) {
+  thickness(width: number) {
     this.ctx.lineWidth = width;
   }
 

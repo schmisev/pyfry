@@ -534,3 +534,9 @@ td.no-fill {
   @extend .mononoki;
   font-weight: bold;
 }
+
+.return-type {
+  @extend .mononoki;
+  font-weight: unset;
+  color: rgba(0, 0, 0, 0.5);
+}

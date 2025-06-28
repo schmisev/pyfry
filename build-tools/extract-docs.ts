@@ -29,6 +29,7 @@ function visit(node: ts.Node) {
     let signature: string = className;
     let type: NodeType = "class";
     let access: NodeAccess = "public";
+    let return_type: string = "";
     let jsDoc: string = extractJSDoc(node);
 
     !(className in classCompletions) && (classCompletions[className] = []);
@@ -38,7 +39,8 @@ function visit(node: ts.Node) {
       signature, 
       jsDoc,
       type,
-      access
+      access,
+      return_type
     });
   } else if (node.parent && ts.isClassDeclaration(node.parent)) {
     // we are in a class
@@ -46,19 +48,24 @@ function visit(node: ts.Node) {
     let signature: string = "???";
     let type: NodeType = "method";
     let access: NodeAccess = "public";
+    let return_type: string = "";
 
     if (ts.isMethodDeclaration(node)) {
       signature = `${node.name.getText()}(${node.parameters.map(p => p.getText()).join(", ")})`
       type = "method";
+      return_type = node.type ? node.type.getFullText() : "";
     } else if (ts.isPropertyDeclaration(node)) {
       signature = `${node.name.getText()}`
       type = "attribute";
+      return_type = node.type ? node.type.getFullText() : "";
     } else if (ts.isGetAccessorDeclaration(node)) {
       signature = `${node.name.getText()}`
       type = "get";
+      return_type = node.type ? node.type.getFullText() : "";
     } else if (ts.isSetAccessor(node)) {
       signature = `${node.name.getText()}`
       type = "set";
+      return_type = node.type ? node.type.getFullText() : "";
     } else {
       ts.forEachChild(node, visit);
       return;
@@ -76,7 +83,8 @@ function visit(node: ts.Node) {
       signature, 
       jsDoc,
       type,
-      access
+      access,
+      return_type,
     });
   }
 
