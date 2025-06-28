@@ -33,8 +33,7 @@ new_show(False)
 csv_data = csv_data.to_py()
 `;
 
-export const STD_PSEUDO_PREAMBLE = `# Import
-import matplotlib.pyplot as plt
+export const STD_PSEUDO_PREAMBLE = `import matplotlib.pyplot as plt
 import numpy as np
 import numpy.polynomial.polynomial as pn
 csv_data = ... # Daten aus csv-Import`;
@@ -329,12 +328,10 @@ class HuiThing:
 '''
 `;
 
-export const GAME_PSEUDO_PREAMBLE = `#Import
-import math
+export const GAME_PSEUDO_PREAMBLE = `import math
 import random
 import hui
-from hui import HuiThing
-`
+from hui import HuiThing`
 
 export const ALL_GAME_PRESETS: CodePreset[] = [
   {
@@ -346,12 +343,16 @@ export const ALL_GAME_PRESETS: CodePreset[] = [
 def setup():
   pass
 
-# draw() wird 30-mal pro Sekunde ausgeführt
+# tick() wird 30-mal pro Sekunde ausgeführt
+def tick():
+  pass
+
+# draw() wird immer nach tick() ausgeführt
 def draw(dt):
   pass`,
   },
   {
-    name: "Hallo!",
+    name: "HuiLayer Test 'Hallo!'",
     preamble: GAME_PREAMBLE,
     pseudo: GAME_PSEUDO_PREAMBLE,
     code: `# Hallo!
@@ -365,7 +366,8 @@ def setup():
   
   hui.mg.font("Arial")
   hui.mg.text_size(50)
-  hui.mg.stroke("white")
+  hui.mg.stroke("black")
+  hui.mg.thickness(2)
   hui.mg.shadow()
 
 # draw() wird 30-mal pro Sekunde ausgeführt
@@ -381,7 +383,7 @@ def draw(dt):
   hui.mg.text("Hallo!", x - 38, y)`
   },
   {
-    name: "Hüpfender Ball",
+    name: "hui.mouse Test 'Hüpfender Ball'",
     preamble: GAME_PREAMBLE,
     pseudo: GAME_PSEUDO_PREAMBLE,
     code: `# Hüpfender Ball
@@ -455,7 +457,7 @@ def draw(dt):
   hui.ui.text(f"Punkte: {score}", hui.width / 2, 20)`,
   },
   {
-    name: "Smiley",
+    name: "HuiSprite Test 'Smiley'",
     preamble: GAME_PREAMBLE,
     pseudo: GAME_PSEUDO_PREAMBLE,
     code: `# Smiley
@@ -480,7 +482,7 @@ def draw(dt):
   hui.mg.show(sprite, hui.mx, hui.my - 30)`
   },
   {
-    name: "Bilder importieren",
+    name: "HuiImage Test 'Snake'",
     preamble: GAME_PREAMBLE,
     pseudo: GAME_PSEUDO_PREAMBLE,
     code: `# Bilder importieren
@@ -497,7 +499,7 @@ def draw(dt):
   # Schlange auf Maus zubewegen
   snake_body.vel = hui.lerp(
     snake_body.vel,
-    snake_body.pos.dirTo(hui.mouse).scale(100), 
+    snake_body.pos.dir_to(hui.mouse).scale(100), 
     0.2
   )
   snake_body.move(dt)

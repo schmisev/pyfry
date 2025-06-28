@@ -19,7 +19,7 @@
   import { ALL_SNIPPETS } from "$lib/snippets";
   import iconFriedEgg from "$lib/assets/fried-egg.svg"
   import Fa from 'svelte-fa'
-  import { faArrowRight, faBacon, faBreadSlice, faChartPie, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faHourglass, faQuestion, faRemove, faSplotch, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
+  import { faArrowDown, faArrowRight, faArrowUp, faBacon, faBreadSlice, faCaretDown, faCaretUp, faChartPie, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faHourglass, faQuestion, faRemove, faSplotch, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
 
   import PythonWorker from '$lib/workers/pyodide-worker.mjs?worker';
   import { pltAutocomplete } from "$lib/python/matplotlib.pyplot";
@@ -63,6 +63,7 @@
   let flags = $state({
     isRunning: false,
     updateURL: true,
+    showPseudo: false,
   });
 
   let current_presets = $state(ALL_PRESETS.map(copyObj));
@@ -318,13 +319,28 @@
       .py
     </div>
     <div id="editor-wrapper">
+      {#if flags.showPseudo}
       <CodeMirror extensions={extensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo}></CodeMirror>
-      <div class="layout panel divider"></div>
-      <CodeMirror on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
+      {/if}
+      <button class="layout panel divider" onclick={() => {flags.showPseudo = !(flags.showPseudo)}}>
+        {#if flags.showPseudo}<Fa class="icon" icon={faCaretUp}></Fa>
+        {:else}<Fa class="icon" icon={faCaretDown}></Fa>
+        {/if}
+      </button>
+      <CodeMirror class="main-editor" on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
+    </div>
+    <button onclick={uploadCSV}><Fa class="icon" icon={faTableCells} />&nbsp;Lade .csv-Datei in &nbsp;<code>csv_data</code>&nbsp; hoch!</button>
+    <div>
+      {#each global_csv.entries() as [index, csv_table]}
+        <div class="holder file-tab">
+          <button onclick={() => global_csv.splice(index, 1)}><Fa class="icon"  icon={faRemove} /></button>
+          &nbsp;<code>csv_data[{index}] = {JSON.stringify(csv_table)}</code>
+        </div>
+      {/each}
     </div>
   </div>
   
-  <div class="layout panel console">
+  <div class="layout panel console right">
     <div id="console-out-wrapper">
       <pre id="console-out"></pre>
     </div>
@@ -335,15 +351,6 @@
       <div class="layout panel label"><Fa class="icon" icon={faSplotch} />&nbsp;<span>Meine Plots</span></div>
     </div>
     <div id="image-out">
-    </div>
-    <button onclick={uploadCSV}><Fa class="icon" icon={faTableCells} />&nbsp;Lade .csv in &nbsp;<code>csv_data</code>&nbsp; hoch!</button>
-    <div>
-      {#each global_csv.entries() as [index, csv_table]}
-        <div class="holder file-tab">
-          <button onclick={() => global_csv.splice(index, 1)}><Fa class="icon"  icon={faRemove} /></button>
-          &nbsp;<code>csv_data[{index}] = {JSON.stringify(csv_table)}</code>
-        </div>
-      {/each}
     </div>
   </div>
 </div>
