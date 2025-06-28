@@ -299,6 +299,7 @@ HuiThing`, {globals: hui_namespace});
           diagnostics = hui.diagnostics;
 
           if (!flags.gameIsRunning) {
+            hui.end();
             return;
           }
           requestAnimationFrame(gameLoop);
@@ -388,6 +389,7 @@ HuiThing`, {globals: hui_namespace});
               {#each docs as d}
                 {#if (d.access === "public" || d.access === "hidden") && d.type !== "set"}
                   <li><span class="access {d.access}"></span> <span class="signature">{d.signature}</span> 
+                    {#if d.return_type !== ""}<span class="return-type">: {d.return_type}</span>{/if}
                     {#if d.jsDoc !== ""} <div class="jsdoc">{@html marked.parse(d.jsDoc)}</div>{/if}
                   </li>
                 {/if}

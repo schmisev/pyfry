@@ -455,6 +455,7 @@ td.no-fill {
 }
 
 .game-wrapper {
+  position: relative;
   background-color: black;
   border: black 2px solid;
   border-radius: calc(0.5rem + 2px);
@@ -532,4 +533,10 @@ td.no-fill {
 .signature {
   @extend .mononoki;
   font-weight: bold;
+}
+
+.return-type {
+  @extend .mononoki;
+  font-weight: unset;
+  color: rgba(0, 0, 0, 0.5);
 }

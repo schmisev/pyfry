@@ -165,12 +165,12 @@ export class HuiPhysicsBox extends HuiPhysicsBody {
       friction: 0.3,
     })
 
-    this.w = w;
-    this.h = h;
+    this.width = w;
+    this.height = h;
   }
 
-  readonly w: number;
-  readonly h: number;
+  readonly width: number;
+  readonly height: number;
 
   draw_debug(layer: HuiLayer, mouse?: HuiVector): void {
     const ctx = layer.ctx;
@@ -181,7 +181,7 @@ export class HuiPhysicsBox extends HuiPhysicsBody {
     ctx.strokeStyle = "red";
     ctx.fillStyle = "rgba(255, 0, 0, 0.2)"
     ctx.beginPath();
-    ctx.rect(-this.w/2, -this.h/2, this.w, this.h);
+    ctx.rect(-this.width/2, -this.height/2, this.width, this.height);
     ctx.fill();
     ctx.stroke();
     ctx.restore();
@@ -205,10 +205,10 @@ export class HuiPhysicsDisc extends HuiPhysicsBody {
       friction: 0.3,
     })
 
-    this.r = r;
+    this.radius = r;
   }
 
-  readonly r: number;
+  readonly radius: number;
 
   draw_debug(layer: HuiLayer, mouse?: HuiVector): void {
     const ctx = layer.ctx;
@@ -219,7 +219,7 @@ export class HuiPhysicsDisc extends HuiPhysicsBody {
     ctx.strokeStyle = "red";
     ctx.fillStyle = "rgba(255, 0, 0, 0.2)"
     ctx.beginPath();
-    ctx.ellipse(0, 0, this.r, this.r, 0, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, this.radius, this.radius, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
     ctx.restore();

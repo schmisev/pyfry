@@ -10,7 +10,11 @@ export abstract class HuiThing {
 
   draw?(dt: number): void {};
 
+  update?(): void {};
+
   draw_debug?(layer: HuiLayer): void {};
+
+  remove?(): void {};
 
   toString() {
     return `<hui:thing>`

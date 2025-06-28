@@ -9,6 +9,7 @@ import { HuiRandomTimer } from "./hui.random";
 import { HuiImage } from "./hui.image";
 import type { PyProxy } from "pyodide/ffi";
 import { HuiPhysics } from "./hui.physics";
+import { HuiButton } from "./hui.dom";
 
 export type HuiDiagnostics = {
   __ft__: [number, number, number, number, number], // frame times
@@ -31,6 +32,7 @@ export type NodeDoc = {
   jsDoc: string,
   type: NodeType,
   access: NodeAccess,
+  return_type: string,
 };
 
 export type HuiSetupFunction = () => void;
@@ -53,15 +55,16 @@ export class HuiGame {
 
   #cvs: HTMLCanvasElement;
   #ctx: CanvasRenderingContext2D;
+  #doc: Document;
   
   #create_proxy?: (obj: any) => any;
 
-  width: number;
-  height: number;
+  readonly width: number;
+  readonly height: number;
 
-  time: number = 0;
+  time: number = 0; // overwritten on tick
 
-  mouse: HuiVector = vec2();
+  readonly mouse: HuiVector = vec2();
   
   get mx() { return this.mouse.x };
   get my() { return this.mouse.y };
@@ -101,6 +104,7 @@ export class HuiGame {
   #has_tick: boolean[] = [];
   #has_draw: boolean[] = [];
   #has_draw_debug: boolean[] = [];
+  #has_update: boolean[] = [];
   #is_physics_body: boolean[] = [];
   #to_remove: boolean[] = [];
   #children_of_thing: Set<number>[] = [];
@@ -120,6 +124,7 @@ export class HuiGame {
   ) {
     this.#cvs = cvs;
     this.#ctx = ctx;
+    this.#doc = doc;
 
     this.#create_proxy = create_proxy;
 
@@ -168,8 +173,8 @@ export class HuiGame {
     }
 
     doc.onpointermove = (ev: PointerEvent) => {
-      this.mouse.x = ev.clientX - cvs.offsetLeft;
-      this.mouse.y = ev.clientY - cvs.offsetTop;
+      this.mouse.x = ev.clientX - cvs.getBoundingClientRect().left;
+      this.mouse.y = ev.clientY - cvs.getBoundingClientRect().top;
     }
 
     cvs.onblur = (ev: FocusEvent) => {
@@ -236,6 +241,7 @@ export class HuiGame {
     if (has_method(thing, "tick")) this.#has_tick[id] = true;
     if (has_method(thing, "draw")) this.#has_draw[id] = true;
     if (has_method(thing, "draw_debug")) this.#has_draw_debug[id] = true;
+    if (has_method(thing, "update")) this.#has_update[id] = true;
     if (thing instanceof HuiMover) this.#is_physics_body[id] = true;
     this.#things[id] = thing;
 
@@ -280,6 +286,11 @@ export class HuiGame {
   new_disc(x: number, y: number, r: number) {
     const new_disc = new HuiDisc(x, y, r);
     return new_disc;
+  }
+
+  new_button(txt: string, x: number, y: number, w: number, h: number) {
+    const new_button = new HuiButton(this.#doc, this.#cvs, txt, x, y, w, h);
+    return new_button;
   }
 
   // vectors
@@ -340,6 +351,16 @@ export class HuiGame {
     this.#has_draw_debug.forEach((value, id) => {
       value && this.#things[id].draw_debug(layer, this.mouse);
     });
+
+    this.dbg.push_preset("debug");
+    this.dbg.circle(...this.mouse.xy, 5);
+    this.dbg.pop();
+  }
+
+  #update_things() {
+    this.#has_update.forEach((value, id) => {
+      value && this.#things[id].update();
+    });
   }
 
   #remove_things() {
@@ -351,24 +372,16 @@ export class HuiGame {
     });
   }
 
-  #solve_collisions() {
-    for (const id_1 in this.#is_physics_body) {
-      const body_1 = this.#things[id_1] as HuiMover;
-      for (const id_2 in this.#is_physics_body) {
-        if (id_2 <= id_1) continue;
-        const body_2 = this.#things[id_2] as HuiMover;
-        // do stuff
-      }
-    }
-  }
-
   #remove_from_tree(id: number) {
+    // run removal method
+    has_method(this.#things[id], "remove") && (this.#things[id] as any).remove();
     // remove from ref list
     delete this.#things[id];
-    // rmeove from component lists
+    // remove from component lists
     delete this.#has_draw[id];
     delete this.#has_draw_debug[id];
     delete this.#has_tick[id];
+    delete this.#has_update[id];
     // removing __from__ parent
     const parent = this.#parent_of_thing[id];
     parent !== undefined && this.#children_of_thing[parent]?.delete(id);
@@ -422,7 +435,7 @@ export class HuiGame {
     this.dbg.clear();
     const draw_now = performance.now();
     this.#draw_things(dt);
-    if (this.show_debug) this.#draw_debug_things(this.dbg);
+    if (this.show_debug) { this.#draw_debug_things(this.dbg); }
     // draw things time
     const draw_things_now = performance.now();
     // draw layer stack
@@ -431,6 +444,7 @@ export class HuiGame {
     const draw_layers_now = performance.now();
     // update inputs
     this.#update_keymap();
+    this.#update_things();
     // key time
     const key_now = performance.now();
     // remove things if marked
@@ -448,6 +462,14 @@ export class HuiGame {
     this.diagnostics = {
       fps, __fc__, __ft__, draw_dt, draw_things_dt, draw_layers_dt, full_dt, key_dt, removal_dt, tick_dt
     }
+  }
+
+  end() {
+    for (const id in this.#things) {
+      has_method(this.#things[id], "remove") && (this.#things[id] as any).remove();
+    }
+    this.clear_all();
+    this.#draw_layers();
   }
 
   swap(draw: HuiDrawFunction, setup?: HuiSetupFunction) {

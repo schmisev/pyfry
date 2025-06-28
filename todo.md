@@ -1,7 +1,8 @@
 - [x] frame diagnostics
-- [ ] simple physics
-  - [ ] add automatic tick to body
-  - [ ] simple point and shape collisions
-  - [ ] automatic checking for collisions
+- [x] simple physics
+  - [x] add automatic tick to body
+  - [x] simple point and shape collisions
+  - [x] automatic checking for collisions
 - [ ] buttons / ui elements
-- [ ] "scene" swapping
+- [x] "scene" swapping
+- [ ] clicking shapes --> buttons?

@@ -1,60 +1,152 @@
 {
+  "HuiDOMElement": [
+    {
+      "className": "HuiDOMElement",
+      "signature": "HuiDOMElement",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public",
+      "return_type": ""
+    }
+  ],
+  "HuiButton": [
+    {
+      "className": "HuiButton",
+      "signature": "HuiButton",
+      "jsDoc": "",
+      "type": "class",
+      "access": "public",
+      "return_type": ""
+    },
+    {
+      "className": "HuiButton",
+      "signature": "#el",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private",
+      "return_type": " HTMLButtonElement"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "#cvs",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private",
+      "return_type": " HTMLCanvasElement"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "is_pressed",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public",
+      "return_type": " boolean"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "just_pressed",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public",
+      "return_type": " boolean"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "just_released",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "public",
+      "return_type": " boolean"
+    },
+    {
+      "className": "HuiButton",
+      "signature": "setup()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": ""
+    },
+    {
+      "className": "HuiButton",
+      "signature": "update()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": ""
+    },
+    {
+      "className": "HuiButton",
+      "signature": "remove()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": ""
+    }
+  ],
   "HuiImage": [
     {
       "className": "HuiImage",
       "signature": "HuiImage",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiImage",
       "signature": "img",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HTMLImageElement"
     },
     {
       "className": "HuiImage",
       "signature": "centered",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiImage",
       "signature": "width",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiImage",
       "signature": "height",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiImage",
       "signature": "width",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiImage",
       "signature": "height",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiImage",
       "signature": "resize(w: number, h: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiLayer": [
@@ -63,203 +155,248 @@
       "signature": "HuiLayer",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "cvs",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " OffscreenCanvas"
     },
     {
       "className": "HuiLayer",
       "signature": "ctx",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " OffscreenCanvasRenderingContext2D"
     },
     {
       "className": "HuiLayer",
-      "signature": "preset(name: \"standard\")",
+      "signature": "preset(name: \"standard\" | \"debug\")",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
-      "signature": "save()",
+      "signature": "push_preset(name: \"standard\" | \"debug\")",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
-      "signature": "restore()",
+      "signature": "push()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "pop()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "reset()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
+    },
+    {
+      "className": "HuiLayer",
+      "signature": "reset_movement()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "rotate(radians: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "scale(fx: number, fy: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "move(dx: number, dy: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "clear()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "flood(color: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "fill(color: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "stroke(color: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "no_stroke()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "shadow()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "no_shadow()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
-      "signature": "thick(width: number)",
+      "signature": "thickness(width: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "circle(x: number, y: number, r: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "rect(x: number, y: number, w: number, h: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "ellipse(x: number, y: number, w: number, h: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "ngon(x: number, y: number, n: number, r: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "star(x: number, y: number, n: number, r1: number, r2: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "text(text: string, x: number, y: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "text_align(alignment: CanvasTextAlign)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "text_baseline(baseline: CanvasTextBaseline)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "text_size(size: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "font(font: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiLayer",
       "signature": "show(sprite: HuiSprite | HuiImage, x: number, y: number, w?: number, h?: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiSprite": [
@@ -268,14 +405,16 @@
       "signature": "HuiSprite",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiSprite",
       "signature": "centered",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     }
   ],
   "HuiMover": [
@@ -284,371 +423,424 @@
       "signature": "HuiMover",
       "jsDoc": "Enthält Informationen über einen Körper, der sich bewegt.\r\nDas schließt die Position, Geschwindigkeit und die aktuelle Beschleunigung ein.\r\nUm einen neuen HuiBody zu erzeugen, nutzt man `hui.new_mover(...)`.<br>\r\n_Kopieren und Probieren!_\r\n```python\r\n# Erstellt einen neuen HuiBody in der Bildmitte, gibt ihm eine Startgeschwindigkeit von [100, 30], eine Beschleunigung von 100 nach unten und fügt ihn dem Spiel hinzu, damit er automatisch geupdated wird.\r\nbody = hui.new_mover(hui.width / 2, hui.height / 2, 100, 30, 0, 100)\r\nhui.add(body)\r\n\r\n# Nun zeichnen wir dort, wo sich der Körper befindet, einen Kreis\r\ndef setup():\r\n  hui.bg.flood(\"lightblue\")\r\n\r\ndef draw(dt):\r\n  hui.mg.clear()\r\n  hui.mg.circle(body.x, body.y, 30)\r\n```",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "type",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiMoverShapeType"
     },
     {
       "className": "HuiMover",
       "signature": "static",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiMover",
       "signature": "pos",
       "jsDoc": "**Pos**ition als Vektor.<br>\r\nBeispiel: _Ausgabe der x- und y-Koordinate_\r\n```python\r\nbody = hui.new_mover(15, 10)\r\nprint(body.pos.x) # Ausgabe: 15\r\nprint(body.pos.y) # Ausgabe: 10\r\n```",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "pos",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "#pos",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "vel",
       "jsDoc": "Geschwindigkeit (**vel**ocity) als Vektor.<br>\r\nBeispiel: _Ausgabe der Gesamtgeschwindigkeit_\r\n```python\r\nbody = hui.new_mover(0, 0, 4, 3) # 4 & 3 sind die x- und y-Geschwindigkeit\r\nprint(body.vel.len()) # Ausgabe: 5\r\n```",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "vel",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "#vel",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "force",
       "jsDoc": "Kraft, die auf den Körper wirkt, als Vektor.<br>\r\nBeispiel: _Setzen der Kraft in y-Richtung_\r\n```python\r\nbody = hui.new_mover(0, 0, 0, 0, 0, 0) # Die letzten 2 Nullen geben die Beschleunigung an\r\nbody.force.y = 9.81 # Die Kraft in y-Richtung ist nun 9.81px/s^2\r\n```",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "gravity",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "mass",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "angle",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "angle",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "angular_vel",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "angular_vel",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "#last_pos",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "#current_pos",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "#last_vel",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "#current_vel",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiMover",
       "signature": "#last_angle",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "#current_angle",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "#angle",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "#last_angular_vel",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "#current_angular_vel",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "#angular_vel",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "torque",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "#accumulator",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "#fixed_dt",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "x",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "y",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "x",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "y",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "vx",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "vy",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "vx",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "vy",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "fx",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "fy",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "fx",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "fy",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "ax",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "ay",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "ax",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "ay",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "speed",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiMover",
       "signature": "speed",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "move(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "tick(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "local_pos(pos: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiMover",
       "signature": "collision_points()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " Generator<HuiVector, void, unknown>"
     },
     {
       "className": "HuiMover",
       "signature": "contains(pos: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiMover",
       "signature": "is_touching(body: HuiMover)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiBox": [
@@ -657,70 +849,80 @@
       "signature": "HuiBox",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiBox",
       "signature": "type",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiMoverShapeType"
     },
     {
       "className": "HuiBox",
       "signature": "size",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiBox",
       "signature": "w",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiBox",
       "signature": "h",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiBox",
       "signature": "contains(pos: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiBox",
       "signature": "collision_points()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " Generator<HuiVector, void, unknown>"
     },
     {
       "className": "HuiBox",
       "signature": "is_touching(body: HuiMover)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiBox",
       "signature": "draw_debug(layer: HuiLayer, mouse?: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " void"
     },
     {
       "className": "HuiBox",
       "signature": "toString()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " string"
     }
   ],
   "HuiDisc": [
@@ -729,56 +931,64 @@
       "signature": "HuiDisc",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiDisc",
       "signature": "type",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiMoverShapeType"
     },
     {
       "className": "HuiDisc",
       "signature": "r",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiDisc",
       "signature": "contains(pos: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiDisc",
       "signature": "collision_points()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " Generator<HuiVector, void, unknown>"
     },
     {
       "className": "HuiDisc",
       "signature": "is_touching(body: HuiMover)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiDisc",
       "signature": "draw_debug(layer: HuiLayer, mouse?: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " void"
     },
     {
       "className": "HuiDisc",
       "signature": "toString()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " string"
     }
   ],
   "HuiPhysics": [
@@ -787,77 +997,88 @@
       "signature": "HuiPhysics",
       "jsDoc": "Ein Wrapper für planck.js",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysics",
       "signature": "#accumulator",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiPhysics",
       "signature": "#fixed_dt",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiPhysics",
       "signature": "world",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysics",
       "signature": "#boundary",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " Body"
     },
     {
       "className": "HuiPhysics",
       "signature": "boundary(active: boolean)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysics",
       "signature": "gravity",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysics",
       "signature": "gravity",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysics",
       "signature": "add_box(x: number, y: number, w: number, h: number, type: BodyType = \"dynamic\")",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysics",
       "signature": "add_disc(x: number, y: number, r: number, type: BodyType = \"dynamic\")",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysics",
       "signature": "step(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiPhysicsBody": [
@@ -866,168 +1087,192 @@
       "signature": "HuiPhysicsBody",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "body",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " Body"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "pos",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "pos",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "vel",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "vel",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "x",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "y",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "x",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "y",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "vx",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "vy",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "vx",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "vy",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "angle",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "angle",
       "jsDoc": "",
       "type": "set",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "apply_force(fx: number, fy: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "apply_torque(torque: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "is_on_ground",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "is_on_wall",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "is_on_ceiling",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "#reset_collisions()",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "#classify_collisions()",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": " boolean"
     },
     {
       "className": "HuiPhysicsBody",
       "signature": "tick(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiPhysicsBox": [
@@ -1036,35 +1281,40 @@
       "signature": "HuiPhysicsBox",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsBox",
       "signature": "body",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " Body"
     },
     {
       "className": "HuiPhysicsBox",
-      "signature": "w",
+      "signature": "width",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysicsBox",
-      "signature": "h",
+      "signature": "height",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysicsBox",
       "signature": "draw_debug(layer: HuiLayer, mouse?: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " void"
     }
   ],
   "HuiPhysicsDisc": [
@@ -1073,28 +1323,32 @@
       "signature": "HuiPhysicsDisc",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiPhysicsDisc",
       "signature": "body",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " Body"
     },
     {
       "className": "HuiPhysicsDisc",
-      "signature": "r",
+      "signature": "radius",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiPhysicsDisc",
       "signature": "draw_debug(layer: HuiLayer, mouse?: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " void"
     }
   ],
   "HuiRandomTimer": [
@@ -1103,91 +1357,104 @@
       "signature": "HuiRandomTimer",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "expected_duration",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiRandomTimer",
       "signature": "current",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiRandomTimer",
       "signature": "last",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiRandomTimer",
       "signature": "current_axis",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "current_pingpong",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "current_dir",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "between",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "between_axis",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "between_pingpong",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "between_dir",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "reroll()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiRandomTimer",
       "signature": "tick(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiSound": [
@@ -1196,49 +1463,56 @@
       "signature": "HuiSound",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiSound",
       "signature": "#ctx",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiSound",
       "signature": "boop(frequency: number, duration: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiSound",
       "signature": "bleep(frequency: number, duration: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiSound",
       "signature": "buzz(frequency: number, duration: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiSound",
       "signature": "humm(frequency: number, duration: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiSound",
       "signature": "psh(frequency: number, duration: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiThing": [
@@ -1247,49 +1521,72 @@
       "signature": "HuiThing",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiThing",
       "signature": "__id__",
       "jsDoc": "",
       "type": "attribute",
-      "access": "hidden"
+      "access": "hidden",
+      "return_type": " number | undefined"
     },
     {
       "className": "HuiThing",
       "signature": "setup()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " void"
     },
     {
       "className": "HuiThing",
       "signature": "tick(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " void"
     },
     {
       "className": "HuiThing",
       "signature": "draw(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " void"
+    },
+    {
+      "className": "HuiThing",
+      "signature": "update()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": " void"
     },
     {
       "className": "HuiThing",
       "signature": "draw_debug(layer: HuiLayer)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " void"
+    },
+    {
+      "className": "HuiThing",
+      "signature": "remove()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": " void"
     },
     {
       "className": "HuiThing",
       "signature": "toString()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiTimer": [
@@ -1298,112 +1595,128 @@
       "signature": "HuiTimer",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiTimer",
       "signature": "autoremove",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiTimer",
       "signature": "does_repeat",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiTimer",
       "signature": "is_running",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiTimer",
       "signature": "just_started",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiTimer",
       "signature": "just_finished",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiTimer",
       "signature": "duration",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiTimer",
       "signature": "time",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiTimer",
       "signature": "progress",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiTimer",
       "signature": "axis",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiTimer",
       "signature": "pingpong",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiTimer",
       "signature": "tick(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiTimer",
       "signature": "start(duration?: number, does_repeat?: boolean)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiTimer",
       "signature": "pause()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiTimer",
       "signature": "stop()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiTimer",
       "signature": "toString()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiGame": [
@@ -1412,511 +1725,616 @@
       "signature": "HuiGame",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "diagnostics",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiDiagnostics"
     },
     {
       "className": "HuiGame",
       "signature": "#cvs",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HTMLCanvasElement"
     },
     {
       "className": "HuiGame",
       "signature": "#ctx",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " CanvasRenderingContext2D"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#doc",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private",
+      "return_type": " Document"
     },
     {
       "className": "HuiGame",
       "signature": "#create_proxy",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " (obj: any) => any"
     },
     {
       "className": "HuiGame",
       "signature": "width",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiGame",
       "signature": "height",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiGame",
       "signature": "time",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiGame",
       "signature": "mouse",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiGame",
       "signature": "mx",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "my",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#keymap",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " Map<string, [boolean, boolean]>"
     },
     {
       "className": "HuiGame",
       "signature": "bg",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiLayer"
     },
     {
       "className": "HuiGame",
       "signature": "mg",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiLayer"
     },
     {
       "className": "HuiGame",
       "signature": "fg",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiLayer"
     },
     {
       "className": "HuiGame",
       "signature": "ui",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiLayer"
     },
     {
       "className": "HuiGame",
       "signature": "dbg",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiLayer"
     },
     {
       "className": "HuiGame",
       "signature": "#layers",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HuiLayer[]"
     },
     {
       "className": "HuiGame",
       "signature": "#all_layers()",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": " Generator<HuiLayer, void, unknown>"
     },
     {
       "className": "HuiGame",
       "signature": "sound",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "physics",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiPhysics"
     },
     {
       "className": "HuiGame",
       "signature": "#things",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " HuiCursedThing[]"
     },
     {
       "className": "HuiGame",
       "signature": "#has_tick",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " boolean[]"
     },
     {
       "className": "HuiGame",
       "signature": "#has_draw",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " boolean[]"
     },
     {
       "className": "HuiGame",
       "signature": "#has_draw_debug",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " boolean[]"
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#has_update",
+      "jsDoc": "",
+      "type": "attribute",
+      "access": "private",
+      "return_type": " boolean[]"
     },
     {
       "className": "HuiGame",
       "signature": "#is_physics_body",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " boolean[]"
     },
     {
       "className": "HuiGame",
       "signature": "#to_remove",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " boolean[]"
     },
     {
       "className": "HuiGame",
       "signature": "#children_of_thing",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " Set<number>[]"
     },
     {
       "className": "HuiGame",
       "signature": "#parent_of_thing",
       "jsDoc": "",
       "type": "attribute",
-      "access": "private"
+      "access": "private",
+      "return_type": " number[]"
     },
     {
       "className": "HuiGame",
       "signature": "show_debug",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiGame",
       "signature": "HuiThing",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " typeof HuiThing | PyProxy"
     },
     {
       "className": "HuiGame",
       "signature": "debug(on?: boolean)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "is_pressed(key: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " boolean"
     },
     {
       "className": "HuiGame",
       "signature": "just_pressed(key: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "just_released(key: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "axis_pressed(a: string, b: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "dir_pressed(u: string, d: string, l: string, r: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "add(anything: HuiCursedThing, parent_id?: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "remove(thing: HuiCursedThing)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#proxy(anything: Object)",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "add_layer()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "new_mover(x: number, y: number, vx: number = 0, vy: number = 0, ax: number = 0, ay: number = 0)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "new_box(x: number, y: number, w: number, h: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "new_disc(x: number, y: number, r: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
+    },
+    {
+      "className": "HuiGame",
+      "signature": "new_button(txt: string, x: number, y: number, w: number, h: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "new_vec2(x?: number, y?: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "new_sprite(w: number, h: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "new_image(src: string)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "new_timer(duration: number, does_repeat: boolean = false)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "new_random_timer(period: number, does_repeat: boolean = false)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#update_keymap()",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#tick_things(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#draw_things(dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#draw_debug_things(layer: HuiLayer)",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
+    },
+    {
+      "className": "HuiGame",
+      "signature": "#update_things()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#remove_things()",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
-    },
-    {
-      "className": "HuiGame",
-      "signature": "#solve_collisions()",
-      "jsDoc": "",
-      "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#remove_from_tree(id: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "#draw_layers()",
       "jsDoc": "",
       "type": "method",
-      "access": "private"
+      "access": "private",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "prepare()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "step(t: number, dt: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
+    },
+    {
+      "className": "HuiGame",
+      "signature": "end()",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "swap(draw: HuiDrawFunction, setup?: HuiSetupFunction)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "setup",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiSetupFunction"
     },
     {
       "className": "HuiGame",
       "signature": "tick",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiTickFunction"
     },
     {
       "className": "HuiGame",
       "signature": "draw",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiDrawFunction"
     },
     {
       "className": "HuiGame",
       "signature": "hex",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "rnd",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "rndi",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "rndr",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "clamp",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "wrap",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "lerp",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "sign",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "move_towards",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiGame",
       "signature": "clear_all",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiVector": [
@@ -1925,294 +2343,336 @@
       "signature": "HuiVector",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "x",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiVector",
       "signature": "y",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiVector",
       "signature": "xy",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " [number, number]"
     },
     {
       "className": "HuiVector",
       "signature": "xy_half",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": " [number, number]"
     },
     {
       "className": "HuiVector",
       "signature": "copy()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiVector",
       "signature": "add(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiVector",
       "signature": "move(dx: number, dy: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiVector",
       "signature": "sub(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiVector",
       "signature": "to(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiVector",
       "signature": "dot(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " number"
     },
     {
       "className": "HuiVector",
       "signature": "times(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "abs(factor = 1)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "scale(factor: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "scale_from(from: HuiVector, factor: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "div(divisor: number | HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "len()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "norm(factor = 1)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "perp()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "dir_to(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "dist_to(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "rotate(theta: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "rotate_around(mid: HuiVector, theta: number)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "angle()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "angle_to(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "angle_between(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "min(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "max(other: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "signed_iso_min()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "signed_iso_max()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "sign(factor = 1)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "proj(onto: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiVector",
       "signature": "signed_proj(onto: HuiVector)",
       "jsDoc": "Safe SIGN-PRESERVING projection onto a vector.\r\nProjects onto [1, 1] if onto is [0, 0].<br>@param: undefined<br>@returns: signed projected vector",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiVector",
       "signature": "is_zero()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "to_vec2()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": " Vec2Value"
     },
     {
       "className": "HuiVector",
       "signature": "from_vec2(v: Vec2Value)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "ZEROS()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "ONES()",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "sum(...vectors: HuiVector[])",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "avg(...vectors: HuiVector[])",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "min(...vectors: HuiVector[])",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiVector",
       "signature": "max(...vectors: HuiVector[])",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ],
   "HuiBoundingBox": [
@@ -2221,56 +2681,64 @@
       "signature": "HuiBoundingBox",
       "jsDoc": "",
       "type": "class",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiBoundingBox",
       "signature": "topLeft",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiBoundingBox",
       "signature": "bottomRight",
       "jsDoc": "",
       "type": "attribute",
-      "access": "public"
+      "access": "public",
+      "return_type": " HuiVector"
     },
     {
       "className": "HuiBoundingBox",
       "signature": "contains(pos: HuiVector)",
       "jsDoc": "",
       "type": "method",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiBoundingBox",
       "signature": "left",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiBoundingBox",
       "signature": "right",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiBoundingBox",
       "signature": "top",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     },
     {
       "className": "HuiBoundingBox",
       "signature": "bottom",
       "jsDoc": "",
       "type": "get",
-      "access": "public"
+      "access": "public",
+      "return_type": ""
     }
   ]
 }
