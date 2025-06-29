@@ -1,4 +1,4 @@
-import { wrapAutocomplete } from "$lib/faux-language-server";
+import { wrapAutocomplete } from "./mode";
 import { type Completion } from "@codemirror/autocomplete";
 
 export const npCompletions: Completion[] = [
@@ -174,5 +174,3 @@ export const npCompletions: Completion[] = [
 { label: `np.fftshift(x)`, displayLabel: `np.fftshift(x[, axes])`, info: `fftshift(x[, axes]):\nShift the zero-frequency component to the center of the spectrum.`, type: `function` },
 { label: `np.ifftshift(x)`, displayLabel: `np.ifftshift(x[, axes])`, info: `ifftshift(x[, axes]):\nThe inverse of fftshift.`, type: `function` },
 ]
-
-export const npAutocomplete = wrapAutocomplete(/np\..*/, npCompletions);

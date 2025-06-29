@@ -1,60 +1,32 @@
 <script lang="ts">
   import "$lib/page-style.scss";
   import "$lib/fonts.css";
-  import { ALL_PRESETS, type CodePreset } from "$lib/presets";
+  import { numpyPresets, type CodePreset } from "$lib/python/presets";
   import { onMount } from "svelte";
   import CodeMirror from "svelte-codemirror-editor";
-  import { python, pythonLanguage } from "@codemirror/lang-python";
   import { undo } from "@codemirror/commands";
   import { type EditorView } from "@codemirror/view";
   import { page } from "$app/state";
   import { downloadPreset, generatePresetFromString, generateStringFromPreset } from "$lib/preset-loading";
-  import { type PyodideInterface, /* loadPyodide */ } from "pyodide";
   import { replaceState } from "$app/navigation";
   import Sortable from 'sortablejs';
   import { parseCSV, type CSVData } from "$lib/csv";
-  import { tags } from "@lezer/highlight"
-  import { HighlightStyle, syntaxHighlighting} from "@codemirror/language"
-  import { CompletionContext, snippetCompletion, type CompletionSource } from '@codemirror/autocomplete'
-  import { ALL_SNIPPETS } from "$lib/snippets";
   import iconFriedEgg from "$lib/assets/fried-egg.svg"
   import Fa from 'svelte-fa'
-  import { faArrowDown, faArrowRight, faArrowUp, faBacon, faBreadSlice, faCaretDown, faCaretUp, faChartPie, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faHourglass, faQuestion, faRemove, faSplotch, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
+  import { faArrowDown, faArrowRight, faArrowUp, faBacon, faBreadSlice, faCaretDown, faCaretUp, faChartPie, faClock, faCloudDownload, faCloudDownloadAlt, faCloudUpload, faCompressAlt, faCopy, faDeleteLeft, faDownload, faEgg, faFileDownload, faFileUpload, faFlag, faFlagCheckered, faFolder, faFolderOpen, faHourglass, faQuestion, faRemove, faSplotch, faTableCells, faTrash, faUndo, faUndoAlt, faUpload, faVrCardboard } from '@fortawesome/free-solid-svg-icons'
 
   import PythonWorker from '$lib/workers/pyodide-worker.mjs?worker';
-  import { pltAutocomplete } from "$lib/python/matplotlib.pyplot";
-  import { npAutocomplete } from "$lib/python/numpy";
-
-  const customPythonHighlighting = HighlightStyle.define([
-    {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
-    {tag: tags.comment, color: "#F4A261", fontStyle: "italic"},
-    {tag: tags.string, color: "#2A9D8F"},
-    {tag: tags.number, color: "#A462F4", fontWeight: "bold"},
-    {tag: tags.variableName, fontWeight: "bold"},
-    
-  ])
-
-  const extensions = [
-    syntaxHighlighting(customPythonHighlighting),
-    python(),
-    pythonLanguage.data.of({
-      autocomplete: ALL_SNIPPETS.map((sn) => {
-        return snippetCompletion(sn.insert, {
-          label: sn.name,
-          type: "preset",
-          displayLabel: sn.display ?? sn.name,
-          info: sn.info ?? `[ENTER] fügt das Snippet ein!`,
-          boost: 100,
-        })
-      }),
-    }),
-    pythonLanguage.data.of({ autocomplete: npAutocomplete }),
-    pythonLanguage.data.of({ autocomplete: pltAutocomplete }),
-  ]
-
-  // Helper functions
-  let btoa2 = (v: string) => btoa(v);
-  let atob2 = (v: string) => atob(v);
+  import { pythonExtensions } from "$lib/python/mode";
+  import { zip, type VersionType } from "$lib/compression";
+  
+  /**
+   * URL versions
+   * ============
+   * if no v= exists, the URL will be decoded by regular btoa
+   * v=1: LZString
+   * v=2: zlib (???)
+   */
+  let currentVersion: VersionType = "1";
 
   function copyObj<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
@@ -66,8 +38,10 @@
     showPseudo: false,
   });
 
-  let current_presets = $state(ALL_PRESETS.map(copyObj));
-  let preset: CodePreset = $state(current_presets[0]); // get first preset
+  let currentState = $state(page.url.href);
+
+  let currentPresets = $state(numpyPresets.map(copyObj));
+  let preset: CodePreset = $state(currentPresets[0]); // get first preset
   let global_csv: CSVData[] = $state([[
     ["x", "y"],
     [1, 1],
@@ -91,7 +65,7 @@
         let contents = e.target.result;
         if (typeof contents === "string") {
           let new_preset = generatePresetFromString(contents);
-          current_presets.push(new_preset);
+          currentPresets.push(new_preset);
           preset = new_preset;
         }
       };
@@ -106,11 +80,14 @@
     let _code = page.url.searchParams.get("code");
     let _preamble = page.url.searchParams.get("preamble");
     let _pseudo = page.url.searchParams.get("pseudo");
+    let _version = page.url.searchParams.get("v") as VersionType;
 
-    if (_name) preset.name = atob2(_name);
-    if (_code) preset.code = atob2(_code);
+    let _atob = (v: string) => zip(true, _version, v);
+
+    if (_name) preset.name = _atob(_name);
+    if (_code) preset.code = _atob(_code);
     // if (_preamble) preset.preamble = atob2(_preamble); deactivated, as the same preamble should always be used
-    if (_pseudo) preset.pseudo = atob2(_pseudo);
+    if (_pseudo) preset.pseudo = _atob(_pseudo);
   }
 
   function updateURL() {
@@ -119,20 +96,24 @@
       return;
     }
 
+    let _btoa = (v: string) => zip(false, currentVersion, v);
+
     let query = new URLSearchParams("");
     try {
-      query.set('name', btoa2(preset.name));
-      query.set('code', btoa2(preset.code));
-      query.set('preamble', btoa2(preset.preamble));
-      query.set('pseudo', btoa2(preset.pseudo));
-    } catch {
-      return;
+      query.set('v', currentVersion || "0");
+      query.set('name', _btoa(preset.name));
+      query.set('code', _btoa(preset.code));
+      query.set('preamble', _btoa(preset.preamble));
+      query.set('pseudo', _btoa(preset.pseudo));
+    } catch (e) {
+      console.error(e);
     }
     // goto(`?${query.toString()}`);
     try {
-      replaceState(`?${query.toString()}`, page.state);
-    } catch {
-      // do nothing
+      currentState = `?${query.toString()}`;
+      replaceState(currentState, page.state);
+    } catch (e) {
+      console.error(e);
     }
   }
 
@@ -144,22 +125,22 @@
   function duplicatePreset() {
     const new_preset = copyObj(preset);
     new_preset.name += " " + (new Date()).toISOString();
-    current_presets.push(new_preset);
-    preset = current_presets.at(-1)!; // guaranteed, since we just added it
+    currentPresets.push(new_preset);
+    preset = currentPresets.at(-1)!; // guaranteed, since we just added it
   }
 
   function removePreset() {
-    let index = current_presets.indexOf(preset);
-    current_presets.splice(index, 1);
-    if (current_presets.length <= 0) {
-      current_presets = ALL_PRESETS.map(copyObj);
+    let index = currentPresets.indexOf(preset);
+    currentPresets.splice(index, 1);
+    if (currentPresets.length <= 0) {
+      currentPresets = numpyPresets.map(copyObj);
     }
-    preset = current_presets[0];
+    preset = currentPresets[0];
   }
 
   function reloadPresets() {
-    current_presets = ALL_PRESETS.map(copyObj);
-    preset = current_presets[0];
+    currentPresets = numpyPresets.map(copyObj);
+    preset = currentPresets[0];
   }
 
   function undoChange() {
@@ -292,8 +273,8 @@
 <div class="layout main playpen-sans">
   <div class="layout panel code">
     <div class="holder left">
-      <div id="title" class="layout panel"><img id="title-icon" src={iconFriedEgg}>&nbsp;<div id="title-text"><b>PYFRYHAM</b> by sms & cdr</div></div>
-      <button class="{flags.updateURL ? 'active' : ''} playpen-sans" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"}</button>
+      <div id="title" class="layout panel"><img id="title-icon" alt="A fried egg." src={iconFriedEgg}>&nbsp;<div id="title-text"><b>PYFRYHAM</b> by sms & cdr</div></div>
+      <button class="{flags.updateURL ? 'active' : ''} playpen-sans" onclick={toggleURLUpdates}>URL {flags.updateURL ? "aktiv" : "inaktiv"} (<Fa class="icon" icon={faCompressAlt} /> {currentState.length} Zeichen)</button>
       <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}><Fa class="icon" icon={faCloudDownloadAlt} /></button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}><Fa class="icon" icon={faFolderOpen} /></button>
     </div>
@@ -302,7 +283,7 @@
       <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}><Fa class="icon" icon={faCopy} /></button>
       <button title="Rückgängig!" onclick={undoChange}><Fa class="icon" icon={faUndoAlt} /></button>
       <select id="preset-select" class="playpen-sans" bind:value={preset}>
-        {#each current_presets.entries() as [i, p]}
+        {#each currentPresets.entries() as [i, p]}
           <option value={p}>{p.name}</option>
         {/each}
       </select>
@@ -320,14 +301,14 @@
     </div>
     <div id="editor-wrapper">
       {#if flags.showPseudo}
-      <CodeMirror extensions={extensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo}></CodeMirror>
+      <CodeMirror extensions={pythonExtensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo}></CodeMirror>
       {/if}
       <button class="layout panel divider" onclick={() => {flags.showPseudo = !(flags.showPseudo)}}>
         {#if flags.showPseudo}<Fa class="icon" icon={faCaretUp}></Fa>
         {:else}<Fa class="icon" icon={faCaretDown}></Fa>
         {/if}
       </button>
-      <CodeMirror class="main-editor" on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
+      <CodeMirror class="main-editor" on:ready={(e) => editor = e.detail} extensions={pythonExtensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
     </div>
     <button onclick={uploadCSV}><Fa class="icon" icon={faTableCells} />&nbsp;Lade .csv-Datei in &nbsp;<code>csv_data</code>&nbsp; hoch!</button>
     <div>

@@ -1,4 +1,4 @@
-import { type CodePreset } from "./presets";
+import { type CodePreset } from "./python/presets";
 
 type SectionLabel = "name" | "code" | "preamble" | "pseudo";
 

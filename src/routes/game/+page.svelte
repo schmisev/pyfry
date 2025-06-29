@@ -1,57 +1,27 @@
 <script lang="ts">
   import "$lib/page-style.scss";
   import "$lib/fonts.css";
-  import { ALL_GAME_PRESETS, ALL_PRESETS, type CodePreset } from "$lib/presets";
+  import "$lib/python/python-highlighting.css";
+
+  import { ALL_GAME_PRESETS, numpyPresets, type CodePreset } from "$lib/python/presets";
   import { onMount } from "svelte";
   import CodeMirror from "svelte-codemirror-editor";
-  import { python } from "@codemirror/lang-python";
   import { undo } from "@codemirror/commands";
   import { type EditorView } from "@codemirror/view";
   import { page } from "$app/state";
   import { downloadPreset, generatePresetFromString, generateStringFromPreset, type ScriptPackage } from "$lib/preset-loading";
   import { loadPyodide, type PyodideInterface, version as pyodideVersion } from "pyodide";
   import { replaceState } from "$app/navigation";
-  import { tags } from "@lezer/highlight"
-  import { HighlightStyle, syntaxHighlighting} from "@codemirror/language"
   import iconFriedEgg from "$lib/assets/fried-egg.svg"
   import Fa from 'svelte-fa'
   import { HuiGame, type HuiDiagnostics, type NodeDoc } from "$lib/game/hui";
   import LZString from "lz-string";
   import huiDocsStr from "$lib/game/hui.docs.json?raw";
   import { faCompressAlt, faCloudDownloadAlt, faFolderOpen, faTrash, faCopy, faUndoAlt, faHourglass, faStar, faPlay, faStop, faGamepad, faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
-  import { parse } from "marked";
-  import { Marked } from "marked";
-  import { markedHighlight } from "marked-highlight";
-  import hljs from 'highlight.js';
-  import "$lib/python/custom-python-highlighting.css";
-  import { HuiThing } from "$lib/game/hui.thing";
-
-  const marked = new Marked(
-  markedHighlight({
-    emptyLangClass: 'hljs',
-      langPrefix: 'hljs language-',
-      highlight(code, lang, info) {
-        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-        return hljs.highlight(code, { language }).value;
-      }
-    })
-  );
+  import { pythonGameExtensions } from "$lib/python/mode";
+  import { pythonMarked } from "$lib/python/marked";
 
   let huiDocs: Record<string, NodeDoc[]> = JSON.parse(huiDocsStr);
-
-  const customPythonHighlighting = HighlightStyle.define([
-    {tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold"},
-    {tag: tags.comment, color: "#F4A261", fontStyle: "italic"},
-    {tag: tags.string, color: "#2A9D8F"},
-    {tag: tags.number, color: "#A462F4", fontWeight: "bold"},
-    {tag: tags.variableName, fontWeight: "bold"},
-    
-  ])
-
-  const extensions = [
-    syntaxHighlighting(customPythonHighlighting),
-    python(),
-  ]
 
   // Helper functions
   let btoa2 = (v: string) => LZString.compressToBase64(v);
@@ -150,13 +120,13 @@
     let index = current_presets.indexOf(preset);
     current_presets.splice(index, 1);
     if (current_presets.length <= 0) {
-      current_presets = ALL_PRESETS.map(copyObj);
+      current_presets = numpyPresets.map(copyObj);
     }
     preset = current_presets[0];
   }
 
   function reloadPresets() {
-    current_presets = ALL_PRESETS.map(copyObj);
+    current_presets = numpyPresets.map(copyObj);
     preset = current_presets[0];
   }
 
@@ -355,14 +325,14 @@ HuiThing`, {globals: hui_namespace});
     </div>
     <div id="editor-wrapper">
       {#if flags.showPseudo}
-      <CodeMirror extensions={extensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo}></CodeMirror>
+      <CodeMirror extensions={pythonGameExtensions} lineWrapping={true} readonly={true} bind:value={preset.pseudo}></CodeMirror>
       {/if}
       <button class="layout panel divider" onclick={() => {flags.showPseudo = !(flags.showPseudo)}}>
         {#if flags.showPseudo}<Fa class="icon" icon={faCaretUp}></Fa>
         {:else}<Fa class="icon" icon={faCaretDown}></Fa>
         {/if}
       </button>
-      <CodeMirror on:ready={(e) => editor = e.detail} extensions={extensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
+      <CodeMirror on:ready={(e) => editor = e.detail} extensions={pythonGameExtensions} lineWrapping={true} bind:value={preset.code}></CodeMirror>
     </div>
   </div>
   <div class="layout panel console right">
@@ -397,7 +367,7 @@ HuiThing`, {globals: hui_namespace});
                 {#if (d.access === "public" || d.access === "hidden") && d.type !== "set"}
                   <li><span class="access {d.access}"></span> <span class="signature">{d.signature}</span> 
                     {#if d.return_type !== ""}<span class="return-type">: {d.return_type}</span>{/if}
-                    {#if d.jsDoc !== ""} <div class="jsdoc">{@html marked.parse(d.jsDoc)}</div>{/if}
+                    {#if d.jsDoc !== ""} <div class="jsdoc">{@html pythonMarked.parse(d.jsDoc)}</div>{/if}
                   </li>
                 {/if}
               {/each}

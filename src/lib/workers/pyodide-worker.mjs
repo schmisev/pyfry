@@ -11,7 +11,7 @@ let pyodideReadyPromise = loadPyodide({
     indexURL: `https://cdn.jsdelivr.net/pyodide/v${pyodideVersion}/full/`,
     fullStdLib: true,
     packages: ["numpy", "matplotlib"],
-    stdout: stdOut
+    stdout: stdOut,
 });
 
 self.onmessage = async (event) => {
