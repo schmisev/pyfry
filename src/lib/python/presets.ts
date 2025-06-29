@@ -5,7 +5,7 @@ export interface CodePreset {
   code: string;
 }
 
-export const STD_PREAMBLE = `# Preambel
+export const numpyPreamble = `# Preambel
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -33,22 +33,22 @@ new_show(False)
 csv_data = csv_data.to_py()
 `;
 
-export const STD_PSEUDO_PREAMBLE = `import matplotlib.pyplot as plt
+export const numpyPseudoPreamble = `import matplotlib.pyplot as plt
 import numpy as np
 import numpy.polynomial.polynomial as pn
 csv_data = ... # Daten aus csv-Import`;
 
-export const ALL_PRESETS: CodePreset[] = [
+export const numpyPresets: CodePreset[] = [
   {
     name: "Startpunkt",
-    preamble: STD_PREAMBLE,
-    pseudo: STD_PSEUDO_PREAMBLE,
+    preamble: numpyPreamble,
+    pseudo: numpyPseudoPreamble,
     code: `# Hier könnte dein Code stehen`,
   },
   {
     name: "Scatterplot (standard)",
-    preamble: STD_PREAMBLE,
-    pseudo: STD_PSEUDO_PREAMBLE,
+    preamble: numpyPreamble,
+    pseudo: numpyPseudoPreamble,
     code: `# Eingabe der Messdaten
 data = np.array([
   [1,1],
@@ -69,6 +69,7 @@ plt.scatter(data_x, data_y,
             marker = "x", 
             color = "blue")
 
+'''
 # Funktion zeichnen 
 x = np.linspace(0,max(data_x),100)
 
@@ -76,6 +77,7 @@ y = 2 * x + 1
 
 plt.plot(x, y, color = "green", label = "f(x) = ")
 plt.legend()
+'''
 
 # Achsen
 plt.xlim(left = 0)
@@ -93,8 +95,8 @@ plt.show()`
   },
   {
     name: "Scatterplot (csv)",
-    preamble: STD_PREAMBLE,
-    pseudo: STD_PSEUDO_PREAMBLE,
+    preamble: numpyPreamble,
+    pseudo: numpyPseudoPreamble,
     code: `# Eingabe der Messdaten
 data = np.array(csv_data[0][1:])
 data_x = data[:,0]
@@ -111,6 +113,7 @@ plt.scatter(data_x, data_y,
             marker = "x", 
             color = "blue")
 
+'''
 # Funktion zeichnen 
 x = np.linspace(0,max(data_x),100)
 
@@ -118,6 +121,7 @@ y = 2 * x + 1
 
 plt.plot(x, y, color = "green", label = "f(x) = ")
 plt.legend()
+'''
 
 # Achsen
 plt.xlim(left = 0)
@@ -310,7 +314,7 @@ plt.show()`
   */
 ]
 
-export const GAME_PREAMBLE = `# Preambel
+export const gamePreamble = `# Preambel
 import math
 import random
 import hui
@@ -328,7 +332,7 @@ class HuiThing:
 '''
 `;
 
-export const GAME_PSEUDO_PREAMBLE = `import math
+export const gamePseudoPreamble = `import math
 import random
 import hui
 from hui import HuiThing`
@@ -336,25 +340,25 @@ from hui import HuiThing`
 export const ALL_GAME_PRESETS: CodePreset[] = [
   {
     name: "Leeres Spiel",
-    preamble: GAME_PREAMBLE,
-    pseudo: GAME_PSEUDO_PREAMBLE,
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
     code: `# Leeres Spiel
 # setup() wird beim Spielstart ausgeführt
 def setup():
   pass
 
-# tick() wird 30-mal pro Sekunde ausgeführt
-def tick():
+# tick(dt) wird 30-mal pro Sekunde ausgeführt
+def tick(dt):
   pass
 
-# draw() wird immer nach tick() ausgeführt
+# draw(dt) wird immer nach tick() ausgeführt
 def draw(dt):
   pass`,
   },
   {
     name: "HuiLayer Test 'Hallo!'",
-    preamble: GAME_PREAMBLE,
-    pseudo: GAME_PSEUDO_PREAMBLE,
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
     code: `# Hallo!
 
 # setup() wird beim Spielstart ausgeführt
@@ -384,8 +388,8 @@ def draw(dt):
   },
   {
     name: "hui.mouse Test 'Hüpfender Ball'",
-    preamble: GAME_PREAMBLE,
-    pseudo: GAME_PSEUDO_PREAMBLE,
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
     code: `# Hüpfender Ball
 gravity = 10
 ball_radius = 50
@@ -458,8 +462,8 @@ def draw(dt):
   },
   {
     name: "HuiSprite Test 'Smiley'",
-    preamble: GAME_PREAMBLE,
-    pseudo: GAME_PSEUDO_PREAMBLE,
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
     code: `# Smiley
 sprite = hui.new_sprite(70, 70)
 sprite.fill("yellow")
@@ -483,8 +487,8 @@ def draw(dt):
   },
   {
     name: "HuiImage Test 'Snake'",
-    preamble: GAME_PREAMBLE,
-    pseudo: GAME_PSEUDO_PREAMBLE,
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
     code: `# Bilder importieren
 snake = hui.new_image("https://img.icons8.com/?size=48&id=OwPRfsLEUW71&format=png")
 snake_body = hui.new_mover(hui.width/2, hui.height/2, 0, 0)
@@ -510,8 +514,8 @@ def draw(dt):
   },
   {
     name: "Scene Tree Test",
-    preamble: GAME_PREAMBLE,
-    pseudo: GAME_PSEUDO_PREAMBLE,
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
     code: `# Scene tree test
 class Test(HuiThing):
   def setup(self):
@@ -539,8 +543,8 @@ def draw(dt):
   },
   {
     name: "Collision Test",
-    preamble: GAME_PREAMBLE,
-    pseudo: GAME_PSEUDO_PREAMBLE,
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
     code: `# Collision Test
 from hui import width, height, bg, ui
 
@@ -565,8 +569,8 @@ def draw(dt):
   },
   {
     name: "Planck.js Test",
-    preamble: GAME_PREAMBLE,
-    pseudo: GAME_PSEUDO_PREAMBLE,
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
     code: `# Collision Test
 from hui import width, height, bg, ui, physics
 hui.debug(True)

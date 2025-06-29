@@ -1,4 +1,3 @@
-import { wrapAutocomplete } from "$lib/faux-language-server";
 import { type Completion } from "@codemirror/autocomplete";
 // regex: \n\n(.*)\((.*)((?:, \*|\[).*)\)\n\n(.*)
 // replace: \n{ label: `$1($2)`, displayLabel: `$1($2$3)`, info: `$1($2$3):\\n$4`\n
@@ -167,5 +166,3 @@ export const pltCompletions: Completion[] = [
 {label: `plt.yscale(value)`, displayLabel: `plt.yscale(value, **kwargs)`, info: "yscale(value, **kwargs):\nSet the y-axis scale.", type: `function`},
 {label: `plt.yticks()`, displayLabel: `plt.yticks([ticks, labels])`, info: "yticks([ticks, labels]):\nGet or set the current tick locations and labels of the y-axis.", type: `function`},
 ]
-
-export const pltAutocomplete = wrapAutocomplete(/plt\..*/, pltCompletions);
