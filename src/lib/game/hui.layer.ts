@@ -109,6 +109,15 @@ export class HuiLayer {
     this.ctx.lineWidth = width;
   }
 
+  line(x1: number, y1: number, x2: number, y2: number) {
+    this.ctx.save();
+    this.ctx.beginPath();
+    this.ctx.moveTo(x1, y1);
+    this.ctx.lineTo(x2, y2);
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
+
   circle(x: number, y: number, r: number) {
     this.ctx.save();
     this.ctx.beginPath();

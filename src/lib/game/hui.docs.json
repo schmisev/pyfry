@@ -312,6 +312,14 @@
     },
     {
       "className": "HuiLayer",
+      "signature": "line(x1: number, y1: number, x2: number, y2: number)",
+      "jsDoc": "",
+      "type": "method",
+      "access": "public",
+      "return_type": ""
+    },
+    {
+      "className": "HuiLayer",
       "signature": "circle(x: number, y: number, r: number)",
       "jsDoc": "",
       "type": "method",
