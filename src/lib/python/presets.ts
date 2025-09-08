@@ -94,6 +94,59 @@ plt.minorticks_on()
 plt.show()`
   },
   {
+    name: "Scatterplot (Regression)",
+    preamble: numpyPreamble,
+    pseudo: numpyPseudoPreamble,
+    code: `# Eingabe der Messdaten
+data = np.array([
+  [1,1],
+  [2,4],
+  [3,9]
+])
+data_x = data[:,0]
+data_y = data[:,1]
+
+# Messdaten in Diagramm anzeigen
+plt.title("Überschrift", 
+          color = "black", 
+          weight = "bold")
+plt.xlabel("x-Achsen Beschriftung")
+plt.ylabel("y-Achsen Beschriftung")
+
+plt.scatter(data_x, data_y, 
+            marker = "x", 
+            color = "blue")
+
+# Lineare Regression
+[t, m], [SQR, *rest] = pn.polyfit(data_x, data_y, 1, full="true")
+x_fit = np.linspace(0, max(data_x), 100)
+y_fit =  m * x_fit + t
+
+avg = np.average(data_y)
+SQT = sum((data_y - avg)**2)
+R_squared = 1 - SQR / SQT
+
+plt.plot(x_fit, y_fit, 
+         color = "red", 
+         linestyle = "-",
+         label = f"y = {m:.3f} * x + {t:.3f}\\nR^2 = {R_squared[0]:.3f}")
+plt.legend()
+
+# Achsen
+plt.xlim(left = 0)
+plt.ylim(bottom = 0)
+plt.grid(which = 'major', 
+        linestyle = '-', 
+        alpha = 0.8)
+plt.grid(which = 'minor', 
+        linestyle = "--",  
+        alpha = 0.5)
+plt.minorticks_on()
+
+# Erstelle Diagramm
+plt.show()`
+  },
+  {
     name: "Scatterplot (csv)",
     preamble: numpyPreamble,
     pseudo: numpyPseudoPreamble,
@@ -591,5 +644,86 @@ def tick(dt):
 # draw() wird 30-mal pro Sekunde ausgeführt
 def draw(dt):
   ui.clear()`
+  },
+  {
+    name: 'Sonnensystem',
+    preamble: gamePreamble,
+    pseudo: gamePseudoPreamble,
+    code: `
+# VARIABLEN definieren
+# Körper 1
+m1 = 500
+r1 = math.sqrt(m1/(1*math.pi))
+x1 = 0
+y1 = 0
+vx1 = -0.02
+vy1 = 0
+
+# Körper 2
+m2 = 50
+r2 = math.sqrt(m2/(1*math.pi))
+x2 = 0
+y2 = 150
+vx2 = 2
+vy2 = 0
+
+# Naturkonstanten
+t = 1
+G = 1
+
+# EINSTELLUNGEN zu Beginn
+def setup():
+  hui.bg.flood("black")
+
+# ZEICHNEN
+def draw(dt):
+  global x1, x2, y1, y2
+  zoom = 0.5
+  
+  hui.mg.clear()
+  # Körper 1
+  hui.mg.fill('yellow')
+  hui.mg.circle(hui.width/2 + x1 * zoom, hui.height/2 + y1 * zoom, 2 * r1)
+  # Körper 2
+  hui.mg.fill('blue')
+  hui.mg.circle(hui.width/2 + x2 * zoom, hui.height/2 + y2 * zoom, 2 * r2)
+  # Bewegung
+  move()
+
+def dist(x1, y1, x2, y2):
+  return math.sqrt((x1-x2)**2 + (y1-y2)**2)
+
+# FUNKTIONEN definieren
+def move():
+  global x1, x2, y1, y2, vx1, vx2, vy1, vy2
+  # Gravitationskraft bestimmen
+  r = dist(x1,y1,x2,y2)
+  F = G * (m1 * m2)/(r * r)
+  
+  # Beschleunigungen bestimmen
+  a1 = F / m1
+  a2 = F / m2
+  
+  # Winkel bestimmen
+  w = math.atan2((y1 -y2),(x1 - x2))
+  
+  # Beschleunigung in x- und y-Richtung
+  ax1 = -a1 * math.cos(w)
+  ay1 = -a1 * math.sin(w)
+  ax2 = a2 * math.cos(w)
+  ay2 = a2 * math.sin(w)
+  
+  # Bewegung Körper 1
+  vx1 = vx1 + ax1*t
+  vy1 = vy1 + ay1*t
+  x1 = x1 + vx1*t
+  y1 = y1 + vy1*t
+  
+  # Bewegung Körper 2
+  vx2 = vx2 + ax2*t
+  vy2 = vy2 + ay2*t
+  x2 = x2 + vx2*t
+  y2 = y2 + vy2*t
+    `
   }
 ]

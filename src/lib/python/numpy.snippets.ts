@@ -56,6 +56,7 @@ plt.legend()
 
 `
     },
+    /*
     {
         name: "Vorlage Plot Lineare Regression",
         display: "📈 Plot: Linearen Regression",
@@ -69,6 +70,27 @@ plt.plot(x_fit, y_fit,
           color = "red", 
           linestyle = "-",
           label = f"y = {m:.3f} * x + {t:.3f}")
+plt.legend()
+
+`
+    },
+    */
+    {
+        name: "Vorlage Plot Lineare Regression",
+        display: "📈 Plot: Linearen Regression",
+        insert: `# Lineare Regression
+[t, m], [SQR, *rest] = pn.polyfit(data_x, data_y, 1, full="true")
+x_fit = np.linspace(0, max(data_x), 100)
+y_fit =  m * x_fit + t
+
+avg = np.average(data_y)
+SQT = sum((data_y - avg)**2)
+R_squared = 1 - SQR / SQT
+
+plt.plot(x_fit, y_fit, 
+         color = "red", 
+         linestyle = "-",
+         label = f"y = {m:.3f} * x + {t:.3f}\\nR^2 = {R_squared[0]:.3f}")
 plt.legend()
 
 `
