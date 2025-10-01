@@ -117,6 +117,10 @@ plt.scatter(data_x, data_y,
             marker = "x", 
             color = "blue")
 
+'''
+plt.errorbar(data_x, data_y, xerr = 1, yerr = 1, fmt = 'o')
+'''
+
 # Lineare Regression
 [t, m], [SQR, *rest] = pn.polyfit(data_x, data_y, 1, full="true")
 x_fit = np.linspace(0, max(data_x), 100)
