@@ -47,11 +47,11 @@ plt.scatter(\${x}, \${y},
         name: "Vorlage Plot Funktion",
         display: "📈 Plot: Beliebige Funktion",
         insert: `# Funktion zeichnen 
-\${x_f} = np.linspace(\${min_x},\${max_x},100)
-\${y_f} = 2 * x_f ** 2
-plt.plot(\${x_f}, \${y_f}, 
+\${x} = np.linspace(0,\${data_x},100)
+\${y} = 2 * \${x} ** 2
+plt.plot(\${x}, \${y}, 
         color = "green",
-        label = "f(x) = 2*x^2")
+        label = "f(x) = ")
 plt.legend()
 
 `
