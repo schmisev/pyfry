@@ -5,12 +5,20 @@ export interface CodePreset {
   code: string;
 }
 
+export const numpyAutocompletePreamble = 
+`import matplotlib.pyplot as plt
+import numpy as np
+import numpy.polynomial.polynomial as pn
+`;
+
+export const numpyPseudoPreamble = 
+`${numpyAutocompletePreamble}
+csv_data = ... # Daten aus csv-Import`
+
 export const numpyPreamble = `# Preambel
 import matplotlib
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import numpy as np
-import numpy.polynomial.polynomial as pn
+${numpyPseudoPreamble}
 from io import BytesIO
 import base64
 
@@ -32,11 +40,6 @@ new_show(False)
 
 csv_data = csv_data.to_py()
 `;
-
-export const numpyPseudoPreamble = `import matplotlib.pyplot as plt
-import numpy as np
-import numpy.polynomial.polynomial as pn
-csv_data = ... # Daten aus csv-Import`;
 
 export const numpyPresets: CodePreset[] = [
   {

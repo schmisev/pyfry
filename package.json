@@ -43,7 +43,7 @@
 		"marked-highlight": "^2.2.1",
 		"planck": "^1.4.2",
 		"planck-js": "^1.3.0",
-		"pyodide": "^0.27.7",
+		"pyodide": "^0.28.3",
 		"pyright": "^1.1.402",
 		"shrink-string": "^3.1.9",
 		"sortablejs": "^1.15.6",
