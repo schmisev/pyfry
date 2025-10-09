@@ -110,8 +110,8 @@ export function jediAutocomplete(
           const completions = JSON.parse(event.data.completions);
           const signatures = JSON.parse(event.data.signatures);
           const id = event.data.id;
+          
           closeRequest(id);
-
           jediWorker.removeEventListener("message", listener);
 
           updateSignature(signatures ? signatures[0] : null);
