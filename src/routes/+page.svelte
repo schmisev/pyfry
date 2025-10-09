@@ -1,12 +1,12 @@
 <script lang="ts">
-  import "$lib/page-style.scss";
+  import "$lib/page-style.css";
   import "$lib/fonts.css";
   import { numpyPresets, type CodePreset } from "$lib/python/presets";
   import { onMount } from "svelte";
   import CodeMirror from "svelte-codemirror-editor";
   import { undo } from "@codemirror/commands";
-  import { EditorView } from "@codemirror/view";
-  import { StateEffect } from "@codemirror/state";
+  import { EditorView, showTooltip, type Tooltip } from "@codemirror/view";
+  import { EditorState, StateEffect, StateField } from "@codemirror/state";
   import { page } from "$app/state";
   import {
     downloadPreset,
@@ -42,27 +42,37 @@
     faFlagCheckered,
     faFolder,
     faFolderOpen,
+    faHandSparkles,
     faHourglass,
+    faJedi,
+    faLightbulb,
     faQuestion,
     faRemove,
     faSplotch,
+    faStar,
     faTableCells,
     faTrash,
     faUndo,
     faUndoAlt,
     faUpload,
     faVrCardboard,
+    faWalkieTalkie,
+    faWandMagic,
+    faWandMagicSparkles,
+    faWandSparkles,
   } from "@fortawesome/free-solid-svg-icons";
 
   import PythonWorker from "$lib/workers/pyodide-worker.mjs?worker";
-  import JediWorker from "$lib/workers/jedi-worker.mjs?worker";
+  import JediWorker from "$lib/workers/jedi-worker.mts?worker";
   import {
+    cursorTooltip,
     jediAutocomplete,
     pythonExtensions,
     type Signature,
   } from "$lib/python/mode";
   import { zip, type VersionType } from "$lib/compression";
   import { pythonLanguage } from "@codemirror/lang-python";
+  import { stripParamString } from "$lib/python/pyodide.utils";
 
   /**
    * URL versions
@@ -208,6 +218,9 @@
   let jediWorker: Worker;
   let liveSignature: Signature | null = $state(null);
 
+  // editor setup
+  // start up tooltips
+
   onMount(async () => {
     consoleOut = document.getElementById("console-out")!;
     consoleOutWrapper = document.getElementById("console-out-wrapper")!;
@@ -235,26 +248,31 @@
     // checking code
     jediWorker = new JediWorker();
 
+    // start up autocompleter
     editor.dispatch({
       effects: StateEffect.appendConfig.of(
         jediAutocomplete(
-            jediWorker,
-            (v) => {
-              flags.autocompleteIsRunning = v;
-            },
-            (sig) => {
-              liveSignature = sig;
-            },
-          ),
+          jediWorker,
+          (v) => {
+            flags.autocompleteIsRunning = v;
+          },
+          (sig) => {
+            liveSignature = sig;
+          },
+        ),
       ),
     });
 
     jediWorker.addEventListener("message", (event) => {
-      const { message }: { message: string } = event.data;
+      const { message, id }: { message: string; id: number } = event.data;
       if (message) {
         log(message);
       }
-    })
+
+      if (id && id < 0) {
+        flags.autocompleteIsRunning = false;
+      }
+    });
 
     // running code
     worker = new PythonWorker();
@@ -283,6 +301,12 @@
       }
       if (pngList.length === 0) return;
       // if (!pngList[-1]) return;
+
+      /*
+      if (result) {
+        log(result, "standard");
+      }
+        */
 
       for (const png of pngList) {
         const wrapper = document.createElement("div");
@@ -421,7 +445,7 @@
       <input
         placeholder="Dateienname"
         id="name-input"
-        class="playpen-sans"
+        class="playpen-sans p-3.5"
         bind:value={preset.name}
       />
       .py
@@ -448,21 +472,31 @@
       <CodeMirror
         class="main-editor"
         on:ready={(e) => (editor = e.detail)}
-        extensions={pythonExtensions()}
+        extensions={[
+          //...cursorTooltip(() => liveSignature),
+          ...pythonExtensions(),
+        ]}
         lineWrapping={true}
         bind:value={preset.code}
       ></CodeMirror>
     </div>
-    <div>
-      Autocompleter: {flags.autocompleteIsRunning ? "..." : ""}
+    <div class="flex flex-row items-center gap-1 mononoki text-sm">
+      {#if flags.autocompleteIsRunning}
+        <Fa class="icon rotating" icon={faHourglass} />
+      {:else}
+        <Fa class="icon" icon={faWandMagicSparkles}></Fa>
+      {/if}
+      {flags.autocompleteIsRunning ? "..." : ""}
       {#if liveSignature}
         <span>
-          {liveSignature.name}(
-          {#each liveSignature.params.entries() as [i, n]}
-            <span class:bold={i == liveSignature.index}>{n}</span
-            >{#if i != liveSignature.params.length - 1},{/if}
-          {/each}
-          )
+          <b>{liveSignature.name}</b
+          >({#each liveSignature.params.entries() as [i, n]}
+            {#if i == liveSignature.index}
+              <b><u>{n[1]}</u></b>
+            {:else}
+              {stripParamString(n[1])}
+            {/if}{#if i != liveSignature.params.length - 1},&nbsp;{/if}
+          {/each})
         </span>
       {/if}
     </div>

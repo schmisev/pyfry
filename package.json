@@ -33,6 +33,7 @@
 		"@fortawesome/free-brands-svg-icons": "^6.7.2",
 		"@fortawesome/free-solid-svg-icons": "^6.7.2",
 		"@sveltejs/adapter-vercel": "^5.5.2",
+		"@tailwindcss/vite": "^4.1.14",
 		"@typefox/pyright-browser": "^1.1.299",
 		"codemirror": "^6.0.1",
 		"csv": "^6.3.11",
@@ -49,6 +50,7 @@
 		"sortablejs": "^1.15.6",
 		"svelte-codemirror-editor": "^1.4.1",
 		"svelte-fa": "^4.0.4",
+		"tailwindcss": "^4.1.14",
 		"vite-plugin-static-copy": "^3.0.0"
 	}
 }

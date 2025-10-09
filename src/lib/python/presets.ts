@@ -18,7 +18,7 @@ csv_data = ... # Daten aus csv-Import`
 export const numpyPreamble = `# Preambel
 import matplotlib
 matplotlib.use("Agg")
-${numpyPseudoPreamble}
+${numpyAutocompletePreamble}
 from io import BytesIO
 import base64
 
