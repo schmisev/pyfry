@@ -59,9 +59,16 @@ export type Signature = {
 
 export function jediAutocomplete(
   jediWorker: Worker,
-  setFlag: (v: boolean) => void,
+  setFlag: (done: boolean, ready?: boolean) => void,
   updateSignature: (sig: Signature | null) => void
 ) {
+  // receiving setup message
+  const setupListener = (event: MessageEvent) => {
+    if (event.data.id && event.data.id < 0) setFlag(false, true);
+  }
+  jediWorker.addEventListener("message", setupListener);
+
+  // tracking requests
   let lastRequestId = 0;
   const requestIds = new Set<number>();
 
@@ -76,11 +83,12 @@ export function jediAutocomplete(
     }
 
     if (requestIds.size === 0) {
-      lastRequestId = 0;
       setFlag(false);
+      if (lastRequestId > 100) lastRequestId = 0;
     }
   }
 
+  // completion logic
   const PYTHON_IDENT = /^[\w\xa1-\uffff][\w\d\xa1-\uffff]*$/;
   const completeThis = ["VariableName", "PropertyName"];
 
@@ -93,10 +101,11 @@ export function jediAutocomplete(
         completeThis.indexOf(inner.name) > -1 || inner.name == ".";
 
       const position = getCursorPosition(context);
+      const requestId = getRequestId();
 
       setFlag(true);
       jediWorker.postMessage({
-        id: getRequestId(),
+        id: requestId,
         source: context.state.doc.toString(),
         position,
         skipCompletions: !complete,
@@ -110,8 +119,14 @@ export function jediAutocomplete(
           const completions = JSON.parse(event.data.completions);
           const signatures = JSON.parse(event.data.signatures);
           const id = event.data.id;
+
+          if (id !== requestId) {
+            // console.log(`Wrong handler: id ${id} != id ${requestId}`);
+            return;
+          }
           
           closeRequest(id);
+          // console.log(`Handled request: id ${id}, remaining: ${[...requestIds.keys()]}`);
           jediWorker.removeEventListener("message", listener);
 
           updateSignature(signatures ? signatures[0] : null);

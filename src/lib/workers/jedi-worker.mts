@@ -1,7 +1,16 @@
 import { loadPyodide, version as pyodideVersion } from "pyodide";
 import { numpyAutocompletePreamble } from "../python/presets";
 
-let rejectMessages = true;
+let interruptBuffer = new Uint8Array(new ArrayBuffer(1));
+function interruptExecution() {
+  interruptBuffer[0] = 2; // SIGINT
+}
+
+function resetInterrupt() {
+  interruptBuffer[0] = 0;
+}
+
+let lastId: number = -1;
 
 let stdOut = (msg: string) => {
   self.postMessage({
@@ -22,14 +31,12 @@ import jedi
 from jedi import settings
 import json
 
-jedi.settings.auto_import_modules = ['gi', 'numpy']
-
-print(">> Jedi-Autocomplete geladen!")
+jedi.settings.auto_import_modules = ['gi', 'numpy', 'matplotlib']
 `);
   return pyodide;
 }).then((pyodide) => {
-  rejectMessages = false;
   sendCompletionMessage(-1);
+  pyodide.setInterruptBuffer(interruptBuffer);
   return pyodide;
 });
 
@@ -38,16 +45,13 @@ self.onmessage = async (event) => {
   const { cursor, line, column } = position;
   const extendedSource = `${numpyAutocompletePreamble}${source}`;
 
-  if (rejectMessages) {
-    console.log("Rejected message!");
-    sendCompletionMessage(id);
-    return;
-  } else {
-    console.log("Accepted message!");
-  }
+  if (id < lastId) return;
+  interruptExecution();
+  
   const pyodide = await pyodideReadyPromise;
 
   try {
+    resetInterrupt();
     const [completions, signatures] = await pyodide.runPythonAsync(`
 code = ${JSON.stringify(extendedSource)}
 script = jedi.Script(code)
@@ -65,7 +69,8 @@ if ${!!skipCompletions ? 'False' : 'True'}:
         #if completion_count > 10:
         #    break
 
-        if comp.name[0] == "_":
+        offset = comp.get_completion_prefix_length()
+        if comp.complete[0] == "_" and comp.name[0] == "_":
             continue
 
         # split up docstring
@@ -89,7 +94,7 @@ if ${!!skipCompletions ? 'False' : 'True'}:
             comp.name, 
             sig,
             head, 
-            comp.get_completion_prefix_length(),
+            offset,
             comp.type,
         ))
 
@@ -98,7 +103,7 @@ signatures = []
 for sig in script.get_signatures(line=${line + 3}, column=${column - 1}):
     signatures.append({
         "name": sig.name,
-        "params": [(p.name, p.to_string()) for p in sig.params],
+        "params": [(p.name, p.to_string()) for p in sig.params if p.name != "*" and p.name != "/"],
         "index": sig.index,
         "doc": sig.docstring(raw = True)
     })
@@ -107,7 +112,12 @@ for sig in script.get_signatures(line=${line + 3}, column=${column - 1}):
 `);
     sendCompletionMessage(id, completions, signatures)
   } catch (e) {
-    console.log(e);
+    try {
+      pyodide.checkInterrupt()
+    } catch (e) {
+      console.log(`Request ${id} has been cancelled!`);
+    }
+    console.log(`Request ${id} has been cancelled!`);
     sendCompletionMessage(id);
   }
 };

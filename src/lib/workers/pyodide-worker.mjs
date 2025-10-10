@@ -25,9 +25,10 @@ self.onmessage = async (event) => {
         // pyodide.globals.set("csv_data", csv_data);
         const ret = await pyodide.runPythonAsync(scriptPackage.script, {globals: empty_namespace});
         const imgStr = empty_namespace.get("plot_result");
+        const retStr = ret ? pyodide.globals.get("str")(ret) : '';
 
         self.postMessage({ 
-            result: ret,
+            result: retStr,
             pngList: imgStr.toJs(),
         });
     } catch (error) {

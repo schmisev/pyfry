@@ -3,10 +3,16 @@
   import "$lib/fonts.css";
   import { numpyPresets, type CodePreset } from "$lib/python/presets";
   import { onMount } from "svelte";
-  import CodeMirror from "svelte-codemirror-editor";
+  import CodeMirror from "$lib/components/codemirror-editor/CodeMirror.svelte";
   import { undo } from "@codemirror/commands";
   import { EditorView, showTooltip, type Tooltip } from "@codemirror/view";
-  import { EditorState, StateEffect, StateField } from "@codemirror/state";
+  import {
+    codePointAt,
+    EditorState,
+    StateEffect,
+    StateField,
+    type Extension,
+  } from "@codemirror/state";
   import { page } from "$app/state";
   import {
     downloadPreset,
@@ -91,11 +97,11 @@
     isRunning: false,
     updateURL: true,
     showPseudo: false,
+    autocompleteIsReady: false,
     autocompleteIsRunning: true,
   });
 
   let currentState = $state(page.url.href);
-
   let currentPresets = $state(numpyPresets.map(copyObj));
   let preset: CodePreset = $state(currentPresets[0]); // get first preset
   let global_csv: CSVData[] = $state([
@@ -214,6 +220,10 @@
   let consoleOutWrapper: HTMLElement;
   let imageOut: HTMLElement;
   let editor: EditorView; // EditorView
+  let editorExtensions: Extension[] = $state([
+    //...cursorTooltip(() => liveSignature),
+    ...pythonExtensions(),
+  ]);
   let worker: Worker;
   let jediWorker: Worker;
   let liveSignature: Signature | null = $state(null);
@@ -249,28 +259,27 @@
     jediWorker = new JediWorker();
 
     // start up autocompleter
+    const jediExtension = jediAutocomplete(
+      jediWorker,
+      (done, ready) => {
+        flags.autocompleteIsRunning = done;
+        if (ready != undefined) flags.autocompleteIsReady = ready;
+      },
+      (sig) => {
+        liveSignature = sig;
+      },
+    );
+
+    // we have to do this dynamically the first time around
     editor.dispatch({
-      effects: StateEffect.appendConfig.of(
-        jediAutocomplete(
-          jediWorker,
-          (v) => {
-            flags.autocompleteIsRunning = v;
-          },
-          (sig) => {
-            liveSignature = sig;
-          },
-        ),
-      ),
+      effects: StateEffect.appendConfig.of(jediExtension),
     });
+    editorExtensions.push(jediExtension);
 
     jediWorker.addEventListener("message", (event) => {
       const { message, id }: { message: string; id: number } = event.data;
       if (message) {
         log(message);
-      }
-
-      if (id && id < 0) {
-        flags.autocompleteIsRunning = false;
       }
     });
 
@@ -284,8 +293,12 @@
         message,
         result,
         pngList,
-      }: { error: string; result: number; message: string; pngList: string[] } =
-        event.data;
+      }: {
+        error: string;
+        result: number;
+        message: string;
+        pngList: string[];
+      } = event.data;
 
       if (error) {
         log(error, "error");
@@ -295,18 +308,14 @@
         return;
       }
 
+      if (result) {
+        log(result, "result");
+      }
+
+      if (pngList.length === 0) return;
       if (pngList) {
         log("Plots generiert: " + pngList.length, "plots");
-        // console.log("" + pngList);
       }
-      if (pngList.length === 0) return;
-      // if (!pngList[-1]) return;
-
-      /*
-      if (result) {
-        log(result, "standard");
-      }
-        */
 
       for (const png of pngList) {
         const wrapper = document.createElement("div");
@@ -387,38 +396,22 @@
     <div class="holder left">
       <div id="title" class="layout panel">
         <img id="title-icon" alt="A fried egg." src={iconFriedEgg} />&nbsp;
-        <div id="title-text"><b>PYFRYHAM</b> by sms & cdr</div>
+        <div id="title-text"><b>PYFRY</b> by sms & cdr</div>
       </div>
-      <button
-        class="{flags.updateURL ? 'active' : ''} playpen-sans"
-        onclick={toggleURLUpdates}
-        >URL {flags.updateURL ? "aktiv" : "inaktiv"} (<Fa
-          class="icon"
-          icon={faCompressAlt}
-        />
-        {currentState.length} Zeichen)</button
-      >
-      <button
-        title="Lade Code als .py-Datei herunter"
-        onclick={() => downloadPreset(preset)}
-        ><Fa class="icon" icon={faCloudDownloadAlt} /></button
-      >
+      <button class="{flags.updateURL ? 'active' : ''} playpen-sans" onclick={toggleURLUpdates}
+        >URL {flags.updateURL ? "aktiv" : "inaktiv"} (<Fa class="icon" icon={faCompressAlt} />
+        {currentState.length} Zeichen)</button>
+      <button title="Lade Code als .py-Datei herunter" onclick={() => downloadPreset(preset)}
+        ><Fa class="icon" icon={faCloudDownloadAlt} /></button>
       <button title="Lade Code in .py-Format hoch" onclick={uploadFile}
-        ><Fa class="icon" icon={faFolderOpen} /></button
-      >
+        ><Fa class="icon" icon={faFolderOpen} /></button>
     </div>
     <div class="holder left">
-      <button
-        title="Entferne '{preset.name}'"
-        class="bad"
-        onclick={removePreset}><Fa class="icon" icon={faTrash} /></button
-      >
+      <button title="Entferne '{preset.name}'" class="bad" onclick={removePreset}
+        ><Fa class="icon" icon={faTrash} /></button>
       <button title="Dupliziere '{preset.name}'" onclick={duplicatePreset}
-        ><Fa class="icon" icon={faCopy} /></button
-      >
-      <button title="Rückgängig!" onclick={undoChange}
-        ><Fa class="icon" icon={faUndoAlt} /></button
-      >
+        ><Fa class="icon" icon={faCopy} /></button>
+      <button title="Rückgängig!" onclick={undoChange}><Fa class="icon" icon={faUndoAlt} /></button>
       <select id="preset-select" class="playpen-sans" bind:value={preset}>
         {#each currentPresets.entries() as [i, p]}
           <option value={p}>{p.name}</option>
@@ -426,18 +419,10 @@
       </select>
       {#if flags.isRunning}
         <button title="Wird ausgeführt..." class="special playpen-sans"
-          >&nbsp;Warte...&nbsp;<Fa
-            class="icon rotating"
-            icon={faHourglass}
-          /></button
-        >
+          >&nbsp;Warte...&nbsp;<Fa class="icon rotating" icon={faHourglass} /></button>
       {:else}
-        <button
-          title="Starte die Ausführung!"
-          class="special playpen-sans"
-          onclick={runCode}
-          >&nbsp;START&nbsp;<Fa class="icon" icon={faFlagCheckered} /></button
-        >
+        <button title="Starte die Ausführung!" class="special playpen-sans" onclick={runCode}
+          >&nbsp;START&nbsp;<Fa class="icon" icon={faFlagCheckered} /></button>
       {/if}
     </div>
     <div class="holder left">
@@ -446,8 +431,7 @@
         placeholder="Dateienname"
         id="name-input"
         class="playpen-sans p-3.5"
-        bind:value={preset.name}
-      />
+        bind:value={preset.name} />
       .py
     </div>
     <div id="editor-wrapper">
@@ -456,61 +440,54 @@
           extensions={pythonExtensions()}
           lineWrapping={true}
           readonly={true}
-          bind:value={preset.pseudo}
-        ></CodeMirror>
+          bind:value={preset.pseudo}></CodeMirror>
       {/if}
       <button
         class="layout panel divider"
         onclick={() => {
           flags.showPseudo = !flags.showPseudo;
-        }}
-      >
+        }}>
         {#if flags.showPseudo}<Fa class="icon" icon={faCaretUp}></Fa>
         {:else}<Fa class="icon" icon={faCaretDown}></Fa>
         {/if}
       </button>
       <CodeMirror
         class="main-editor"
-        on:ready={(e) => (editor = e.detail)}
-        extensions={[
-          //...cursorTooltip(() => liveSignature),
-          ...pythonExtensions(),
-        ]}
+        onready={(e) => (editor = e)}
+        extensions={editorExtensions}
         lineWrapping={true}
-        bind:value={preset.code}
-      ></CodeMirror>
+        bind:value={preset.code}></CodeMirror>
     </div>
-    <div class="flex flex-row items-center gap-1 mononoki text-sm">
+    <div class="inline-flex flex-row items-center gap-1 mononoki text-sm">
       {#if flags.autocompleteIsRunning}
         <Fa class="icon rotating" icon={faHourglass} />
       {:else}
         <Fa class="icon" icon={faWandMagicSparkles}></Fa>
       {/if}
-      {flags.autocompleteIsRunning ? "..." : ""}
-      {#if liveSignature}
-        <span>
-          <b>{liveSignature.name}</b
-          >({#each liveSignature.params.entries() as [i, n]}
+      <div class="grow min-w-0">
+        {#if liveSignature && liveSignature.name != "ufunc"}
+          <b>{liveSignature.name}</b>({#each liveSignature.params.entries() as [i, n]}
             {#if i == liveSignature.index}
               <b><u>{n[1]}</u></b>
             {:else}
               {stripParamString(n[1])}
-            {/if}{#if i != liveSignature.params.length - 1},&nbsp;{/if}
+            {/if}{#if i != liveSignature.params.length - 1},&nbsp;<wbr />{/if}
           {/each})
-        </span>
-      {/if}
+        {:else if !flags.autocompleteIsReady}
+        Autocomplete wird gestartet!
+        {:else}
+        ...
+        {/if}
+      </div>
     </div>
     <button onclick={uploadCSV}
-      ><Fa class="icon" icon={faTableCells} />&nbsp;Lade .csv-Datei in &nbsp;<code
-        >csv_data</code
-      >&nbsp; hoch!</button
-    >
+      ><Fa class="icon" icon={faTableCells} />&nbsp;Lade .csv-Datei in &nbsp;<code>csv_data</code
+      >&nbsp; hoch!</button>
     <div>
       {#each global_csv.entries() as [index, csv_table]}
         <div class="holder file-tab">
           <button onclick={() => global_csv.splice(index, 1)}
-            ><Fa class="icon" icon={faRemove} /></button
-          >
+            ><Fa class="icon" icon={faRemove} /></button>
           &nbsp;<code>csv_data[{index}] = {JSON.stringify(csv_table)}</code>
         </div>
       {/each}

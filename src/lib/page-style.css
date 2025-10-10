@@ -275,10 +275,20 @@ td.no-fill {
 
 .message.plots {
   background-color: var(--purple);
+  color: white;
 }
 
 .message.error {
   background-color: var(--dark-orange);
+}
+
+.message.result {
+  &::before {
+    content: "= ";
+  }
+
+  background-color: var(--blue);
+  color: white;
 }
 
 .message.standard {
