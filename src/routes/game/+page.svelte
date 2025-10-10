@@ -18,7 +18,7 @@
   import LZString from "lz-string";
   import huiDocsStr from "$lib/game/hui.docs.json?raw";
   import { faCompressAlt, faCloudDownloadAlt, faFolderOpen, faTrash, faCopy, faUndoAlt, faHourglass, faStar, faPlay, faStop, faGamepad, faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
-  import { pythonGameExtensions } from "$lib/python/mode";
+  import { pythonGameExtensions } from "$lib/python/language-mode";
   import { pythonMarked } from "$lib/python/marked";
 
   let huiDocs: Record<string, NodeDoc[]> = JSON.parse(huiDocsStr);

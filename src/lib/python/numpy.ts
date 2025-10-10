@@ -1,4 +1,3 @@
-import { wrapAutocomplete } from "./mode";
 import { type Completion } from "@codemirror/autocomplete";
 
 export const npCompletions: Completion[] = [

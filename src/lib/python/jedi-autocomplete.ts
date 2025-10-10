@@ -1,33 +1,10 @@
-import { tags } from "@lezer/highlight";
-import {
-  HighlightStyle,
-  syntaxHighlighting,
-  syntaxTree,
-} from "@codemirror/language";
-import { python, pythonLanguage } from "@codemirror/lang-python";
-import {
-  CompletionContext,
-  snippetCompletion,
-  type Completion,
-  type CompletionResult,
-} from "@codemirror/autocomplete";
 import { EditorView, showTooltip, type Tooltip } from "@codemirror/view";
 import { EditorState, StateField } from "@codemirror/state";
-import { npCompletions } from "./numpy";
-import { pltCompletions } from "./matplotlib.pyplot";
-import { ALL_SNIPPETS } from "$lib/python/numpy.snippets";
+import { CompletionContext, type CompletionResult } from "@codemirror/autocomplete";
+import { pythonLanguage } from "@codemirror/lang-python";
+import { syntaxTree } from "@codemirror/language";
 
-export function wrapAutocomplete(prefix: RegExp, completions: Completion[]) {
-  return (context: CompletionContext): null | CompletionResult => {
-    let word = context.matchBefore(prefix);
-    if (!word || (word.from == word.to && !context.explicit)) return null;
-    return {
-      from: word.from,
-      options: completions.map((c) => snippetCompletion(c.label, c)),
-    };
-  };
-}
-
+// utilities
 function getCursorPosition(context: CompletionContext): {
   line: number;
   column: number;
@@ -50,6 +27,7 @@ function mapToType(pythonType: string) {
   }
 }
 
+// function signature
 export type Signature = {
   name: string;
   params: [string, string][];
@@ -57,6 +35,7 @@ export type Signature = {
   doc: string;
 };
 
+// autocompletion via worker
 export function jediAutocomplete(
   jediWorker: Worker,
   setFlag: (done: boolean, ready?: boolean) => void,
@@ -65,7 +44,7 @@ export function jediAutocomplete(
   // receiving setup message
   const setupListener = (event: MessageEvent) => {
     if (event.data.id && event.data.id < 0) setFlag(false, true);
-  }
+  };
   jediWorker.addEventListener("message", setupListener);
 
   // tracking requests
@@ -93,12 +72,9 @@ export function jediAutocomplete(
   const completeThis = ["VariableName", "PropertyName"];
 
   return pythonLanguage.data.of({
-    autocomplete: async (
-      context: CompletionContext
-    ): Promise<null | CompletionResult> => {
+    autocomplete: async (context: CompletionContext): Promise<null | CompletionResult> => {
       let inner = syntaxTree(context.state).resolveInner(context.pos, -1);
-      const complete =
-        completeThis.indexOf(inner.name) > -1 || inner.name == ".";
+      const complete = completeThis.indexOf(inner.name) > -1 || inner.name == ".";
 
       const position = getCursorPosition(context);
       const requestId = getRequestId();
@@ -124,7 +100,7 @@ export function jediAutocomplete(
             // console.log(`Wrong handler: id ${id} != id ${requestId}`);
             return;
           }
-          
+
           closeRequest(id);
           // console.log(`Handled request: id ${id}, remaining: ${[...requestIds.keys()]}`);
           jediWorker.removeEventListener("message", listener);
@@ -133,9 +109,7 @@ export function jediAutocomplete(
           if (completions.length === 0) return resolve(null);
 
           resolve({
-            from:
-              context.state.selection.main.head -
-              (completions[0] ? completions[0][3] : 0),
+            from: context.state.selection.main.head - (completions[0] ? completions[0][3] : 0),
             options: (completions as any[]).map((c: any) => {
               return {
                 label: c[0],
@@ -154,84 +128,42 @@ export function jediAutocomplete(
   });
 }
 
-export const npAutocomplete = wrapAutocomplete(/np\..*/, npCompletions);
-export const pltAutocomplete = wrapAutocomplete(/plt\..*/, pltCompletions);
-
-export const customPythonHighlighting = HighlightStyle.define([
-  { tag: tags.keyword, color: "#2A9D8F", fontWeight: "bold" },
-  { tag: tags.comment, color: "#F4A261", fontStyle: "italic" },
-  { tag: tags.string, color: "#2A9D8F" },
-  { tag: tags.number, color: "#A462F4", fontWeight: "bold" },
-  { tag: tags.variableName, fontWeight: "bold" },
-]);
-
-export const pythonHighlighting = syntaxHighlighting(customPythonHighlighting);
-
-export function pythonExtensions() {
-  const extensions = [
-    pythonHighlighting,
-    python(),
-    pythonLanguage.data.of({
-      autocomplete: ALL_SNIPPETS.map((sn) => {
-        return snippetCompletion(sn.insert, {
-          label: sn.name,
-          type: "preset",
-          displayLabel: sn.display ?? sn.name,
-          info: sn.info ?? `[ENTER] fügt das Snippet ein!`,
-          boost: 100,
-        });
-      }),
-    }),
-    /*
-    pythonLanguage.data.of({
-      autocomplete: npAutocomplete
-    }),
-    pythonLanguage.data.of({
-      autocomplete: pltAutocomplete
-    })
-    */
-  ];
-
-  return extensions;
-}
-
-export const pythonGameExtensions = [
-  syntaxHighlighting(customPythonHighlighting),
-  python(),
-];
-
+// (not used) tooltip on cursor
 function cursorSignature(fetchSignature: () => Signature | null) {
-  return (state: EditorState): readonly Tooltip[] => state.selection.ranges
-    .filter((range) => range.empty)
-    .map((range) => {
-      let sig: Signature | null = fetchSignature();
-      if (!sig) return {
-        pos: range.head,
-        above: true,
-        strictSide: true,
-        arrow: true,
-        create: () => {
-          let dom = document.createElement("div");
-          return { dom };
-        },
-      };
+  return (state: EditorState): readonly Tooltip[] =>
+    state.selection.ranges
+      .filter((range) => range.empty)
+      .map((range) => {
+        let sig: Signature | null = fetchSignature();
+        if (!sig)
+          return {
+            pos: range.head,
+            above: true,
+            strictSide: true,
+            arrow: true,
+            create: () => {
+              let dom = document.createElement("div");
+              return { dom };
+            },
+          };
 
+        let text = `${sig.name}(${sig.params
+          .map((p, i) => (i == sig.index ? `<b>${p}</b>` : p))
+          .join(", ")})`;
 
-      let text = `${sig.name}(${sig.params.map((p, i) => i == sig.index ? `<b>${p}</b>` : p).join(", ")})`
-
-      return {
-        pos: range.head,
-        above: true,
-        strictSide: true,
-        arrow: true,
-        create: () => {
-          let dom = document.createElement("div");
-          dom.className = "cm-tooltip-cursor";
-          dom.innerHTML = text;
-          return { dom };
-        },
-      };
-    });
+        return {
+          pos: range.head,
+          above: true,
+          strictSide: true,
+          arrow: true,
+          create: () => {
+            let dom = document.createElement("div");
+            dom.className = "cm-tooltip-cursor";
+            dom.innerHTML = text;
+            return { dom };
+          },
+        };
+      });
 }
 
 function cursorSignatureField(fetchSignature: () => Signature | null) {

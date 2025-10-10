@@ -5,14 +5,8 @@
   import { onMount } from "svelte";
   import CodeMirror from "$lib/components/codemirror-editor/CodeMirror.svelte";
   import { undo } from "@codemirror/commands";
-  import { EditorView, showTooltip, type Tooltip } from "@codemirror/view";
-  import {
-    codePointAt,
-    EditorState,
-    StateEffect,
-    StateField,
-    type Extension,
-  } from "@codemirror/state";
+  import { EditorView } from "@codemirror/view";
+  import { StateEffect, type Extension } from "@codemirror/state";
   import { page } from "$app/state";
   import {
     downloadPreset,
@@ -25,60 +19,28 @@
   import iconFriedEgg from "$lib/assets/fried-egg.svg";
   import Fa from "svelte-fa";
   import {
-    faArrowDown,
-    faArrowRight,
-    faArrowUp,
-    faBacon,
-    faBreadSlice,
     faCaretDown,
     faCaretUp,
-    faChartPie,
-    faClock,
-    faCloudDownload,
     faCloudDownloadAlt,
-    faCloudUpload,
     faCompressAlt,
     faCopy,
-    faDeleteLeft,
-    faDownload,
-    faEgg,
-    faFileDownload,
-    faFileUpload,
-    faFlag,
     faFlagCheckered,
-    faFolder,
     faFolderOpen,
-    faHandSparkles,
     faHourglass,
-    faJedi,
-    faLightbulb,
-    faQuestion,
     faRemove,
     faSplotch,
-    faStar,
     faTableCells,
     faTrash,
-    faUndo,
     faUndoAlt,
-    faUpload,
-    faVrCardboard,
-    faWalkieTalkie,
-    faWandMagic,
     faWandMagicSparkles,
-    faWandSparkles,
   } from "@fortawesome/free-solid-svg-icons";
 
   import PythonWorker from "$lib/workers/pyodide-worker.mjs?worker";
   import JediWorker from "$lib/workers/jedi-worker.mts?worker";
-  import {
-    cursorTooltip,
-    jediAutocomplete,
-    pythonExtensions,
-    type Signature,
-  } from "$lib/python/mode";
+  import { pythonExtensions } from "$lib/python/language-mode";
   import { zip, type VersionType } from "$lib/compression";
-  import { pythonLanguage } from "@codemirror/lang-python";
   import { stripParamString } from "$lib/python/pyodide.utils";
+  import { jediAutocomplete, type Signature } from "$lib/python/jedi-autocomplete";
 
   /**
    * URL versions
@@ -150,7 +112,7 @@
 
     if (_name) preset.name = _atob(_name);
     if (_code) preset.code = _atob(_code);
-    // if (_preamble) preset.preamble = atob2(_preamble); deactivated, as the same preamble should always be used
+    // if (_preamble) preset.preamble = atob2(_preamble); deactivated, as one should always use the same preamble
     if (_pseudo) preset.pseudo = _atob(_pseudo);
   }
 
@@ -474,9 +436,9 @@
             {/if}{#if i != liveSignature.params.length - 1},&nbsp;<wbr />{/if}
           {/each})
         {:else if !flags.autocompleteIsReady}
-        Autocomplete wird gestartet!
+          Autocomplete wird gestartet!
         {:else}
-        ...
+          ...
         {/if}
       </div>
     </div>

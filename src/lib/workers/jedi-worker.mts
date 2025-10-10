@@ -64,13 +64,13 @@ completion_count = 0
 
 if ${!!skipCompletions ? 'False' : 'True'}:
     # only try a full completion if requested
-    for comp in script.complete(line=${line + 3}, column=${column - 1}):
+    for comp in script.complete(line=${line + 3}, column=${column - 1}, fuzzy=True):
         completion_count += 1    
         #if completion_count > 10:
         #    break
 
         offset = comp.get_completion_prefix_length()
-        if comp.complete[0] == "_" and comp.name[0] == "_":
+        if comp.complete and comp.complete[0] == "_" and comp.name[0] == "_":
             continue
 
         # split up docstring
@@ -117,7 +117,7 @@ for sig in script.get_signatures(line=${line + 3}, column=${column - 1}):
     } catch (e) {
       console.log(`Request ${id} has been cancelled!`);
     }
-    console.log(`Request ${id} has been cancelled!`);
+    console.log(e);
     sendCompletionMessage(id);
   }
 };
