@@ -10,7 +10,7 @@ let stdOut = (msg) => {
 let pyodideReadyPromise = loadPyodide({
     indexURL: `https://cdn.jsdelivr.net/pyodide/v${pyodideVersion}/full/`,
     fullStdLib: true,
-    packages: ["numpy", "matplotlib"],
+    packages: ["numpy", "matplotlib", "scipy"],
     stdout: stdOut,
 });
 

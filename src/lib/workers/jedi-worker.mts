@@ -21,7 +21,7 @@ let stdOut = (msg: string) => {
 let pyodideReadyPromise = loadPyodide({
   indexURL: `https://cdn.jsdelivr.net/pyodide/v${pyodideVersion}/full/`,
   fullStdLib: true,
-  packages: ["jedi", "numpy", "matplotlib"],
+  packages: ["jedi", "numpy", "matplotlib", "scipy"],
   stdout: stdOut,
 }).then(async (pyodide) => {
   await pyodide.runPythonAsync(`
@@ -31,7 +31,7 @@ import jedi
 from jedi import settings
 import json
 
-jedi.settings.auto_import_modules = ['gi', 'numpy', 'matplotlib']
+jedi.settings.auto_import_modules = ['gi', 'numpy', 'matplotlib', 'scipy']
 `);
   return pyodide;
 }).then((pyodide) => {
