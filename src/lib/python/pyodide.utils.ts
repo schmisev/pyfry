@@ -10,3 +10,21 @@ export function correctPyodideErrorMessage(error: Error, scriptPackage: ScriptPa
   correctedMessage = correctedMessage.replace(`File "<exec>", line ${lineNumber}`, `Fehler in Zeile ${lineNumber - scriptPackage.offset}:`)
   return { correctedMessage, lineNumber };
 }
+
+export function stripParamString(str: string) {
+  const hasType = (str.includes(":"));
+  const hasDefault = (str.includes("="));
+
+  let result = ""
+
+  if (hasType) {
+    result = str.split(":")[0];
+    if (hasDefault) {
+      result += "=" + str.split("=")[1];
+    }
+  } else {
+    result = str;
+  }
+
+  return result;
+}

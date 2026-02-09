@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "$lib/page-style.scss";
+  import "$lib/page-style.css";
   import "$lib/fonts.css";
   import "$lib/python/python-highlighting.css";
 
@@ -18,7 +18,7 @@
   import LZString from "lz-string";
   import huiDocsStr from "$lib/game/hui.docs.json?raw";
   import { faCompressAlt, faCloudDownloadAlt, faFolderOpen, faTrash, faCopy, faUndoAlt, faHourglass, faStar, faPlay, faStop, faGamepad, faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
-  import { pythonGameExtensions } from "$lib/python/mode";
+  import { pythonGameExtensions } from "$lib/python/language-mode";
   import { pythonMarked } from "$lib/python/marked";
 
   let huiDocs: Record<string, NodeDoc[]> = JSON.parse(huiDocsStr);
@@ -365,8 +365,8 @@ HuiThing`, {globals: hui_namespace});
             <ul>
               {#each docs as d}
                 {#if (d.access === "public" || d.access === "hidden") && d.type !== "set"}
-                  <li><span class="access {d.access}"></span> <span class="signature">{d.signature}</span> 
-                    {#if d.return_type !== ""}<span class="return-type">: {d.return_type}</span>{/if}
+                  <li><span class="access {d.access}"></span> <span class="mononoki signature">{d.signature}</span> 
+                    {#if d.return_type !== ""}<span class="mononoki return-type">: {d.return_type}</span>{/if}
                     {#if d.jsDoc !== ""} <div class="jsdoc">{@html pythonMarked.parse(d.jsDoc)}</div>{/if}
                   </li>
                 {/if}

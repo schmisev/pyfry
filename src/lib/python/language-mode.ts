@@ -1,6 +1,9 @@
 import { tags } from "@lezer/highlight";
-
-import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
+import {
+  HighlightStyle,
+  syntaxHighlighting,
+  syntaxTree,
+} from "@codemirror/language";
 import { python, pythonLanguage } from "@codemirror/lang-python";
 import {
   CompletionContext,
@@ -11,7 +14,6 @@ import {
 
 import { npCompletions } from "./numpy";
 import { pltCompletions } from "./matplotlib.pyplot";
-
 import { ALL_SNIPPETS } from "$lib/python/numpy.snippets";
 
 export function wrapAutocomplete(prefix: RegExp, completions: Completion[]) {
@@ -38,23 +40,33 @@ export const customPythonHighlighting = HighlightStyle.define([
 
 export const pythonHighlighting = syntaxHighlighting(customPythonHighlighting);
 
-export const pythonExtensions = [
-  pythonHighlighting,
-  python(),
-  pythonLanguage.data.of({
-    autocomplete: ALL_SNIPPETS.map((sn) => {
-      return snippetCompletion(sn.insert, {
-        label: sn.name,
-        type: "preset",
-        displayLabel: sn.display ?? sn.name,
-        info: sn.info ?? `[ENTER] fügt das Snippet ein!`,
-        boost: 100,
-      });
+export function pythonExtensions() {
+  const extensions = [
+    pythonHighlighting,
+    python(),
+    pythonLanguage.data.of({
+      autocomplete: ALL_SNIPPETS.map((sn) => {
+        return snippetCompletion(sn.insert, {
+          label: sn.name,
+          type: "preset",
+          displayLabel: sn.display ?? sn.name,
+          info: sn.info ?? `[ENTER] fügt das Snippet ein!`,
+          boost: 100,
+        });
+      }),
     }),
-  }),
-  pythonLanguage.data.of({ autocomplete: npAutocomplete }),
-  pythonLanguage.data.of({ autocomplete: pltAutocomplete }),
-];
+    /*
+    pythonLanguage.data.of({
+      autocomplete: npAutocomplete
+    }),
+    pythonLanguage.data.of({
+      autocomplete: pltAutocomplete
+    })
+    */
+  ];
+
+  return extensions;
+}
 
 export const pythonGameExtensions = [
   syntaxHighlighting(customPythonHighlighting),

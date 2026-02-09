@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 .material-symbols-outlined {
   font-variation-settings:
   'FILL' 0,
@@ -65,13 +67,13 @@ code, pre {
 
 button:hover, a:hover {
   background-color: #F4A261;
-  //scale: 1.05;
-  //rotate: 2deg;
+  /* scale: 1.05; */
+  /* rotate: 2deg; */
   translate: 0 -0.1em;
 }
 
 button:active, a:active {
-  //scale: 0.9;
+  /* scale: 0.9; */
   translate: 0 0.1em;
 }
 
@@ -126,6 +128,10 @@ td {
 
 td.no-fill {
   background-color: transparent;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 .holder {
@@ -269,10 +275,20 @@ td.no-fill {
 
 .message.plots {
   background-color: var(--purple);
+  color: white;
 }
 
 .message.error {
   background-color: var(--dark-orange);
+}
+
+.message.result {
+  &::before {
+    content: "= ";
+  }
+
+  background-color: var(--blue);
+  color: white;
 }
 
 .message.standard {
@@ -328,7 +344,7 @@ td.no-fill {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  //max-width: 200px;
+  /* max-width: 200px; */
 }
 
 #preset-select {
@@ -349,9 +365,9 @@ td.no-fill {
   box-sizing: border-box;
   margin-bottom: 0.5em;
 
-  // Prestate
+  /* Prestate */
   opacity: 0;
-  // remove transform for just a fade-in
+  /* remove transform for just a fade-in */
   transform: rotateX(-90deg);
   transform-origin: top center;
 
@@ -360,8 +376,8 @@ td.no-fill {
   flex: 0 0 auto;
   overflow: hidden;
 
-  // max-width: 700px;
-  // min-width: 100%;
+  /* max-width: 700px; */
+  /* min-width: 100%; */
 }
 
 #image-out > .img-wrapper img {
@@ -429,7 +445,7 @@ td.no-fill {
   min-width: 1.5rem;
 }
 
-// rotation animation
+/* rotation animation */
 @-webkit-keyframes rotating /* Safari and Chrome */ {
   from {
     -webkit-transform: rotate(0deg);
@@ -550,12 +566,10 @@ td.no-fill {
 }
 
 .signature {
-  @extend .mononoki;
   font-weight: bold;
 }
 
 .return-type {
-  @extend .mononoki;
   font-weight: unset;
   color: rgba(0, 0, 0, 0.5);
 }
