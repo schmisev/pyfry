@@ -37,7 +37,7 @@
 
   import PythonWorker from "$lib/workers/pyodide-worker.mjs?worker";
   import JediWorker from "$lib/workers/jedi-worker.mts?worker";
-  import { pythonExtensions } from "$lib/python/language-mode";
+  import { npAutocomplete, pythonExtensions } from "$lib/python/language-mode";
   import { zip, type VersionType } from "$lib/compression";
   import { stripParamString } from "$lib/python/pyodide.utils";
   import { jediAutocomplete, type Signature } from "$lib/python/jedi-autocomplete";
@@ -187,36 +187,13 @@
     ...pythonExtensions(),
   ]);
   let worker: Worker;
-  let jediWorker: Worker;
+  let jediWorker: Worker | null = $state(null);
   let liveSignature: Signature | null = $state(null);
 
   // editor setup
   // start up tooltips
 
-  onMount(async () => {
-    consoleOut = document.getElementById("console-out")!;
-    consoleOutWrapper = document.getElementById("console-out-wrapper")!;
-    imageOut = document.getElementById("image-out")!;
-
-    let old_log = console.log;
-    function log(msg: any, type: string = "standard") {
-      let newMessage = document.createElement("div");
-      newMessage.textContent = `${msg}`;
-      newMessage.classList.add("message");
-      newMessage.classList.add(type);
-      consoleOut.appendChild(newMessage);
-      consoleOutWrapper.scroll({
-        top: consoleOut.scrollHeight,
-        behavior: "smooth",
-      });
-      old_log(`${msg}`);
-    }
-    console.log = log;
-
-    log(
-      "Drücke START, um dein Python-Skript auszuführen!\nBeim ersten Mal kann das etwas länger dauern, da erst die nötigen Bibliotheken heruntergeladen werden müssen.",
-    );
-
+  function startJediWorker() {
     // checking code
     jediWorker = new JediWorker();
 
@@ -241,9 +218,34 @@
     jediWorker.addEventListener("message", (event) => {
       const { message, id }: { message: string; id: number } = event.data;
       if (message) {
-        log(message);
+        console.log(message);
       }
     });
+  }
+
+  onMount(async () => {
+    consoleOut = document.getElementById("console-out")!;
+    consoleOutWrapper = document.getElementById("console-out-wrapper")!;
+    imageOut = document.getElementById("image-out")!;
+
+    let old_log = console.log;
+    function log(msg: any, type: string = "standard") {
+      let newMessage = document.createElement("div");
+      newMessage.textContent = `${msg}`;
+      newMessage.classList.add("message");
+      newMessage.classList.add(type);
+      consoleOut.appendChild(newMessage);
+      consoleOutWrapper.scroll({
+        top: consoleOut.scrollHeight,
+        behavior: "smooth",
+      });
+      old_log(`${msg}`);
+    }
+    console.log = log;
+
+    log(
+      "Drücke START, um dein Python-Skript auszuführen!\nBeim ersten Mal kann das etwas länger dauern, da erst die nötigen Bibliotheken heruntergeladen werden müssen.",
+    );
 
     // running code
     worker = new PythonWorker();
@@ -421,26 +423,30 @@
         bind:value={preset.code}></CodeMirror>
     </div>
     <div class="inline-flex flex-row items-center gap-1 mononoki text-sm">
-      {#if flags.autocompleteIsRunning}
-        <Fa class="icon rotating" icon={faHourglass} />
-      {:else}
-        <Fa class="icon" icon={faWandMagicSparkles}></Fa>
-      {/if}
-      <div class="grow min-w-0">
-        {#if liveSignature && liveSignature.name != "ufunc"}
-          <b>{liveSignature.name}</b>({#each liveSignature.params.entries() as [i, n]}
-            {#if i == liveSignature.index}
-              <b><u>{n[1]}</u></b>
-            {:else}
-              {stripParamString(n[1])}
-            {/if}{#if i != liveSignature.params.length - 1},&nbsp;<wbr />{/if}
-          {/each})
-        {:else if !flags.autocompleteIsReady}
-          Autocomplete wird gestartet!
+      {#if jediWorker}
+        {#if flags.autocompleteIsRunning}
+          <Fa class="icon rotating" icon={faHourglass} />
         {:else}
-          ...
+          <Fa class="icon" icon={faWandMagicSparkles}></Fa>
         {/if}
-      </div>
+        <div class="grow min-w-0">
+          {#if liveSignature && liveSignature.name != "ufunc"}
+            <b>{liveSignature.name}</b>({#each liveSignature.params.entries() as [i, n]}
+              {#if i == liveSignature.index}
+                <b><u>{n[1]}</u></b>
+              {:else}
+                {stripParamString(n[1])}
+              {/if}{#if i != liveSignature.params.length - 1},&nbsp;<wbr />{/if}
+            {/each})
+          {:else if !flags.autocompleteIsReady}
+            Autocomplete wird gestartet!
+          {:else}
+            ...
+          {/if}
+        </div>
+      {:else}
+        <button onclick={startJediWorker}>&nbsp;Starte Autocomplete&nbsp;</button>
+      {/if}
     </div>
     <button onclick={uploadCSV}
       ><Fa class="icon" icon={faTableCells} />&nbsp;Lade .csv-Datei in &nbsp;<code>csv_data</code
