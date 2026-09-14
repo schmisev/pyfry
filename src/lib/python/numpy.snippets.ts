@@ -47,7 +47,7 @@ plt.scatter(\${x}, \${y},
         name: "Vorlage Plot Funktion",
         display: "📈 Plot: Beliebige Funktion",
         insert: `# Funktion zeichnen 
-\${x} = np.linspace(0,\${data_x},100)
+\${x} = np.linspace(0,\${np.max(data_x)},100)
 \${y} = 2 * \${x} ** 2
 plt.plot(\${x}, \${y}, 
         color = "green",
